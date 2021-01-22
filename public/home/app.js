@@ -5,8 +5,6 @@
 
 
 */
-
-
 import { q, range } from '/vision-stage/modules/utils-core.js'
 import { AppComponent, Component, html, define, log, getStage, useSVG } from '/vision-stage/vision-stage.js'
 
@@ -24,9 +22,9 @@ class App extends AppComponent {
 
 	afterFirstRender(){
 		/// wait till now to not block app load/render
-		Component.load('menu-scenes')
-		Component.load('menu-options')
-		Component.load('menu-auth2')
+		// Component.load('menu-scenes')
+		// Component.load('menu-options')
+		// Component.load('menu-auth2')
 		this.faded = false
 	}
 
@@ -36,21 +34,27 @@ class App extends AppComponent {
 			<img src="/home/images/love-in-the-dark.png" class='' alt="">
 			<h1>Vision Stage</h1>
 			<p id='tagline'>A web framework for <span class='nowrap'>free spirits</span> <span class='icon'>🙏</span></p>
-			<p>Simple components <span>| pure JS/HTML (lit-html templating)</span></p>
+			<p>Simple components <span>| pure JS/HTML (lit-html templating), ES modules -> No build required!!</span></p>
 			<p>Staged content <span>| rem scaled and spaced/framed within flexible limits</span></p>
 			<hr>
-			<p>Awesome helpers</p>
-
-			<p>Flow attribute for intuitive flex layout <span>| flow='col top stretch'</span></p>
-			<p>Insert an icon symbol from icons.svg <span>| \${ useSVG('thumbs-up') }</span></p>
-			<p>Use a localized string <span>| \${ this.getString('name') } or this.$name</span></p>
-			<p>Declare rendering dependency <span>| this.uses([[component_selector,prop1,prop2]])</span></p>
-			<hr>
-			<p>Callbacks <span>| onConnected, afterFirstRender, afterRender, afterResize, afterSceneChange</span></p>
-			<p>Built-in functional menus <span>| scenes, options, authentication</span></p>
-			<hr>
-			<p>Built-in components</p>	
-			<p>full-stage dynamic popup <span>| await & alert or get user input w/ buttons or text</span></p>
+			<button class='bare' @click=${ this.onClickMore }>${ this.show_more ? 'Less…' : 'More…' }</button>
+			<section id='more' class=${ this.show_more ? '' : 'hide' }>
+				<!-- <p>Awesome helpers</p> -->
+				<p>Flow attribute for intuitive flex layout <span>| flow='col top stretch'</span></p>
+				<p>Insert an icon symbol from icons.svg <span>| \${ useSVG('thumbs-up') }</span></p>
+				<p>Use a localized string <span>| \${ this.getString('name') } or this.$name</span></p>
+				<p>Declare rendering dependency <span>| this.uses([[component_selector,prop1,prop2]])</span></p>
+				<hr>
+				<h2>App Component</h2>	
+				<p>Callbacks <span>| onConnected, afterFirstRender, afterRender, <wbr>afterResize, afterSceneChange</span></p>
+				<p>Built-in functional menus <span>| scenes, options (+ fullscreen & lang selection), authentication (Firebase)</span></p>
+				<p>Play a sound <span>| this.playSound(name)</span></p>
+				<hr>
+				<h2>Built-in components</h2>	
+				<p>full-stage dynamic popup <span>| await & alert or get user input w/ buttons or text</span></p>
+				<p>button-waiting, button-checkbox, range-slider, super-selector (user editable) and more.</p>
+			</section>
+			<footer flow><a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a></footer>
 		</main>`
 	}
 
@@ -61,6 +65,10 @@ class App extends AppComponent {
 
 	afterSceneChange(){
 
+	}
+
+	onClickMore( e){
+		this.show_more = !this.show_more
 	}
 }
 
@@ -82,7 +90,7 @@ App.aspect_ratios_v2 = {
 }
 
 App.properties = {
-
+	show_more: false,
 }
 
 App.strings = {

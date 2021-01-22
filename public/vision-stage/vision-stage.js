@@ -37,10 +37,10 @@ export async function define( tag_name, clss, components){
 	return window.customElements.whenDefined( tag_name).then( () => {
 		if( tag_name.includes('app-main')){
 			//log('pink', 'app defined:', tag_name)
-			const app_el = q( tag_name)
+			//const app_el = q( tag_name)
 			setTimeout( () => { 
-				app_el.classList.add('loaded')
-				q('#loading').classList.add('faded') 
+				//app_el.classList.add('loaded')
+				q('#loading').classList.add('faded')
 				setTimeout( () => { q(':root > body > #loading').remove() }, 1000)
 			}, 100)
 
@@ -48,10 +48,10 @@ export async function define( tag_name, clss, components){
 			stage.updateForURL()
 			setTimeout( e => 
 				window.addEventListener('resize', debounce( stage.resize.bind( stage), 300, 300)), 
-				// ->  debounce  (call once after events faster than this dly), 
-				// ->  throttle  (call while events at this dly)
 				2000
 			)
+			// ->  Arg 1: debounce dly (call once after events faster than this dly), 
+			// ->  Arg 2: throttle dly (call while events at this dly)
 		}
 		// else {
 		// 	log('info', 'comp defined:', tag_name)

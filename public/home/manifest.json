@@ -15,7 +15,7 @@
   ],
   "start_url": "/MyApp/",
   "scope": "/MyApp/",
-  "theme_color": "#0a68fe",
+  "theme_color": "hsl(266, 88%, 40%)",
   "background_color": "#cccccc",
   "display": "fullscreen",
   "orientation": "landscape"
