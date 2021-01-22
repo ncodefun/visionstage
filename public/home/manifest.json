@@ -1,0 +1,22 @@
+{
+  "short_name": "My App",
+  "name": "My App – Me Co",
+  "icons": [
+    {
+      "src": "/vision-stage-resources/images/app-icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/vision-stage-resources/images/app-icons/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/MyApp/",
+  "scope": "/MyApp/",
+  "theme_color": "#0a68fe",
+  "background_color": "#cccccc",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}

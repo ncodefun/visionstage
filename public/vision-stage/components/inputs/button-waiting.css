@@ -1,0 +1,53 @@
+
+button-waiting {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	min-width: 4.5em;
+	height: 2.5em;
+}
+button-waiting button {
+	padding-top: 0;
+	padding-bottom: 0;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+button-waiting svg {
+	height: 2em;
+}
+
+button-waiting.icon button {
+	/* padding: 0; */
+	height: 2em;
+	position: relative;
+}
+/* button-waiting:not(.icon) svg.icon {
+	margin-left: .5rem;
+	margin-right: -.25rem;
+	height: .8em;
+	width: .8em;
+} */
+button-waiting svg.icon.dark {
+	fill: rgba(0,0,0,.55);
+}
+button-waiting span {
+	margin: auto;
+}
+/** --dots-color: other button-waiting should follow theme color (nav-bg, must rename those...) */
+/** (except in auth: it overrides color — auth keeps the blue theme) */
+button-waiting .loader {
+	--w: calc( var(--size) * 3 + var(--pad) * 4);
+	position: relative;
+	width: var(--w);
+	height: var(--size);
+}
+button-waiting .loader div {
+	--dots-color: var(--blue);
+}
+
+button-waiting[disabled] {
+	pointer-events: none;
+	opacity: .6;
+}

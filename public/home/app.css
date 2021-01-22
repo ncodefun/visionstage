@@ -1,0 +1,96 @@
+.stage {
+	background: url(/vision-stage-resources/images/textures/paper.png) hsl(265, 77%, 37%);
+	/* hsl(258, 66%, 33%) */
+	background-blend-mode: multiply;
+	color: #f3e9ff;
+	font-family: Asap Condensed, sans-serif;
+	--scrollbar-color: yellowgreen;
+	--scrollbar-thumb-color: orange;
+}
+
+main h1 {
+	font-family: Autour One, sans-serif;
+	text-transform: uppercase;
+	font-size: 2.75rem; /*calc(var(--sth) / 17);*/
+	margin: 0;
+	padding: 0 1ch;
+	/* letter-spacing: .1em; */
+	color: #ffd65c;
+	/* -webkit-text-stroke: 1.5px #a0822998; */
+	line-height: 1.3;
+	text-shadow: -.1rem -.15rem .4rem #0004;
+}
+main img {
+	mix-blend-mode: lighten; 
+	height: 9rem;
+	margin: 1.5rem 0 .5rem;
+}
+main p:not(#tagline) {
+	margin: 0;
+	text-align: center;
+}
+main p:not(#tagline) > span {
+	color: #fff7
+}
+p#tagline {
+	text-align: center;
+	font-family: Simonetta, sans-serif;
+	font-size: 2rem; /*calc(var(--sth) / 25);*/
+	font-weight: 900;
+	
+	padding: 0 2ch;
+	line-height: 1.33;
+	margin: 1.5rem 0 2rem;
+	position: relative;
+	top: -.25rem;
+	letter-spacing: 3px;
+	color: #ffd65c;
+}
+p#tagline span {
+	color: rgba(152, 251, 152, 0.94);
+}
+p#tagline span.icon {
+	font-style: normal;
+}
+
+@media (max-aspect-ratio: 6/5){ /** matches the threshold in aspect-ratios */
+	.app {
+		font-size: 1.125rem;
+	}
+	main img {
+		height: 11rem;
+		position: absolute;
+		left: 1em;
+		top: 1rem;	
+		mix-blend-mode: screen;
+	}
+	main h1 { 
+		text-align: center;
+		margin-top: 2em;
+		margin-bottom: .5em;
+		padding-left: 6.77ch;
+		line-height: 1.15;
+		letter-spacing: .15em; 
+	}
+}
+/* autour-one-regular - latin */
+@font-face {
+  font-family: 'Autour One';
+  font-style: normal;
+  font-weight: 400;
+  src:url('/vision-stage-resources/fonts/autour-one-v10-latin-regular.woff2') format('woff2');
+}
+/* simonetta-900 - latin */
+@font-face {
+  font-family: 'Simonetta';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/vision-stage-resources/fonts/simonetta-v11-latin-900.woff2') format('woff2'); 
+}
+/* simonetta-900italic - latin */
+/*@font-face {
+  font-family: 'Simonetta';
+  font-style: italic;
+  font-weight: 900;
+  src: url('../fonts/simonetta-v11-latin-900italic.woff2') format('woff2');
+}*/

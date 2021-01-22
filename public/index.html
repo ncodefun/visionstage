@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<title>Appy World</title>
+	<meta 	charset=		'UTF-8'>
+	
+	<meta 	name=				'theme-color'
+					content=			'hsl(217, 100%, 52%)'>
+
+	<meta 	name=				'description' 	
+					content=			"Applications Web éducatives et ludiques pour l'apprentissage des mathématiques.">
+
+	<meta 	name=				'keywords' 
+					content=			'defi math, web apps, apps, Michel Lyons, Robert Lyons'>
+
+	<meta 	name=				'viewport'
+					content=			'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no'>
+	<meta 	name=				'mobile-web-app-capable'
+					content=			'yes'>
+	<meta 	name=				'apple-mobile-web-app-capable'
+					content=			'yes'>
+	<meta 	name=				'apple-mobile-web-app-status-bar-style'
+					content=			'black-translucent'>
+
+	<!--//  PRELOAD  //-->
+	<link rel='preload' as='style' href='/vision-stage/vision-stage.css'>
+	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/lato-v16-latin-700italic.woff2'>
+	<link rel='modulepreload' href='/vision-stage/modules/lit-html.js'>
+	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/if-defined.js'>
+	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/unsafe-html.js'>
+	<link rel='modulepreload' href='/vision-stage/vision-stage.js'>
+	<link rel='modulepreload' href='/vision-stage/z-console.js'>
+
+	<link rel='icon' type='image/png' sizes='192x192' href='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'>
+	<link rel='icon' type='image/png' sizes='32x32'		href='/vision-stage-resources/images/app-icons/favicon-32x32.png'>
+	<link rel='icon' type='image/png' sizes='16x16'		href='/vision-stage-resources/images/app-icons/favicon-16x16.png'>
+	<link rel='apple-touch-icon' 			sizes='60x60' 	href='/vision-stage-resources/images/app-icons/apple-touch-icon.png'>
+
+	<link rel='stylesheet' href='/vision-stage/vision-stage.css'>
+	<link rel='stylesheet' href='/home/app.css'>
+	<script type='module'  src='/home/app.js'></script>
+</head>
+
+<body flow>
+	<div id='loading' class='layer' flow='col'>
+		<h1>Appy World<div>Vision Stage</div></h1>
+		<div class='loader'><div></div><div></div><div></div><div></div></div>
+	</div>
+	<vision-stage>
+		<app-main no-auth
+			langs='fr, en'
+			store='mywebapps-home'
+			strings='title: Appy World, doc-title: Appy World – Vision Stage'>
+		</app-main>
+	</vision-stage>
+</body>
+</html>

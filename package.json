@@ -1,0 +1,48 @@
+{
+  "scripts": {
+    "start": "browser-sync start --server 'public/' --port 5001 --files '**/index.html,**/*.js,**/*.css' --no-open",
+    "pack": "snowpack --optimize",
+    "deploy:test": "firebase hosting:channel:deploy test1",
+    "bundle": "rollup $INIT_CWD/app.js --file $INIT_CWD/app.bundle.js --format es --inlineDynamicImports"
+  },
+  "devDependencies": {
+    "snowpack": "^1.4.0"
+  },
+  "dependencies": {
+    "d3-ease": "^2.0.0",
+    "file-saver": "^2.0.2",
+    "firebase": "^8.0.1",
+    "lit-html": "^1.3.0",
+    "screenfull": "^5.0.2",
+    "split-ease": "^1.0.2",
+    "zdog": "^1.1.2",
+    "zfont": "^1.2.7"
+  },
+  "snowpack": {
+    "webDependencies": [
+      "lit-html",
+      "lit-html/directives/unsafe-html.js",
+      "lit-html/directives/if-defined.js",
+      "lit-html/directives/live.js",
+      "lit-html/directives/guard.js",
+      "lit-html/directives/repeat.js",
+      "firebase/app",
+      "firebase/auth",
+      "firebase/firestore",
+      "firebase/storage",
+      "firebase/analytics",
+      "screenfull",
+      "file-saver",
+      "zdog",
+      "zfont",
+      "split-ease",
+      "d3-ease"
+    ]
+  },
+  "name": "appy-world-new",
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": "José Roux",
+  "license": "",
+  "description": ""
+}

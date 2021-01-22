@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /gym-logique/*
+Allow: /gym-logique/$
+Disallow: /gym-logique2/

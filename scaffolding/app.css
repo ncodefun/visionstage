@@ -1,0 +1,7 @@
+
+/**  Adjust threshold and font-size according to title length  **/
+@media (max-aspect-ratio: 3/5){
+	app-main > header h1 { padding: 0 }
+	app-main > header h1 div { font-size: .62em; padding-bottom: .1em; }
+}
+

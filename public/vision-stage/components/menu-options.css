@@ -1,0 +1,126 @@
+
+/** flex alternative (behaves almost identically) */
+/* .menu-body  > header > *:nth-child(3),
+.side-menu .menu-body  > header > *:first-child {
+	flex: 0 2 4.5em;
+	min-width: 3.25em;
+}
+.side-menu .menu-body  > header > *:nth-child(2) {
+	flex: 0 0 9.5em;
+} */
+
+
+menu-options ul.lang-options button.pseudo-link {
+	text-align: center;
+	margin: 0;
+	text-decoration: none;
+	text-shadow: 0 .14rem 0.1rem rgba(0, 0, 0, 0.08);
+	color: inherit;
+	font-family: Roboto Condensed;
+}
+menu-options ul.lang-options button.pseudo-link .text {
+	font-size: 1.2em;
+}
+menu-options ul.lang-options {
+	width: 100%;
+	list-style-type: none;
+	margin:0;
+	padding:0;
+	top: 0;
+	/* min-width: 15rem; */
+}
+menu-options ul.lang-options button.pseudo-link:hover,
+menu-options ul.lang-options button.pseudo-link.active {
+	color: inherit;
+	text-decoration: underline currentColor;
+}
+/** ios bug workaround */
+@supports (-webkit-touch-callout: none){
+	menu-options ul.lang-options button.pseudo-link {
+		margin: 0 1em;
+	}
+	menu-options ul.lang-options button.pseudo-link.active {
+		text-align: center;
+		background: linear-gradient( transparent 85%, white 85% 88%, transparent 88%);
+	}
+}
+
+#install-app {
+	height: var(--h);
+	display: none;
+	border-bottom-color: var(--menu-borders-light, var(--blue-gray-light));
+	/* margin-top: auto; */
+}
+/*
+.app.installable .side-menu .menu-body > footer {
+	margin-top: 0;
+}*/
+
+#install-app ul {
+	font-size: .8em;
+	line-height: 1.25;
+	padding-left: 1em;
+	margin: 0;
+}
+.app.installable #install-app {
+	display: flex;
+}
+
+/** no install section to push down */
+/* .app:not(.installable) .side-menu.left .menu-body > footer {
+	margin-top: auto;
+}  */
+
+#install-btn {
+	margin: 0 1em 0 0;
+	--green: hsl(120, 4%, 46%);
+}
+#install-btn svg.download {
+	height: 1.4em;
+	fill: #111;
+ }
+#install-btn svg.add {
+	fill: green;
+	height: 1.25em;
+	top: -.25em;
+	right: -.25em;
+	position: absolute;
+	stroke: #ffffff44;
+	stroke-width: 2px;
+}
+
+#adjust-volume {
+	padding: 1em 0 !important;
+	
+}
+#adjust-volume span {
+	margin: 0 .75em;
+	font-size: 1.25em;
+}
+#volume-slider {
+	flex: 1 0 60%;
+	/* max-width: 10rem; */
+}
+vision-stage.portrait #volume-slider {
+	max-width: none;
+}
+
+#volume-slider:focus {
+	outline: 1px dotted #fff7;
+}
+body.using-mouse #volume-slider:focus {
+	outline: none;
+}
+
+#app-version {
+	/* z- index: 1; */
+	align-self: center;
+	/* font-size: .8em; */
+	letter-spacing: 2px;
+	line-height: 1.5;
+	color: #fff9 !important;
+	position: relative;
+	/* top: -.1em; */
+}
+
+

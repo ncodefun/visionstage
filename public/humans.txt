@@ -1,0 +1,8 @@
+/* TEAM */
+
+Development & design: José Roux.
+
+
+/* SITE */
+
+The apps on this website use Vision Stage, a reactive components framework which doesn't require a build step since it uses only pure JS + HTML (thanks to lit-html) and native ES modules.

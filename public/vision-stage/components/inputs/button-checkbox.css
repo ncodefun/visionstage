@@ -1,0 +1,37 @@
+
+button-checkbox {
+	display: inline-block
+}
+button-checkbox button {
+  white-space: nowrap;
+  margin:0;
+  padding: 0 .5rem 0 0;
+  border: none;
+	height: auto;
+	min-height: 2rem;
+}
+button-checkbox button span {
+	line-height: 1.5;
+	display: block;
+	text-align: left;
+}
+button-checkbox button span em {
+	font-weight: 600;
+}
+button-checkbox button small {
+	display: block;
+	font-size: .8rem;
+	line-height: 1.2;
+	position: relative;
+	top: -.17rem;
+	font-style: italic;
+}
+button-checkbox svg.icon {
+  width: 1.75rem;
+  height: 1.2rem;
+	margin-right: .4rem;
+}
+button-checkbox[disabled]{
+	opacity: .6;
+	pointer-events: none;
+}

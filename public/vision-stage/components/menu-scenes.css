@@ -1,0 +1,132 @@
+/* app-main * { pointer-events: auto !important;} */
+
+
+menu-scenes:empty {
+	display: none;
+}
+menu-scenes.menu {
+	pointer-events: none;
+	opacity: 0;
+	user-select: none;
+	position: absolute;
+	--space: -2.7em;
+	top: 0;
+	color: hsl(0, 0%, 100%);
+	min-width: 12em;
+	padding: .5em 1em .5em;
+	border-radius: .5em;	
+	box-shadow: 
+		0 0.5rem 1.2rem -0.3rem rgba(0,0,0,0.42);
+	border: .12rem solid hsl(0, 100%, 100%, .25);
+	background: hsl(217, 100%, 56%);
+	transition: transform .52s cubic-bezier(.42,-0.54,.58,1), opacity .42s ease, z-index 0s .6s !important;
+}
+
+menu-scenes.menu.open {
+	opacity: 1;
+	transform: translateY(5em); 
+	pointer-events: auto;
+	transition: transform .42s .23s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity .42s .23s ease !important;
+}
+/*
+menu-scenes:not(.open) button {
+	transform: translateY(0);
+}
+menu-scenes.open button {
+	transform: translateY(0) !important;
+}*/
+/* menu-scenes:not(.open) button:not(.selected) {
+	opacity: 0;
+	pointer-events: none;
+} */
+
+button svg.fanion {
+	color: white;
+	z-index: -1;
+}
+
+#selected-title {
+	top: 115%;
+	height: auto;
+	min-height: 2.25em;
+	transition: opacity .37s .3s ease;
+	padding: .4em 2em .7em;
+	line-height: 1;
+}
+.app[opened-menu='scenes'] #selected-title {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .42s ease;
+}
+#selected-title,
+menu-scenes button.bare {
+	position: relative;
+	font-family: Jost, sans-serif;
+	font-weight: 600;
+	
+	color: hsl(195, 100%, 17%); /*var(--primary-darker);*/
+	min-width: 14em;
+	/* pointer-events: auto; */
+	margin: .1em 0;
+	
+}
+
+
+menu-scenes button.bare {
+	height: auto;
+	line-height: 1.1;
+	min-height: 2.4em;
+	margin: .2em 0;
+	padding: .5em 2em .75em;
+	transition: 
+		transform .42s cubic-bezier(0.18, 0.89, 0.32, 1.28), 
+		opacity .12s ease-out;
+}
+menu-scenes button.bare[disabled] {
+	opacity: .5;
+}
+
+/* button.selected { z-index: 1  } */
+/* menu-scenes.open button:not(.selected) { color: rgba(48, 76, 85, .8)  } */
+/* menu-scenes.open button.selected svg { fill: var(--blue) !important } */
+
+/** not open: translate to top position */
+/* menu-scenes button:nth-child(1){ transform: translateY( calc(var(--space) * 1)) }
+menu-scenes button:nth-child(2){ transform: translateY( calc(var(--space) * 2)) }
+menu-scenes button:nth-child(3){ transform: translateY( calc(var(--space) * 3)) }
+menu-scenes button:nth-child(4){ transform: translateY( calc(var(--space) * 4)) }
+menu-scenes button:nth-child(5){ transform: translateY( calc(var(--space) * 5)) }
+menu-scenes button:nth-child(6){ transform: translateY( calc(var(--space) * 6)) }
+menu-scenes button:nth-child(7){ transform: translateY( calc(var(--space) * 7)) }
+menu-scenes button:nth-child(8){ transform: translateY( calc(var(--space) * 8)) }
+menu-scenes button:nth-child(9){ transform: translateY( calc(var(--space) * 9)) } */
+
+
+
+menu-scenes button[show-for\:role='admin'] svg {
+  fill: hsl(53, 96%, 83%) !important;
+}
+menu-scenes.open button[show-for\:role='admin'] {
+  /* border: .125rem dotted hsl(44, 100%, 74%); */
+  background-clip: padding-box;
+}
+
+menu-scenes button svg {
+	filter: drop-shadow(0 0.33rem 0.15rem  rgba(0,0,0,.1));
+	fill: url(#button-gradient) white; /** gradient not working on iOS… */
+	/*
+	display: block;
+	position: absolute;
+	
+	height: 100%;
+	width: 100%;
+	z-index: -2;
+	left: 0;
+	top: .15rem;*/
+}
+menu-scenes button:hover svg {
+	fill: url(#button-hover-gradient) white;
+}
+menu-scenes button:focus {
+	border-color: rgba(255,255,255,.75);
+}
