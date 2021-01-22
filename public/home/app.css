@@ -4,16 +4,19 @@
 	/* background-blend-mode: multiply; */
 	background: hsl(266, 88%, 40%);
 
-	color: #f3e9ff;
+	color: #f6efff;
+	/* color: white; */
 	font-family: Asap Condensed, sans-serif;
 	--scrollbar-color: #FFF3;
 	--scrollbar-thumb-color: #FFF7;
+	--header-height: 0;
 }
-.app {
-	color: #fffc;
-}
+
 main a, button.bare {
 	color: hsla(120, 100%, 71%, 0.94);
+}
+main > footer {
+	font-size: 1.25em;
 }
 button.bare {
 	border: 1px solid;
@@ -25,13 +28,14 @@ main a:hover {
 	color: hsla(120, 100%, 71%, 1);
 }
 main > footer {
-	height: 4rem;
+	height: 6rem;
 	width: 100%;
 	flex-shrink: 0;
 	text-align: center;
 	margin-top: auto;
 }
 main {
+	padding: 0 3ch;
 	text-align: center;
 	/* isolation: isolate; */
 	background:  hsl(266, 88%, 40%); /** ios bug, blend mode not working across elements... */
@@ -51,7 +55,7 @@ main h1 {
 }
 main h2 {
 	font-size: 1.25rem;
-	margin: .75rem 0 0;
+	margin: 1rem 0 .5rem;
 }
 main img {
 	mix-blend-mode: lighten; 
@@ -59,19 +63,20 @@ main img {
 	margin: 1.5rem 0 .5rem;
 }
 main p:not(#tagline) {
-	margin: 0;
+	margin: 0 0 1rem;
 	text-align: center;
 	/* font-size: 1rem; */
+	line-height: 1.33;
 }
 main p:not(#tagline) > span {
-	color: #fffa;
+	color: #fffc;
 	font-family: monospace;
-	white-space: nowrap;
-	font-size: .85rem;
+	/* white-space: nowrap; */
+	font-size: .85em;
 	font-style: italic;
+	
 }
 p#tagline {
-	
 	font-family: Simonetta, sans-serif;
 	font-size: 2rem; /*calc(var(--sth) / 25);*/
 	font-weight: 900;
@@ -95,11 +100,18 @@ button {
 	color: #000c;
 	margin: 1rem;
 }
+main > button, main > img {
+	align-self: center;
+}
 
-
+@media (min-aspect-ratio: 6/5) {
+	main p:not(#tagline) > span::before {
+		content: ' | '
+	}
+}
 @media (max-aspect-ratio: 6/5){ /** matches the threshold in aspect-ratios */
-	main h1 {
-		/* font-size: 1.125rem; */
+	main > footer, main button {
+		font-size: 1.5em;
 	}
 	main img {
 		height: 11rem;
@@ -116,6 +128,21 @@ button {
 		line-height: 1.15;
 		letter-spacing: .15em; 
 	}
+	main h2 {
+		font-size: 1.75em;
+		margin: 2rem 0;
+	}
+	hr {
+		margin: 2rem auto !important;
+	}
+	main p:not(#tagline) {
+		font-size: 1.5em;
+		line-height: 1.5;
+	}
+	main p:not(#tagline) span {
+		display: block;
+	}
+
 }
 /* autour-one-regular - latin */
 @font-face {

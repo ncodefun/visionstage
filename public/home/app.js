@@ -30,28 +30,28 @@ class App extends AppComponent {
 
 	template(){
 		return html`
-		<main flow='col top'>
+		<main flow='col top stretch'><!-- stretch otherwise content overflows?? -->
 			<img src="/home/images/love-in-the-dark.png" class='' alt="">
 			<h1>Vision Stage</h1>
 			<p id='tagline'>A web framework for <span class='nowrap'>free spirits</span> <span class='icon'>🙏</span></p>
-			<p>Simple components <span>| pure JS/HTML (lit-html templating), ES modules -> No build required!!</span></p>
-			<p>Staged content <span>| rem scaled and spaced/framed within flexible limits</span></p>
+			<p>Simple components <span>pure JS/HTML (lit-html templating), <wbr>ES modules -> No build required!!</span></p>
+			<p>Staged content <span>rem scaled and spaced/framed <wbr>within flexible limits</span></p>
 			<hr>
 			<button class='bare' @click=${ this.onClickMore }>${ this.show_more ? 'Less…' : 'More…' }</button>
 			<section id='more' class=${ this.show_more ? '' : 'hide' }>
 				<!-- <p>Awesome helpers</p> -->
-				<p>Flow attribute for intuitive flex layout <span>| flow='col top stretch'</span></p>
-				<p>Insert an icon symbol from icons.svg <span>| \${ useSVG('thumbs-up') }</span></p>
-				<p>Use a localized string <span>| \${ this.getString('name') } or this.$name</span></p>
-				<p>Declare rendering dependency <span>| this.uses([[component_selector,prop1,prop2]])</span></p>
+				<p>Flow attribute for intuitive flex layout <span>flow='col top stretch'</span></p>
+				<p>Insert an icon symbol from icons.svg <span>\${ useSVG('thumbs-up') }</span></p>
+				<p>Use a localized string <span>\${ this.getString('name') } <wbr>or this.$name</span></p>
+				<p>Declare rendering dependency <span>this.uses([[comp,prop1,prop2]])</span></p>
 				<hr>
 				<h2>App Component</h2>	
-				<p>Callbacks <span>| onConnected, afterFirstRender, afterRender, <wbr>afterResize, afterSceneChange</span></p>
-				<p>Built-in functional menus <span>| scenes, options (+ fullscreen & lang selection), authentication (Firebase)</span></p>
-				<p>Play a sound <span>| this.playSound(name)</span></p>
+				<p>Callbacks <span>onConnected, afterFirstRender, afterRender, <wbr>afterResize, afterSceneChange</span></p>
+				<p>Built-in functional menus <span>scenes, <wbr>options (+ fullscreen & lang selection), <wbr>authentication (Firebase)</span></p>
+				<p>Play a sound <span>this.playSound(name)</span></p>
 				<hr>
 				<h2>Built-in components</h2>	
-				<p>full-stage dynamic popup <span>| await & alert or get user input w/ buttons or text</span></p>
+				<p>full-stage dynamic popup <span>await & alert or get user input w/ buttons or text</span></p>
 				<p>button-waiting, button-checkbox, range-slider, super-selector (user editable) and more.</p>
 			</section>
 			<footer flow><a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a></footer>
