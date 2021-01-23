@@ -2,8 +2,7 @@
   "scripts": {
     "start": "browser-sync start --server 'public/' --port 5001 --files '**/index.html,**/*.js,**/*.css' --no-open",
     "pack": "snowpack --optimize",
-    "deploy:test": "firebase hosting:channel:deploy test1",
-    "bundle": "rollup $INIT_CWD/app.js --file $INIT_CWD/app.bundle.js --format es --inlineDynamicImports"
+    "deploy:test": "firebase hosting:channel:deploy test1"
   },
   "devDependencies": {
     "snowpack": "^1.4.0"
@@ -39,7 +38,7 @@
       "d3-ease"
     ]
   },
-  "name": "appy-world-new",
+  "name": "vision-stage",
   "version": "1.0.0",
   "main": "main.js",
   "author": "José Roux",
