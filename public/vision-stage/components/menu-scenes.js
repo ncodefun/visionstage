@@ -26,40 +26,32 @@ class MenuScenes extends Component {
 	onConnected(){
 		app.nav = app.menu_scenes = this
 		this.onclick = this.onClick.bind( this)
-		//this.setAttribute('flow', 'col top')
 		this.scene_param_index = this.getAttribute('scene-param-index')
 		this.classList.add('menu')
-		//let scenes = this.getAttribute('scenes')
-		let scenes = []
-		const strings_for_lang = this.strings[ stage.lang] //!! or use default ?
 
-		//log('check', 'strings_for_lang:', strings_for_lang, stage.lang)
+		const scenes = []
+		const strings_for_lang = this.strings[ stage.lang] //!! or use default ?
 		for( let str_key in strings_for_lang){
 			//// we must know which strings are scenes; for now they're one char long, or have $ special prefix
 			if( str_key.length === 1 || str_key.startsWith('$'))
 				scenes.push( str_key.startsWith('$') ? str_key.slice(1) : str_key)
 		}
 
-		//log('ok', 'scenes:', scenes)
-		/// search: show-for:scene
+		// show-for:scene
 		let str = []
 		if( scenes.length){
-			str.push(`app-main:not([scene]) [show-for\\:scene]`) //:not([show-for\\:scene=''])
-			str.push(`app-main[scene=''] [show-for\\:scene='any']`)
-			str.push(`app-main[scene=''] [show-for\\:scene]:not([show-for\\:scene=''])`)
+			str.push(`.app:not([scene]) [show-for\\:scene]`)
+			//str.push(`.app[scene=''] [show-for\\:scene='any']`)
+			str.push(`.app[scene=''] [show-for\\:scene]:not([show-for\\:scene=''])`)
 			for( let name of scenes)
-				str.push(`app-main[scene='${name}'] [show-for\\:scene]:not([show-for\\:scene~='${name}']):not([show-for\\:scene~='any'])`)
-
-			// str.push(`app-main[scene=''] menu-scenes:not(.open) button`)
-			// for( let name of scenes)
-			// 	str.push(`app-main[scene='${name}'] menu-scenes:not(.open) button:not([data-scene='${name}'])`)
-
-			//const h = this.closest('header')
-			//h && h.classList.add('has-scenes')
+				str.push(`.app[scene='${name}'] [show-for\\:scene]:not([show-for\\:scene~='${name}'])`) 
+				//:not([show-for\\:scene~='any'])
+				//? => 'any' means hide if none (when scene not chosen yet, menu is open)... @todo: need better naming
 			app.has_scenes = scenes.length > 1
 			app.classList.remove('waiting-scenes')
 			app.scenes = 
-			this.scenes = scenes.map( s => s.replace(/^\$/g,''))
+			this.scenes = 
+				scenes.map( s => s.replace(/^\$/g,''))
 			app.onScenes && app.onScenes( this.scenes)
 			if( app.scene && !this.scenes.includes( app.scene) ){
 				log('err', 'unknown scene:', app.scene, this.scenes)

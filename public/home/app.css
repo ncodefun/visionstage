@@ -1,23 +1,73 @@
+html {
+	--color-base: hsl(160, 100%, 88%);
+	--color-base2: hsl(160, 93%, 79%);
+	--color-base2-faded: hsla(160, 93%, 79%, .8);
 
+	--color-highlight: hsl(160, 100%, 88%);
+
+	--soft: hsl(214, 22%, 41%);
+	--soft-dark: hsl(260, 6%, 25%);
+	--soft-darker: hsl(260, 11%, 22%);
+	--soft-darkest: hsl(260, 9%, 15%);
+	--blue: #0a68ff;
+	--dark-blue: var(--soft-dark,#3c4549);
+	--primary-dark: hsl(266, 88%, 40%);
+	--primary-darker: hsl(260, 66%, 41%);
+	--primary-darker-faded: hsla(260, 36%, 61%, 1);
+	--primary-darkest: hsl(245, 18%, 29%);
+}
+body {
+	background: var(--primary-darkest);
+}
+img.layout {
+	height: 100%;
+	opacity: .25;
+	outline: 1px #fff;
+	display: block;
+	margin: auto;
+	left: auto;
+}
 .stage {
-	/* background: url(/vision-stage-resources/images/textures/paper.png) hsl(265, 77%, 37%); */
-	/* background-blend-mode: multiply; */
-	background: hsl(266, 88%, 40%);
-
 	color: #f6efff;
-	/* color: white; */
+	color:hsl(276, 100%, 85%);
+	color: hsla(160, 93%, 79%, 0.76);
+	color: var(--color-base);
 	font-family: Asap Condensed, sans-serif;
+
 	--scrollbar-color: #FFF3;
 	--scrollbar-thumb-color: #FFF7;
-	--header-height: 0;
+	/* --header-height: 0; */
+	/* background: url(/vision-stage-resources/images/textures/paper.png) hsl(265, 80%, 44%);
+	background-blend-mode: multiply; */
+}
+.app {
+	--floor: 56%;
+	/* background-blend-mode: overlay, normal, normal; */
+	background-color:  hsl(266, 88%, 40%);
+	/* background-color:   hsl(266, 100%, 34%); */
+	background-image: 
+		/* url(/vision-stage-resources/images/textures/paper.png), */
+		linear-gradient( to bottom,
+			rgba(0,0,0,0), 
+			rgba(0,0,0,0) var(--floor), 
+			rgba(0,0,0,0.07) calc(var(--floor) + 1.5rem), 
+			rgba(0,0,0,0) 70%,
+			hsla(298, 69%, 90%, 0.12)), 
+		radial-gradient( circle farthest-side, 
+			hsla(0, 0%, 82%, 0.11), 
+			hsla(0, 0%, 75%, 0.08) 60%, 
+			hsla(0, 0%, 69%, 0));
 }
 
+.stage.ios,
+.stage.ios .app > header {
+	background: var(--primary-dark); /** ios bug, blend mode not working across elements... make same as stage */
+}
 main a, button.bare {
 	color: hsla(120, 100%, 71%, 0.94);
+	color: #ffd65c;
 }
-main > footer {
-	font-size: 1.25em;
-}
+
 button.bare {
 	border: 1px solid;
 	padding: 0 1ch;
@@ -26,73 +76,84 @@ button.bare {
 }
 main a:hover {
 	color: hsla(120, 100%, 71%, 1);
+	color: #ffce3b;
 }
 main > footer {
-	height: 6rem;
+	height: 4rem;
 	width: 100%;
 	flex-shrink: 0;
 	text-align: center;
 	margin-top: auto;
 }
-main {
-	padding: 0 3ch;
-	text-align: center;
-	/* isolation: isolate; */
-	background:  hsl(266, 88%, 40%); /** ios bug, blend mode not working across elements... */
-	/* background: #000; */
+
+.app > header {
+	padding-top: 3rem;
 }
-main h1 {
-	font-family: Autour One, sans-serif;
+.app > header > div {
+	position: relative;
+	left: -7rem;
+}
+.app > header img {
+	height: 16rem;
+	position: relative;
+	/* left: -1rem; */
+	mix-blend-mode: screen; /** more details */
+	transition: opacity 1s .5s ease; /** prevent flash of unstyled content...*/
+}
+.app.faded > header img {
+	opacity: 0;
+}
+.app > header img:hover {
+	mix-blend-mode: lighten; 
+}
+.app > header h1 {
+	/* background: #0f0; */
+	/* color: hsl(45, 100%, 68%);  */
+	/* color: hsla(160, 93%, 79%, 0.66); */
+	font-family: Gro Bold, Autour One, sans-serif;
+	letter-spacing: .25rem;;
 	text-transform: uppercase;
-	font-size: 2.75rem; /*calc(var(--sth) / 17);*/
+	font-size: 2.5rem;
 	margin: 0;
-	padding: 0 1ch;
-	/* letter-spacing: .1em; */
-	color: #ffd65c;
-	/* -webkit-text-stroke: 1.5px #a0822998; */
+	position: relative;
+	left: -4.4rem;
+	top: -.5rem;
 	line-height: 1.3;
 	text-shadow: -.1rem -.15rem .4rem #0004;
+	/* -webkit-text-stroke: 1.5px #a0822998; */
 }
-main h2 {
-	font-size: 1.25rem;
-	margin: 1rem 0 .5rem;
+.app > header h1 span {
+	color: var(--color-highlight);
 }
-main img {
-	mix-blend-mode: lighten; 
-	height: 9rem;
-	margin: 1.5rem 0 .5rem;
-}
-main p:not(#tagline) {
-	margin: 0 0 1rem;
-	text-align: center;
-	/* font-size: 1rem; */
-	line-height: 1.33;
-}
-main p:not(#tagline) > span {
-	color: #fffc;
-	font-family: monospace;
-	/* white-space: nowrap; */
-	font-size: .85em;
-	font-style: italic;
-	
-}
-p#tagline {
-	font-family: Simonetta, sans-serif;
-	font-size: 2rem; /*calc(var(--sth) / 25);*/
-	font-weight: 900;
-	
-	padding: 0 2ch;
-	line-height: 1.33;
-	margin: 1.5rem 0 2rem;
+
+#tagline {
+	font: 900 italic 2rem/1.25 Simonetta, sans-serif;
+	/* letter-spacing: .03rem; */
 	position: relative;
-	top: -.25rem;
-	letter-spacing: 3px;
-	color: #ffd65c;
+	top: -6.6rem;
+	left: 1.77rem;
 }
-p#tagline span {
-	color: hsla(120, 93%, 79%, 0.94);
+#tagline p {
+	margin: 0;
+	
 }
-p#tagline span.icon {
+#tagline p:first-child {
+	
+}
+#tagline p:last-child {
+	font-size: 1.5rem;
+	/* opacity: .76; */
+	/* animation: slow-blink 1.6s infinite alternate; */
+	position: relative;
+	left: -.5rem;
+	color: var(--color-base2-faded);
+}
+#tagline p:last-child span.highlight {
+	/* color: hsl(303, 100%, 79%); */
+	/* color: var(--color-highlight); */
+	color: var(--color-base2);;
+}
+#tagline .icon {
 	font-style: normal;
 }
 
@@ -100,56 +161,49 @@ button {
 	color: #000c;
 	margin: 1rem;
 }
-main > button, main > img {
-	align-self: center;
+
+@keyframes slow-blink {
+	0% {
+		opacity: .76;
+	}
+	50% {
+		opacity: .76;
+		animation-timing-function: ease-in;
+	}
+	100% {
+		opacity: .95;
+		animation-timing-function: ease;
+	}
 }
 
-@media (min-aspect-ratio: 6/5) {
-	main p:not(#tagline) > span::before {
-		content: ' | '
-	}
+@media (min-aspect-ratio: 6/5) { /** landscape */
+
 }
 @media (max-aspect-ratio: 6/5){ /** matches the threshold in aspect-ratios */
-	main > footer, main button {
-		font-size: 1.5em;
+	.app > header > div {
+		flex-direction: column;
+		align-items: center !important;
+		left: auto;
 	}
-	main img {
-		height: 11rem;
-		position: absolute;
-		left: 1em;
-		top: 1rem;	
-		mix-blend-mode: screen;
+	.app > header img,
+	.app > header h1,
+	.app #tagline p:last-child
+		{ left: auto }
+	.app #tagline { 
+		left: auto;
+		top: 1.2rem;
+		align-items: center;
 	}
-	main h1 { 
-		text-align: center;
-		margin-top: 2em;
-		margin-bottom: 0;
-		padding-left: 6.77ch;
-		line-height: 1.15;
-		letter-spacing: .15em; 
-	}
-	main h2 {
-		font-size: 1.75em;
-		margin: 2rem 0;
-	}
-	hr {
-		margin: 2rem auto !important;
-	}
-	main p:not(#tagline) {
-		font-size: 1.5em;
-		line-height: 1.5;
-	}
-	main p:not(#tagline) span {
-		display: block;
-	}
-
 }
+
+
 /* autour-one-regular - latin */
 @font-face {
   font-family: 'Autour One';
   font-style: normal;
   font-weight: 400;
   src:url('/vision-stage-resources/fonts/autour-one-v10-latin-regular.woff2') format('woff2');
+	font-display: block;
 }
 /* simonetta-900 - latin */
 @font-face {
@@ -159,10 +213,10 @@ main > button, main > img {
   src: url('/vision-stage-resources/fonts/simonetta-v11-latin-900.woff2') format('woff2'); 
 }
 /* simonetta-900italic - latin */
-/*@font-face {
+@font-face {
   font-family: 'Simonetta';
   font-style: italic;
   font-weight: 900;
-  src: url('../fonts/simonetta-v11-latin-900italic.woff2') format('woff2');
-}*/
+  src: url('/vision-stage-resources/fonts/simonetta-v11-latin-900italic.woff2') format('woff2');
+}
 

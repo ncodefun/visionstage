@@ -36,10 +36,7 @@ export async function define( tag_name, clss, components){
 	window.customElements.define( tag_name, clss)
 	return window.customElements.whenDefined( tag_name).then( () => {
 		if( tag_name.includes('app-main')){
-			//log('pink', 'app defined:', tag_name)
-			//const app_el = q( tag_name)
 			setTimeout( () => { 
-				//app_el.classList.add('loaded')
 				q('#loading').classList.add('faded')
 				setTimeout( () => { q(':root > body > #loading').remove() }, 1000)
 			}, 100)
@@ -768,7 +765,7 @@ export class AppComponent extends Component {
 	}
 }
 
-/** These will be extended, use underscore to mix with user's own */
+/** These will be extended, using underscore so these will mix with user's own */
 AppComponent._properties = { 
 	authentified: { // set by menu-auth
 		value: false,
@@ -829,12 +826,14 @@ AppComponent._properties = {
 			return val
 		}
 	},
+	has_scenes: {
+		value: false,
+		class: 'has-scenes' /** we want the title centered with side menu toggles when no scenes / no scene menu */
+	},
 	level: {
 		value: 1,
 		attribute: 'level',
 		watcher( val){
-			//log('check', 'level:', val)
-			//this.setAttribute('level', val)
 			this.afterLevelChange && this.afterLevelChange( val)
 		}
 	},
@@ -1056,30 +1055,25 @@ class VisionStage extends Component {
 	}
 
 	updateForURL( pop=false){
-		// if( pop) log('check', 'pop state')
-		// else log('ok', 'no pop, start updateURL')
-		//this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
+		// this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
 		this.app.params = location.hash.slice(1).split('/')
-		//log('err', 'updateForURL, this.app.params:', this.app.params)
-		//this.url_segments.length>1 && this.url_segments.slice(1) || [];
-		//this.app.params.length && log('info', 'params:', ...this.app.params)
+		this.app.params.length && log('info', 'params:', ...this.app.params)
 
-		//// scene from first param
-		let s = decodeURI( this.app.params[0])
-		//log('check', 'scene from param:', s)
+		// scene from first param
+		let scene = decodeURI( this.app.params[0])
 		if( !pop)
-			this.app._state.scene = s || '' // we might not be ready to render; set on _state to bypass auto render
+			this.app._state.scene = scene || '' 
+			// we might not be ready to render; set on _state to bypass auto render
 		else
-			this.app.scene = s
+			this.app.scene = scene
 
-		//// level from second param
-		let l = this.app.params[1]
-		if( l){
-			l = parseInt( l)
-			if( !isNaN( (l)))
-				this.app._state.level = l
-		}
-		//log('check', 'l:', l)
+		// level from second param
+		// let l = this.app.params[1]
+		// if( l){
+		// 	l = parseInt( l)
+		// 	if( !isNaN( (l)))
+		// 		this.app._state.level = l
+		// }
 	}
 	/*
 	//! erase SW

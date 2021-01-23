@@ -79,7 +79,7 @@ class MenuOptions extends Component {
 			<footer flow='row left'>
 				<a href='/' flow aria-label='home'><button id='btn-home' class='round ${app.UI_button_size_class}'>${ useSVG('home') }</button></a>
 				<small>
-					<div id='app-version'>${ app.version||'2020' }</div>
+					<div id='app-version'>${ app.version||'2021.X.X.A' }</div>
 					<div class='one'>${this.$rights}</div>
 					<a href="mailto:${this.$contact}">${this.$contact}</a>
 				</small>
@@ -146,8 +146,8 @@ MenuOptions.strings = {
 		install1: "Raccourçis sur l'écran d'accueil",
 		install2: "S'ouvre dans une fenêtre autonome",
 		fullscreen: "Plein écran",
-		rights: "© 2020 Expertises didactiques Lyons",
-		contact: "michel.lyons@videotron.ca",
+		rights: "© 2021 inc",
+		contact: "ncode.fun@gmail.com",
 		volume: "Sound volume level"
 	},
 	en: {

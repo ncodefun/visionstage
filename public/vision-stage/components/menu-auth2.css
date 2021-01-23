@@ -1,8 +1,11 @@
 .menu-auth {
-	/* background: pink; */
 	text-align: center;
 }
 
+/**!! BLOCK MAIN IF NOT AUTHENTICATED */
+.app:not(.auth):not([no-auth]) > main { 
+	pointer-events: none !important;
+}
 
 button.signout {
 	position: relative;
@@ -83,7 +86,6 @@ button.signout .exit {
 	font-family: Jost, Roboto, sans-serif;
 	text-transform: uppercase;
 }
-
 .menu-auth button-waiting {
 	margin: .5em 0 1em;
 	min-width: 7em;
@@ -101,6 +103,7 @@ button.signout .exit {
 	padding: .1em .2em 0;
 	color: #fff;
 }
+
 #toggle-menu-auth {
 	visibility: visible; /** hidden by default when not using auth */
 }
@@ -154,19 +157,6 @@ button.signout .exit {
 .menu-auth div.input {
 	position: relative;
 }
-/* .menu-auth div.input:first-of-type {
-	font-size: .85em;
-	text-align: left;
-	height: 1.75em;
-	line-height: 1.8;
-	background: var(--primary-dark);
-	color: #fff;
-	padding: 0 2ch;
-	border-radius: .5em .5em 0 0;
-	min-width: 10em;
-	align-self: flex-start;
-	margin-left: .6em;
-} */
 .menu-auth .input input {
 	color: inherit;
 	font-size: inherit;
@@ -302,269 +292,13 @@ header > h2 + button.small.signup:hover {
 	margin: .5em;
 }
 
-.students-management {
-	background: #ccc;
-	font-size: 1rem;
-}
-.students-management h2 {
-	margin: 1.5rem 0;
-	font-size: 1.6rem;
-}
-.students-management button.close {
-	right: 1rem;
-	top: 1rem;
-	font-size: 1.7rem;
-	height: 2.25rem;
-	width: 2.25rem;
-	padding: 0;
-	color: #777;
-
-}
-.menu-auth.managing-students {
-	z-index: 10;
-}
-
-/* .menu-auth.open .menu-body {
-	overflow: visible;
-} */
-
-
-#students-list {
-	background: var(--blue);
-	border-radius: .5rem;
-	/* text-align: center; */
-	color: #fff;
-	padding: 1rem;
-	margin-bottom: 2rem;
-}
-#students-list h3 {
-	font-weight: 400;
-	margin: 0 0 1rem;
-	padding-left: .6rem;
-}
-#students-list table {
-  border-collapse: collapse;
-}
-#students-list tr:not(:last-of-type) {
-	border-bottom: 1px solid rgba(255, 255, 255, 0.301);
-}
-#students-list td.section {
-	/* background: #0003; */
-	margin: 0 .5rem;
-	overflow: hidden;
-	padding: 0 .5rem;
-	height: 4rem;
-}
-#students-list td.section > span {
-	padding: .25rem 1rem .25rem;
-	/* height: 100%; */
-	height: 2rem;
-	display: inline-block;
-	vertical-align: baseline;
-}
-#students-list .section > span:first-child {
-	/* color: #fffc; */
-	font-size: .9rem;
-	padding-right: .75rem;
-	padding-bottom: 0;
-	line-height: 1.7;
-	background: #0009;
-	border-radius: .33rem 0 0 .33rem;
-}
-#students-list .section > span:last-child {
-	font-family: Consolas, monospace;
-	background: #0006;
-	user-select: text;
-	border-radius: 0 .33rem .33rem 0;
-	margin-left: -5px;
-}
-#students-list .section:nth-child(2) {
-	padding-right: 0 !important;
-}
-#students-list button {
-	line-height: 1;
-	margin: 0 0 0 .5rem;
-	box-shadow: .1rem .2rem .4rem rgba(0,0,0,.33);
-}
-#students-list button[disabled] {
-	opacity: .5;
-}
-#students-list button.delete {
-	background: rgb(194, 40, 40);
-	color: white;
-	/* font-size: 1rem; */
-	padding: 0;
-	margin-left: 1rem;
-	border-color: #fff3;
-	/* border: none; */
-	box-shadow: .1rem .2rem .4rem rgba(0,0,0,.23);
-}
-#students-list button.restrictions,
-#students-list button.stats {
-	background: #0009;
-	color: #fff;
-	border: none;
-	font-size: .9rem;
-	font-family: Roboto, sans-serif;
-	margin-left: 1rem;
-}
-
-.popup {
-	pointer-events: auto;
-	z-index: 2;
-	background: var(--blue);
-	color: white;
-	width: calc(100% - 2rem);
-	height: calc(100% - 2rem);
-	margin: 1rem;
-	left: 0;
-	top: 0;
-	border-radius: .5rem;
-	box-shadow: 0 .6rem 1rem rgba(0,0,0,.33);
-	text-align: center;
-	padding: 1rem 2rem;
-}
-.popup.dirty {
-	background: hsl(273, 63%, 46%);
-}
-
-.popup button.close {
-	right: .5rem;
-	top: .5rem;
-	font-size: 2.5rem;
-	line-height: 0;
-	color: #fff7;
-	width: 3rem;
-	height: 3rem;
-}
-.popup button.close:hover {
-	color: #fffc;
-}
-.popup h1 {
-	all: initial;
-	color: #fffc;
-	font-size: 1.5rem;
-	font-family: Consolas, monospace;
-	margin: .3rem 0 0rem;
-
-	/* font-style: normal; */
-}
-.popup header.line {
-	height: 3rem;
-	border-bottom: 1px solid rgba(255,255,255,.25);
-	margin-bottom: 1rem;
-	margin-top: 1rem;
-}
-.popup div + header.line {
-	border-top: 1px solid rgba(255,255,255,.25);
-	height: 4rem;
-}
-.popup div + header.line > span {
-	justify-content: flex-end;
-	padding-bottom: .5rem;
-}
-.popup header span.col {
-	line-height: 1.2;
-}
-.popup .line {
-	width: 100%;
-	margin: .25rem 0;
-}
-.popup .scene {
-	display: inline-block;
-	width: 11rem;
-	margin-right: .5rem;
-	padding: .25rem 1rem;
-	background: #000a;
-	border-radius: .5rem;
-}
-.popup header .scene {
-	background: none;
-}
-.popup span.col {
-	width: 12rem;
-	height: 100%;
-	margin: 0 1px;
-	line-height: 1.2;
-	/* background: #fff3; */
-}
-.popup span.col span:not(.num) {
-	background: #000a;
-	width: 2.5rem;
-	height: 2rem;
-	border-radius:  50%;
-	margin: 0 .25rem;
-	font-size: .8rem;
-}
-.popup span.col span.num {
-	background: #000a;
-	/* width: 2.5rem;
-	height: 2.5rem;
-	 */
-	border-radius:  .2rem;
-	margin: 0 .25rem;
-	font-size: .8rem;
-	padding: .25rem;
-	margin: .1rem;
-}
-
-
-.popup button.reset {
-	font-size: 1.5rem;
-	line-height: 1;
-	margin-left: auto;
-}
-
-.popup.restrictions header {
-	height: auto;
-	line-height: 2;
-	margin-top: 1rem;
-}
-
-.popup.restrictions span.scene {
-	margin-right: 1rem;
-}
-.popup.restrictions span.level {
-	width: 2rem;
-	height: 2rem;
-	background: #000b;
-	margin: 0 .75rem;
-	border-radius: .25rem;
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-.popup.restrictions header span.level {
-	background: #0005;
-}
-.popup.restrictions span.level[data-checked='true']::after {
-	/* background: #f008; */
-	content: '❌';
-	position: absolute;
-	font-size: 1.33rem;
-	/* margin-left: 1px; */
-	/* width:  */
-
-}
-
-.popup h2 {
-	font-size: 1.25rem !important;
-	font-weight: 400 !important;
-
-}
-
-
 form.student label {
 	margin: 1rem;
 }
-
 .icon svg.person {
 	height: 1.33rem;
 }
-
 .tab-group button.tab {
-	/* background: #dde3ec; */
 	padding-top: .12em;
 	font-weight: bold;
 }

@@ -1,0 +1,20 @@
+
+/**  Adjust threshold and font-size according to title length  **/
+@media (max-aspect-ratio: 3/5){
+	app-main > header h1 { padding: 0 }
+	app-main > header h1 div { font-size: .62em; padding-bottom: .1em; }
+}
+main {
+	padding-top: 1rem;
+	font-weight: bold;
+}
+main > header,
+main > footer {
+	font-size: 2rem;
+	font-weight: bold;
+}
+/** to target by [show-for:scene] you need to escape the colon (:) */
+.app[scene='A'] [show-for\:scene='A C']{ margin-bottom: auto; }
+.app[scene='A'] div:nth-child(2) { margin-top: auto; }
+/** target a value in a list of values w/ ~= (~ =)*/
+[show-for\:scene~='C'] { color: purple; }

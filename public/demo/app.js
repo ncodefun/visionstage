@@ -17,14 +17,14 @@ class App extends AppComponent {
 		/// wait till now to not block app load/render
 		Component.load('menu-scenes')
 		Component.load('menu-options')
-		Component.load('menu-auth2')
+		// Component.load('menu-auth2')
 		this.faded = false
 	}
 
 	template(){
 		return html`
-		<menu-options class='side-menu left layer'></menu-options>
 		<!-- <menu-auth2 class='side-menu right layer'></menu-auth2> -->
+		<menu-options class='side-menu left layer'></menu-options>
 		<popup-full></popup-full>
 
 		<header>
@@ -53,12 +53,13 @@ class App extends AppComponent {
 					>
 					${ useSVG('android-person','','xMidYMid slice') }
 				</button>`
-				: ''
+				: html`<button class='dummy'></button> `
 			}
 
+			<!-- scene names syntax: "$game-B: Game B" -> prefix $ to distinguish scenes from other strings, or use a single letter key -->
 			<menu-scenes flow='col top'
-				strings:fr='A: Un, $jeu-B: Deux'
-				strings:en='A: One, $jeu-B: Two'
+				strings:fr='A: Un, B: Deux, C: Trois'
+				strings:en='A: One, B: Two, C: Three'
 				scene-param-index='0'>
 			</menu-scenes>
 			
@@ -68,8 +69,12 @@ class App extends AppComponent {
 			</p>
 		</header>
 
-		<main>
-
+		<main flow='col space-between'>
+			<header>Headr</header>
+			<div show-for:scene='A'>Scene A</div>
+			<div show-for:scene='B'>Scene B</div>
+			<div show-for:scene='A C'>Scenes A & C</div>
+			<footer >Foo</footer>
 		</main>`
 	}
 
@@ -83,7 +88,7 @@ class App extends AppComponent {
 
 	}
 
-	afterLevelChange(){ //!! -> onLevelChanged
+	afterLevelChange(){
 		
 	}
 	
@@ -103,7 +108,6 @@ App.aspect_ratios_v2 = {
 		'max': 1.777								// extend stage width up to this
 	},
 	cross_margin: '1.2%',					// if dead space on one axis, add margins on the other (looks better…)
-	//ultrawide_cross_margin: '1.2%' // only use cross_margin when we're over landscape.max AR (not below land.min & over thresh.)
 }
 
 App.properties = {

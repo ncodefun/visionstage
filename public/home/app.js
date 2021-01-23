@@ -25,35 +25,28 @@ class App extends AppComponent {
 		// Component.load('menu-scenes')
 		// Component.load('menu-options')
 		// Component.load('menu-auth2')
-		this.faded = false
+		// setTimeout( e => , 5000)
+		
 	}
 
 	template(){
 		return html`
+		<!-- <div class='layer no-events' flow>
+			<img src='./home/images/layout.png' class='layout' alt=''>
+		</div> -->
+		<header flow='col'>
+			<div flow='row top'>
+				<img src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
+				<h1>Vision <span>Stage</span></h1>
+			</div>
+			<div id='tagline' flow='col left'>
+				<p>Web apps in no time </p>
+				<p>Simple components in <span class='highlight'>pure JS/HTML</span> <span class='icon'>🙏</span></p>
+			</div>
+		</header>
+
 		<main flow='col top stretch'><!-- stretch otherwise content overflows?? -->
-			<img src="/home/images/love-in-the-dark.png" class='' alt="">
-			<h1>Vision Stage</h1>
-			<p id='tagline'>A web framework for <span class='nowrap'>free spirits</span> <span class='icon'>🙏</span></p>
-			<p>Simple components <span>pure JS/HTML (lit-html templating), <wbr>ES modules -> No build required!!</span></p>
-			<p>Staged content <span>rem scaled and spaced/framed <wbr>within flexible limits</span></p>
-			<hr>
-			<button class='bare' @click=${ this.onClickMore }>${ this.show_more ? 'Less…' : 'More…' }</button>
-			<section id='more' class=${ this.show_more ? '' : 'hide' }>
-				<!-- <p>Awesome helpers</p> -->
-				<p>Flow attribute for intuitive flex layout <span>flow='col top stretch'</span></p>
-				<p>Insert an icon symbol from icons.svg <span>\${ useSVG('thumbs-up') }</span></p>
-				<p>Use a localized string <span>\${ this.getString('name') } <wbr>or this.$name</span></p>
-				<p>Declare rendering dependency <span>this.uses([[comp,prop1,prop2]])</span></p>
-				<hr>
-				<h2>App Component</h2>	
-				<p>Callbacks <span>onConnected, afterFirstRender, afterRender, <wbr>afterResize, afterSceneChange</span></p>
-				<p>Built-in functional menus <span>scenes, <wbr>options (+ fullscreen & lang selection), <wbr>authentication (Firebase)</span></p>
-				<p>Play a sound <span>this.playSound(name)</span></p>
-				<hr>
-				<h2>Built-in components</h2>	
-				<p>full-stage dynamic popup <span>await & alert or get user input w/ buttons or text</span></p>
-				<p>button-waiting, button-checkbox, range-slider, super-selector (user editable) and more.</p>
-			</section>
+
 			<footer flow><a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a></footer>
 		</main>`
 	}
@@ -67,9 +60,13 @@ class App extends AppComponent {
 
 	}
 
-	onClickMore( e){
-		this.show_more = !this.show_more
+	onImageLoaded( e){
+		this.faded = false
 	}
+
+	// onClickMore( e){
+	// 	this.show_more = !this.show_more
+	// }
 }
 
 App.aspect_ratios_v2 = {
@@ -83,10 +80,10 @@ App.aspect_ratios_v2 = {
 	landscape: {
 		'min': 1.333, 							// base – min width for content
 		'max-content': 1.6, 				// extend content width up to this
-		'max': 1.777								// extend stage width up to this
+		'max': 2								// extend stage width up to this
 	},
-	// cross_margin: '1.2%',
-	ultrawide_cross_margin: '1.2%'
+	cross_margin: '1.2%',
+	// ultrawide_cross_margin: '1.2%'
 }
 
 App.properties = {

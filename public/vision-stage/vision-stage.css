@@ -1,7 +1,6 @@
-/** min and content-max-ar are the extreme of portrait (min) and landscape (max) ARs
-/** they allow to limit the content (<main>) aspect ratio inside the more extreme ones of the stage
-/** This way we keep the content from spreading too thin on very wide or very narrow screens, while allowing the stage and header to occupy more fully the available space. */
-
+html {
+	/* --title-banner-color:  */
+}
 .stage.dark-mode {
 	background-color: #16171a;
 	background-blend-mode: soft-light;
@@ -160,15 +159,26 @@
 
 /** COLORS **/
 	html {
-		/* --btn-bg: #f7f7f7; */
+		--soft: hsl(214, 22%, 41%);
+		--soft-dark: hsl(214, 6%, 25%);
+		--soft-darker: hsl(215, 11%, 22%);
+		--soft-darkest: hsl(214, 9%, 15%);
+		--blue: #0a68ff;
+		--dark-blue: var(--soft-dark,#3c4549);
+		--primary-dark: hsl(217, 100%, 52%);
+		--primary-darker: hsl(217, 66%, 41%);
+		--primary-darker-faded: hsla(217, 36%, 61%, 1);
+		--primary-darkest: hsl(218, 18%, 29%);
+		--btn-bg: #f7f7f7;
 	}
 	body { 
-		background: hsl(251, 28%, 24%); 
+		background: var(--soft-dark);
 		color: hsl(267, 100%, 96%);
 	}
-	.stage { 
+	.stage, #loading { 
 		/*background-color: #C6C6C6; /** opaque version is mixed with #d7d7d7 */
 		background: url(/vision-stage-resources/images/textures/paper-opaque-8bit.png);
+		color: var(--soft-darker, #272727);
 	}
 
 	::selection {
@@ -183,7 +193,7 @@
 		text-align: center;
 		color: white;
 		z-index: 1;
-		background: var(--primary-darker);
+		/* background: #ccc; */
 		transition: opacity .23s ease-out;
 	}
 	#loading.faded {
@@ -271,7 +281,6 @@
 		user-select: none;
 	}
 
-
 	img { margin: 0; display: inline-block }
 	noscript { color: white }
 
@@ -283,7 +292,7 @@
 		margin: 0;
 		min-height:100%; 
 
-		/*overflow: hidden; /** prevents random scroll bars...*/
+		overflow: hidden; /** prevents random scroll bars...*/
 		/*! BUT ALSO BREAKS IOS SCROLLING */
 		box-sizing: border-box;
 	}
@@ -487,11 +496,6 @@
 		{ pointer-events: none } /** might block scenes before its css is fully loaded */
 	#toggle-menu-auth
 		{ visibility: hidden } /** hidden by default when not using auth */
-	
-	/* #toggle-menu-options[disabled],
-	#toggle-menu-auth[disabled]
-		{ opacity: .42; pointer-events: none } */
-
 /***/
 
 /** SHOW-FOR:LEVEL **/
@@ -554,10 +558,10 @@
 /***/
 
 /** SIDE MENUS **/
-	vision-stage.has-margins .side-menu.left {
+	.stage.has-margins .side-menu.left {
 		border-radius: .5rem 0 0 .5rem; 
 	}
-	vision-stage.has-margins .side-menu.right {
+	.stage.has-margins .side-menu.right {
 		border-radius: 0 .5rem .5rem 0; 
 	}
 	.side-menu a {
@@ -672,10 +676,10 @@
 		border-bottom-color: #fff2;
 		border-top-color: #fff5;
 	}
-	vision-stage.has-margins .side-menu.left .menu-body > header::before { border-radius: .5rem 0 0 0 }
-	vision-stage.has-margins .side-menu.left .menu-body > footer::before { border-radius: 0 0 0 .5rem }
-	vision-stage.has-margins .side-menu.right .menu-body > header::before { border-radius: 0 .5rem 0 0 }
-	vision-stage.has-margins .side-menu.right .menu-body > footer::before { border-radius: 0 0 .5rem 0 }
+	.stage.has-margins .side-menu.left .menu-body > header::before { border-radius: .5rem 0 0 0 }
+	.stage.has-margins .side-menu.left .menu-body > footer::before { border-radius: 0 0 0 .5rem }
+	.stage.has-margins .side-menu.right .menu-body > header::before { border-radius: 0 .5rem 0 0 }
+	.stage.has-margins .side-menu.right .menu-body > footer::before { border-radius: 0 0 .5rem 0 }
 
 	.side-menu .menu-body > footer {
 		text-align: center;
@@ -688,6 +692,7 @@
 		margin: 0 .75em;
 	}
 	.side-menu.left .menu-body > footer small {
+		text-align: right;
 		font-size: .85em;
 		display: block;
 		padding: 0 calc((var(--top-corner-width,4em) - var(--button-size)) / 2) .5em 0;
@@ -705,11 +710,47 @@
 	}
 /***/
 
+/** STAGE */
+	.stage {
+		width: var(--stw);
+		height: var(--sth);
+		position: relative;
+	}
+	.stage.has-margins {
+		border-radius: .25rem;
+		box-shadow: 0 .125rem 1rem -.25rem rgb(0, 0, 0, .33);
+	}
+	.stage.has-margins > * {
+		border-radius: inherit;
+	}
+	body:not(.has-scrollbar) .stage.has-margins {
+		border-radius: .5rem;
+	}
+/***/
 
-.app:not(.auth):not([no-auth]) main {
-	pointer-events: none !important;
+
+.app { /** app-main */
+	display: block;
+	width: 100%;
+	height: 100%;
+	transition: opacity .23s .23s ease-out;
+}
+.app > main { /** OPT IN MAX-WIDTH/HEIGHT ? */
+	position: relative;
+	margin: auto;
+	
+	width: 100%;
+	max-width: calc(var(--sth) * var(--stage-ar-for-widest-content));
+	justify-self: center;
+
+	height: 100%; 
+	max-height: calc(100vw * 1 / var(--stage-ar-for-tallest-content) - var(--header-height));
+	align-self: end; /** stick to bottom after max-height is reached */
 }
 
+
+
+/** keep here: we might want to keep the button but disabled if we dont use auth ? else missing button… */
 #toggle-menu-auth {
 	position: relative;
 }
@@ -717,124 +758,121 @@
 	top: 100%;
 }
 
-.stage {
-  width: var(--stw);
-  height: var(--sth);
-  position: relative;
-}
-.stage.has-margins {
-	border-radius: .25rem;
-  box-shadow: 0 .125rem 1rem -.25rem rgb(0, 0, 0, .33);
-}
-.stage.has-margins > * {
-  border-radius: inherit;
-}
-body:not(.has-scrollbar) .stage.has-margins {
-  border-radius: .5rem;
-}
-
-.app { /** app-main */
-	/* background: dodgerblue; */
-	/* color: white; */
-	display: block;
-	width: 100%;
-	height: 100%;
-	/* align-content: space-between; */
-}
-.app.has-header {
-	display: grid;
-	grid-template-rows: var(--header-height) 1fr;
-	gap: 0;
-}
-
-.app > header {
-	user-select: none;
-	position: relative;
-	/* background: palegreen; */
-	font-size: var(--header-font-size);
-
-
-	/**!! the 9.25em min for center (#title-banner-pill) is designed to push side button a bit to the sides as they're comming closer the the scene selection button as the screen gets narrower, up to the ultra-tall AR of .5; if we'd choose to go even narrower we'll have to adjust this to prevent overflow. */
-	
-	display: grid;
-	grid-template-columns: minmax(3.25em,4.5em) minmax(9.25em,1fr) minmax(3.25em,4.5em);
-	max-height: var(--header-height);
-	grid-template-rows: var(--header-height);
-
-	align-items: center;
-	justify-items: center;
-}
+/** MENU LEFT BUTTON */
 .top-corner-wrapper { /** wrapper fills grid slot and used to get slot size */
 	width: 100%;
 }
 
-#title-banner-pill {
-	position: relative;
-	background: var(--title-banner-color, var(--primary-dark, #eee));
-	border-radius: 2rem;
-	padding: 0 1ch;
-	height: 2.25em;
-	width: 100%;
-	max-width: 18em;
-	margin: 0 auto;
-	box-shadow: 
-		0 0.7rem 0.4rem -0.5rem hsla(0, 0%, 0%, 0.22);
-		/* inset 0 -.1rem 0.4rem #ffffff00; */
-}
-.app[opened-menu='scenes'] #title-banner-pill {
-	box-shadow: 
-		0 0.8rem 0.6rem -0.5rem hsla(0, 0%, 0%, 0.33);
-		/* inset 0 -.1rem 0.4rem #ffffff22; */
-}
-.title-banner h1 {
-	/* */
-	color: var(--title-color,#fffe);
-	pointer-events: none;
-	user-select: none;
-	font: 2em/1 Rokkitt, sans-serif;
-	margin: 0;
-	line-height: 1;
-	text-align: center;
-	text-shadow: var(--title-shadow, 0 .15rem 0.23rem rgba(0,0,0,.23));
-
-	font-family: Gro Bold;
-  font-size: 1.5em;
-  letter-spacing: 0.03em;
-  /* text-transform: uppercase; */
+.stay-big {
+	font-size: var(--header-font-size); /* !! rename ? */
 }
 
-.app:not([opened-menu='scenes']) > header.has-scenes #title-banner-pill {
-	transform: translateY(-.85em);
-}
-
-main {
-	position: relative;
-	width: 100%;
-		max-width: calc(var(--sth) * var(--stage-ar-for-widest-content));
-		justify-self: center;
-
-	height: 100%; 
-		/* overflow: hidden; */
-		max-height: calc(100vw * 1 / var(--stage-ar-for-tallest-content) - var(--header-height));
-		align-self: end;
-}
 
 .admin {
-  border: .125rem dotted hsl(44, 100%, 74%);
-  background: hsla(44, 100%, 94%,.75);
-  background-clip: padding-box;
-	
+	border: .125rem dotted hsl(44, 100%, 74%);
+	background: hsla(44, 100%, 94%,.75);
+	background-clip: padding-box;
 }
 
-/** below portrait.min main content scales down to keep fitting the stage width
-/** but header content doesn't scale down until stage.min (this keep the main UI relatively big on narrow screen)
-/** we can restrict .app width and allow stage to be wider (to AR: stage.max) */
-
-
-.app {
-	transition: opacity .23s .23s ease-out;
+button.dummy {
+	display: none;
 }
 
+/** défi style  */
+
+	.app.grid {
+		display: grid;
+		grid-template-rows: var(--header-height) 1fr;
+		gap: 0;
+	}
+	.app.grid > header {
+		user-select: none;
+		position: relative;
+		font-size: var(--header-font-size);
+
+		/** the 9.25em min for center (#title-banner-pill) is designed to push side button a bit to the sides as they're comming closer the the scene selection button as the screen gets narrower, up to the ultra-tall AR of .5; if we'd choose to go even narrower we'll have to adjust this to prevent overflow. */
+		display: grid;
+		grid-template-columns: minmax(3.25em,4.5em) minmax(9.25em,1fr) minmax(3.25em,4.5em);
+		max-height: var(--header-height);
+		grid-template-rows: var(--header-height);
+
+		align-items: center;
+		justify-items: center;
+	}
+
+	/** TITLE */
+	#title-banner-pill {
+		position: relative;
+		background: var(--title-banner-color, var(--primary-dark, #fce));
+		border-radius: 2rem;
+		padding: 0 1ch;
+		height: 2.25em;
+		width: 100%;
+		max-width: 18em;
+		margin: 0 auto;
+		box-shadow: 
+			0 0.7rem 0.4rem -0.5rem hsla(0, 0%, 0%, 0.22);
+			/* inset 0 -.1rem 0.4rem #ffffff00; */
+	}
+	.app[opened-menu='scenes'] #title-banner-pill {
+		box-shadow: 
+			0 0.8rem 0.6rem -0.5rem hsla(0, 0%, 0%, 0.33);
+			/* inset 0 -.1rem 0.4rem #ffffff22; */
+	}
+	.title-banner h1 {
+		color: var(--title-color,#fffe);
+		pointer-events: none;
+		user-select: none;
+		font: 2em/1 Rokkitt, sans-serif;
+		margin: 0;
+		line-height: 1;
+		text-align: center;
+		text-shadow: var(--title-shadow, 0 .15rem 0.23rem rgba(0,0,0,.23));
+		font-family: Gro Bold;
+		font-size: 1.5em;
+		letter-spacing: 0.03em;
+		/* text-transform: uppercase; */
+	}
+	.app:not([opened-menu='scenes']).has-scenes #title-banner-pill {
+		transform: translateY(-.85em);
+	}
+
+	.app > header #menu-scenes-message {
+		bottom: calc(50% - 15em);
+		left: calc(50%);
+		transform: translateX(-50%);
+		visibility: hidden;
+		will-change: opacity;
+		opacity: 0;
+		background: #c2ffc2;
+		padding: 1ch 2ch;
+		border-radius: .5em;
+		box-shadow: 
+			0 0.25rem 0.6rem -0.123rem rgba(0, 0, 0, 0.18), 
+			inset 0 0 0.4em rgba(255, 255, 255, 0.15);
+		margin: 0 auto;
+		color: rgb(76, 122, 76);
+		font-size: .85em;
+		white-space: nowrap;
+	}
+	.app[opened-menu='scenes'] > header #menu-scenes-message {
+		visibility: visible;
+		opacity: 1;
+		transition: opacity .5s .7s ease;
+	}
+
+
+.no-events { pointer-events: none }
+.scroll {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  overflow-y: auto !important; 
+}
+body.has-srollbar .scroll { /** has-scrollbar is auto set in JS */
+	scroll-behavior: smooth;
+	overflow-y: auto;
+}
 .scroll::-webkit-scrollbar {
   position: relative;
   width: .67rem; 
@@ -854,76 +892,13 @@ main {
 	box-shadow: 
 		.07rem .15rem .25rem  rgb(0, 0, 0, .12); 
 }
-.scroll {
-	pointer-events: auto !important;
-  touch-action: pan-y !important;
-  -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
-  overflow-y: auto !important; 
-}
-body.has-srollbar .scroll {
-	scroll-behavior: smooth;
-	overflow-y: auto;
-}
-/* body.has-srollbar .stage.has-margins {
-  border-radius: 1rem 0 0 1rem;
-} */
 
-
-.levels {
-  position: absolute;
-  top: 6em;
-  z-index: 1;
-}
-.levels button {
-  font-size: 1em;
-  width: 3.3em;
-  height: 2.5em;
-  margin: 0 .33em;
-  position: relative;
-  align-items: flex-start;
-  /** more intense (higher overshoot) for smaller images */
-  transition: transform 0.22s cubic-bezier(0.21, 0.63, 0.52, 1.72);
-  will-change: transform;
-}
-.jump,
-.levels button.selected {
-  transform: scale(1.33);
-  transform-origin: center center;
-}
-.levels button.selected:active {
-  transform: scale(1.44) !important; /** override default depressed fx */
+hr.split {
+  margin-top: auto !important;
+  visibility: hidden;
 }
 
-.levels button img {
-  object-fit: contain;
-  height: 100%;
-  width: auto;
-}
-.levels button img.shadow {
-  position: relative;
-  height: 2.6em;
-  top: .25em;
-  opacity: .6;
-  filter: blur(1.5px);
-  will-change: transform;
-}
-.levels button.selected img.shadow {
-  transform: scale(1.1);
-	
-}
-.levels button:nth-of-type(1) img.top {
-  filter: contrast(.9) brightness(1.15) !important;
-}
-.levels button:nth-of-type(2) img.top {
-  filter: contrast(.33) brightness(1.6) !important;
-}
-.levels button:nth-of-type(3) img.top {
-  filter: contrast(.9) brightness(1.15) !important;
-}
-.levels button img.shadow {
-  z-index: 0;
-}
+.nowrap { white-space: nowrap }
 
 .text-center {text-align: center}
 .text-left {text-align: left}
@@ -1008,62 +983,9 @@ body.has-srollbar .scroll {
 
 [flow~='inline'] { display: inline-flex }
 
+
 /** ////// **/
 
-
-
-.btn-next > svg {
-	position: relative;
-	left: .06em;
-	/* height: 120%; */
-	filter: drop-shadow(.04em .1em .07em rgba(0, 0, 0, .21));
-	stroke: #000 !important;
-}
-#btn-home,
-#fullscreen-toggle {
-	padding: 0 .75ch;
-}
-#fullscreen-toggle svg {
-	position: relative;
-	left: .03em;
-}
-/* ,
-#btn-home {
-	color: var(--primary-darker);
-} */
-#btn-home svg {
-	position: relative;
-	top: -.05em;
-}
-
-
-.text-center {
-	text-align: center;
-}
-#menu-scenes-message {
-	bottom: calc(50% - 15em);
-	left: calc(50%);
-	transform: translateX(-50%);
-	visibility: hidden;
-	will-change: opacity;
-	opacity: 0;
-	background: #c2ffc2;
-	padding: 1ch 2ch;
-	border-radius: .5em;
-	box-shadow: 
-		0 0.25rem 0.6rem -0.123rem rgba(0, 0, 0, 0.18), 
-		inset 0 0 0.4em rgba(255, 255, 255, 0.15);
-	margin: 0 auto;
-	color: rgb(76, 122, 76);
-	font-size: .85em;
-	white-space: nowrap;
-}
-.app[opened-menu='scenes'] #menu-scenes-message {
-	visibility: visible;
-	opacity: 1;
-	/* transform: translateX(-50%) scale(1); */
-	transition: opacity .5s .7s ease;
-}
 
 .tab-group {
   display: flex;
@@ -1103,10 +1025,4 @@ body.has-srollbar .scroll {
 .tab-group button.tab.selected::after {
 	content: '';
 
-}
-.nowrap { white-space: nowrap }
-
-hr.split {
-  margin-top: auto !important;
-  visibility: hidden;
 }
