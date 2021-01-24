@@ -1,9 +1,8 @@
 import { q, range } from '/vision-stage/modules/utils-core.js'
-import { AppComponent, Component, html, define, log, getStage, useSVG } from '/vision-stage/vision-stage.js'
+import { VisionStage, Component, html, define, log, useSVG } 
+	from '/vision-stage/vision-stage.js'
 
-const stage = getStage()
-
-class App extends AppComponent {
+class App extends VisionStage {
 
 	onConnected(){
 		this.render()
@@ -124,4 +123,4 @@ App.sounds = [
 	// ['wrong', '/vision-stage-resources/sounds/wrong.mp3', { volume:.6 }],
 ]
 
-define( 'app-main', App)
+define( 'vision-stage', App)
