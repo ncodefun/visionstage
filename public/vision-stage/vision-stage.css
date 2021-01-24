@@ -548,7 +548,7 @@ html {
 	.app[opened-menu]:not([opened-menu='']):not([opened-menu='auth']) #toggle-menu-auth,
 	.app[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) #title-banner-pill,
 	.app[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) menu-scenes,
-	.app[opened-menu]:not([opened-menu='']) > main,
+	.app.grid[opened-menu]:not([opened-menu='']) > main,
 	.app[opened-menu]:not([opened-menu='']) > iframe,
 	.app[opened-menu]:not([opened-menu='']) .levels
 		{ filter: blur(5px) }
@@ -735,10 +735,10 @@ html {
 	height: 100%;
 	transition: opacity .23s .23s ease-out;
 }
-.app > main { /** OPT IN MAX-WIDTH/HEIGHT ? */
+.app.grid > main { /** OPT IN MAX-WIDTH/HEIGHT ? */
 	position: relative;
 	margin: auto;
-	
+
 	width: 100%;
 	max-width: calc(var(--sth) * var(--stage-ar-for-widest-content));
 	justify-self: center;
@@ -927,6 +927,9 @@ hr.split {
   height: 100%;
 }
 
+[flow] > * {
+	flex-shrink: 0;
+}
 [flow],
 [flow~='row'],
 [flow~='row-rev'],
