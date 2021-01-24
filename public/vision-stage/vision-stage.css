@@ -1,7 +1,7 @@
 html {
 	/* --title-banner-color:  */
 }
-.stage.dark-mode {
+vision-stage.dark-mode {
 	background-color: #16171a;
 	background-blend-mode: soft-light;
 	color: #fffd;
@@ -175,7 +175,7 @@ html {
 		background: var(--soft-dark);
 		color: hsl(267, 100%, 96%);
 	}
-	.stage, #loading { 
+	vision-stage, #loading { 
 		/*background-color: #C6C6C6; /** opaque version is mixed with #d7d7d7 */
 		background: url(/vision-stage-resources/images/textures/paper-opaque-8bit.png);
 		color: var(--soft-darker, #272727);
@@ -280,7 +280,6 @@ html {
 	button {
 		user-select: none;
 	}
-
 	img { margin: 0; display: inline-block }
 	noscript { color: white }
 
@@ -351,7 +350,6 @@ html {
 	button.UI svg {
 		height: 68%;
 	}
-
 	button.round {
 		border-radius: 50%;
 		width: var(--button-size);
@@ -362,7 +360,6 @@ html {
 		width: var(--button-size);
 		padding: .25em 0;
 	}
-
 	button.bare {
 		background: none;
 		border: none;
@@ -390,6 +387,8 @@ html {
 		color: #fffd; 
 		border-color: #fff3
 	}
+
+
 	input[type='text']{
 		height: 2.25rem;
 	}
@@ -411,31 +410,20 @@ html {
 		stroke: none;
 		filter: drop-shadow(0 .12rem .06rem rgba(0, 0, 0, 0.22));
 	}
-	hr {
-		width: 80%;
-		margin: .75rem auto .25rem;
-		border: none;
-		border-top: 1.5px solid rgba(255, 255, 255, 0.33);
-		border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
-		box-shadow: 0 .15rem .2rem rgba(0, 0, 0, 0.05);
-	}
-	hr.inset {
-		border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
-		border-top: 1.5px solid rgba(0, 0, 0, 0.1);
-		box-shadow: 0 -.15rem .2rem rgba(0, 0, 0, 0.05);
-	}
+
 	/* 
 	button > svg.stroke {
 		stroke: var(--primary-darker);
 		stroke-width: .12em;
 		stroke-linejoin: round;
 	} */
+
 /***/
 
 /**  Z-INDEX  **/
-	.app
+	vision-stage
 		{ z-index: 0 }
-	.menu-veil
+	#veil
 		{ z-index: 2 } /** is initially hidden */
 	popup-full 
 		{ z-index: 5 }
@@ -454,12 +442,12 @@ html {
 	}
 
 	.menu.open,
-	.app[opened-menu='options'] #toggle-menu-options,
-	.app[opened-menu='auth'] #toggle-menu-auth {
+	vision-stage[opened-menu='options'] #toggle-menu-options,
+	vision-stage[opened-menu='auth'] #toggle-menu-auth {
 		z-index: 3;
 		transition: none;
 	}
-	.app[opened-menu='scenes'] .title-banner { /** toggle-menu-scenes; same as above but keep transform transition */
+	vision-stage[opened-menu='scenes'] .title-banner { /** toggle-menu-scenes; same as above but keep transform transition */
 		z-index: 4;
 		transition: transform .3s ease;
 	}
@@ -471,7 +459,7 @@ html {
 
 
 	/**  TO TEST  **/
-	.app.call-attention #dark-veil 
+	vision-stage.call-attention #dark-veil 
 		{ z-index: 3 }
 /***/
 
@@ -486,82 +474,73 @@ html {
 /***/
 
 /** INITIAL / TEMP **/
-	.app {
-		transition: opacity .5s ease;
-	}
-	.app.faded {
-		opacity: 0;
-	}
+
+	vision-stage.faded 
+		{ opacity: 0 }
 	.menu-auth 
 		{ pointer-events: none } /** might block scenes before its css is fully loaded */
 	#toggle-menu-auth
 		{ visibility: hidden } /** hidden by default when not using auth */
+
 /***/
 
 /** SHOW-FOR:LEVEL **/
-	.app:not([user-role='admin']) [show-for\:role~='admin'],
-	.app[level='1'] *[show-for\:level]:not([show-for\:level~='1']),
-	.app[level='2'] *[show-for\:level]:not([show-for\:level~='2']),
-	.app[level='3'] *[show-for\:level]:not([show-for\:level~='3']),
-	.app[level='4'] *[show-for\:level]:not([show-for\:level~='4']),
-	.app[level='5'] *[show-for\:level]:not([show-for\:level~='5']) { 
+	vision-stage:not([user-role='admin']) [show-for\:role~='admin'],
+	vision-stage[level='1'] *[show-for\:level]:not([show-for\:level~='1']),
+	vision-stage[level='2'] *[show-for\:level]:not([show-for\:level~='2']),
+	vision-stage[level='3'] *[show-for\:level]:not([show-for\:level~='3']),
+	vision-stage[level='4'] *[show-for\:level]:not([show-for\:level~='4']),
+	vision-stage[level='5'] *[show-for\:level]:not([show-for\:level~='5']) { 
 		display: none !important 
 	}
 /***/
 
-/** VEILS **/
-	.veil {
+/** VEIL (content cover when a menu is open) **/
+	#veil {
 		visibility: hidden;
 		opacity: 0;
 		/** hidding transition; vis delayed */
 		transition: opacity .6s, visibility 0s .6s; /*, backdrop-filter .6s; /*, ;*/
 		will-change: opacity, visibility; /*, backdrop-filter; */
-	}
-	#bright-veil {
 		background: url(/vision-stage-resources/images/textures/brushed-alum.png) #ffffffe7;
 		/* background-blend-mode: multiply; */
 	}
-	#dark-veil {
-		background: hsla(220, 5%, 12%, 0.92);
-	}
-	/*.app:not(.optimized-perf) .veil {
-		/** little bit buggy on chromium browsers *
+
+	/**! little bit buggy on chromium browsers */
+	/*
+		vision-stage:not(.optimized-perf) #veil {
 		backdrop-filter: blur(5px);
 		-webkit-backdrop-filter: blur(5px);
 	}*/
 
-	.app[opened-menu]:not([opened-menu='']) .menu-veil,
-	.app.call-attention #dark-veil 
-	{
+	vision-stage[opened-menu]:not([opened-menu='']) #veil,
+	vision-stage.call-attention #veil {
 		visibility: visible;
 		opacity: .85;
 		/** showing transition */
 		transition: opacity .3s !important; /*, backdrop-filter .3s;*/
 	}
-
-	.stage.has-margins .veil {
+	vision-stage.has-margins #veil {
 		border-radius: inherit;
 	}
 
 	/** ALTERNATIVE TO BUGGY BACKDROP FILTER */
-	.app[opened-menu]:not([opened-menu='']):not([opened-menu='options']) #toggle-menu-options,
-	.app[opened-menu]:not([opened-menu='']):not([opened-menu='auth']) #toggle-menu-auth,
-	.app[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) #title-banner-pill,
-	.app[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) menu-scenes,
-	.app.grid[opened-menu]:not([opened-menu='']) > main,
-	.app[opened-menu]:not([opened-menu='']) > iframe,
-	.app[opened-menu]:not([opened-menu='']) .levels
+	vision-stage[opened-menu]:not([opened-menu='']):not([opened-menu='options']) #toggle-menu-options,
+	vision-stage[opened-menu]:not([opened-menu='']):not([opened-menu='auth']) #toggle-menu-auth,
+	vision-stage[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) #title-banner-pill,
+	vision-stage[opened-menu]:not([opened-menu='']):not([opened-menu='scenes']) menu-scenes,
+	vision-stage.grid[opened-menu]:not([opened-menu='']) > main,
+	vision-stage[opened-menu]:not([opened-menu='']) > iframe,
+	vision-stage[opened-menu]:not([opened-menu='']) .levels
 		{ filter: blur(5px) }
-
-
 
 /***/
 
 /** SIDE MENUS **/
-	.stage.has-margins .side-menu.left {
+	vision-stage.has-margins .side-menu.left {
 		border-radius: .5rem 0 0 .5rem; 
 	}
-	.stage.has-margins .side-menu.right {
+	vision-stage.has-margins .side-menu.right {
 		border-radius: 0 .5rem .5rem 0; 
 	}
 	.side-menu a {
@@ -610,15 +589,9 @@ html {
 		height: 100%;
 		width: 21em; 
 		max-width: 100%;
-		/* contain: strict; */
 		overflow: hidden; /** for a scrollable child */
-		/* background-color: hsl(218, 18%, 29%, .92); */
-		/* background-color: hsl(218, 16%, 44%); */
 		background: url(/vision-stage-resources/images/textures/brushed-alum.png) #e1e1e1 fixed;
-		/* background: #fff5 fixed; */
-		/* background-image: url(/vision-stage-resources/images/textures/paper.png); */
 		background-blend-mode: color-dodge;
-		/* background-image: url(/vision-stage-resources/images/textures/brushed-aluminium-blue.png); */
 	}
 	.side-menu.left .menu-body section {
 		font-family: Roboto Condensed, Roboto, sans-serif;
@@ -676,10 +649,14 @@ html {
 		border-bottom-color: #fff2;
 		border-top-color: #fff5;
 	}
-	.stage.has-margins .side-menu.left .menu-body > header::before { border-radius: .5rem 0 0 0 }
-	.stage.has-margins .side-menu.left .menu-body > footer::before { border-radius: 0 0 0 .5rem }
-	.stage.has-margins .side-menu.right .menu-body > header::before { border-radius: 0 .5rem 0 0 }
-	.stage.has-margins .side-menu.right .menu-body > footer::before { border-radius: 0 0 .5rem 0 }
+	vision-stage.has-margins .side-menu.left .menu-body > header::before 
+		{ border-radius: .5rem 0 0 0 }
+	vision-stage.has-margins .side-menu.left .menu-body > footer::before 
+		{ border-radius: 0 0 0 .5rem }
+	vision-stage.has-margins .side-menu.right .menu-body > header::before 
+		{ border-radius: 0 .5rem 0 0 }
+	vision-stage.has-margins .side-menu.right .menu-body > footer::before 
+		{ border-radius: 0 0 .5rem 0 }
 
 	.side-menu .menu-body > footer {
 		text-align: center;
@@ -710,32 +687,32 @@ html {
 	}
 /***/
 
-/** STAGE */
-	.stage {
+/** STAGE */	
+
+	vision-stage {
 		width: var(--stw);
 		height: var(--sth);
 		position: relative;
 	}
-	.stage.has-margins {
+	vision-stage.has-margins {
 		border-radius: .25rem;
 		box-shadow: 0 .125rem 1rem -.25rem rgb(0, 0, 0, .33);
 	}
-	.stage.has-margins > * {
+	vision-stage.has-margins > * {
 		border-radius: inherit;
 	}
-	body:not(.has-scrollbar) .stage.has-margins {
+	body:not(.has-scrollbar) vision-stage.has-margins {
 		border-radius: .5rem;
 	}
 /***/
 
 
-.app { /** app-main */
+vision-stage {
 	display: block;
-	width: 100%;
-	height: 100%;
 	transition: opacity .23s .23s ease-out;
 }
-.app.grid > main { /** OPT IN MAX-WIDTH/HEIGHT ? */
+
+vision-stage.grid > main { /** OPT IN MAX-WIDTH/HEIGHT  */
 	position: relative;
 	margin: auto;
 
@@ -743,12 +720,10 @@ html {
 	max-width: calc(var(--sth) * var(--stage-ar-for-widest-content));
 	justify-self: center;
 
-	height: 100%; 
+	height: 100%; /** grid item; needed so it extend ? */
 	max-height: calc(100vw * 1 / var(--stage-ar-for-tallest-content) - var(--header-height));
 	align-self: end; /** stick to bottom after max-height is reached */
 }
-
-
 
 /** keep here: we might want to keep the button but disabled if we dont use auth ? else missing button… */
 #toggle-menu-auth {
@@ -767,25 +742,21 @@ html {
 	font-size: var(--header-font-size); /* !! rename ? */
 }
 
-
 .admin {
 	border: .125rem dotted hsl(44, 100%, 74%);
 	background: hsla(44, 100%, 94%,.75);
 	background-clip: padding-box;
 }
 
-button.dummy {
-	display: none;
-}
 
 /** défi style  */
 
-	.app.grid {
+	vision-stage.grid {
 		display: grid;
 		grid-template-rows: var(--header-height) 1fr;
 		gap: 0;
 	}
-	.app.grid > header {
+	vision-stage.grid > header {
 		user-select: none;
 		position: relative;
 		font-size: var(--header-font-size);
@@ -814,7 +785,7 @@ button.dummy {
 			0 0.7rem 0.4rem -0.5rem hsla(0, 0%, 0%, 0.22);
 			/* inset 0 -.1rem 0.4rem #ffffff00; */
 	}
-	.app[opened-menu='scenes'] #title-banner-pill {
+	vision-stage[opened-menu='scenes'] #title-banner-pill {
 		box-shadow: 
 			0 0.8rem 0.6rem -0.5rem hsla(0, 0%, 0%, 0.33);
 			/* inset 0 -.1rem 0.4rem #ffffff22; */
@@ -833,11 +804,11 @@ button.dummy {
 		letter-spacing: 0.03em;
 		/* text-transform: uppercase; */
 	}
-	.app:not([opened-menu='scenes']).has-scenes #title-banner-pill {
+	vision-stage:not([opened-menu='scenes']).has-scenes #title-banner-pill {
 		transform: translateY(-.85em);
 	}
 
-	.app > header #menu-scenes-message {
+	vision-stage > header #menu-scenes-message {
 		bottom: calc(50% - 15em);
 		left: calc(50%);
 		transform: translateX(-50%);
@@ -855,55 +826,76 @@ button.dummy {
 		font-size: .85em;
 		white-space: nowrap;
 	}
-	.app[opened-menu='scenes'] > header #menu-scenes-message {
+	vision-stage[opened-menu='scenes'] > header #menu-scenes-message {
 		visibility: visible;
 		opacity: 1;
 		transition: opacity .5s .7s ease;
 	}
 
 
-.no-events { pointer-events: none }
-.scroll {
-  touch-action: pan-y;
-  -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
-  overflow-y: auto !important; 
-}
-body.has-srollbar .scroll { /** has-scrollbar is auto set in JS */
-	scroll-behavior: smooth;
-	overflow-y: auto;
-}
-.scroll::-webkit-scrollbar {
-  position: relative;
-  width: .67rem; 
-	overflow: hidden;
-}
-.scroll.mini-scrollbar::-webkit-scrollbar {
-  width: .42rem;	
-}
-.scroll::-webkit-scrollbar-track {
-  background-color: hsla(0, 0%, 0%, .12); 
-	background: var(--scrollbar-color,  hsla(0, 0%, 0%, .12));
-	box-shadow: inset .2rem 0 .2rem #00000007;
-}
-.scroll::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb-color,#ddd); /*#e7e7e7*/
-	border-radius: 2px;
-	box-shadow: 
-		.07rem .15rem .25rem  rgb(0, 0, 0, .12); 
-}
 
+
+/** SCROLL **/
+	.scroll {
+		touch-action: pan-y;
+		-webkit-overflow-scrolling: touch;
+		overflow-x: hidden;
+		overflow-y: auto !important; 
+	}
+	body.has-srollbar .scroll { /** has-scrollbar is auto set in JS */
+		scroll-behavior: smooth;
+		overflow-y: auto;
+	}
+	.scroll::-webkit-scrollbar {
+		position: relative;
+		width: .67rem; 
+		overflow: hidden;
+	}
+	.scroll.mini-scrollbar::-webkit-scrollbar {
+		width: .42rem;	
+	}
+	.scroll::-webkit-scrollbar-track {
+		background-color: hsla(0, 0%, 0%, .12); 
+		background: var(--scrollbar-color,  hsla(0, 0%, 0%, .12));
+		box-shadow: inset .2rem 0 .2rem #00000007;
+	}
+	.scroll::-webkit-scrollbar-thumb {
+		background-color: var(--scrollbar-thumb-color,#ddd); /*#e7e7e7*/
+		border-radius: 2px;
+		box-shadow: 
+			.07rem .15rem .25rem  rgb(0, 0, 0, .12); 
+	}
+
+/***/
+
+
+button.dummy {
+	display: none;
+}
+hr {
+	width: 80%;
+	margin: .75rem auto .25rem;
+	border: none;
+	border-top: 1.5px solid rgba(255, 255, 255, 0.33);
+	border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
+	box-shadow: 0 .15rem .2rem rgba(0, 0, 0, 0.05);
+}
+hr.inset {
+	border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
+	border-top: 1.5px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 -.15rem .2rem rgba(0, 0, 0, 0.05);
+}
 hr.split {
   margin-top: auto !important;
   visibility: hidden;
 }
-
+.no-events { pointer-events: none }
 .nowrap { white-space: nowrap }
-
 .text-center {text-align: center}
 .text-left {text-align: left}
 .text-right {text-align: right}
 .text-justify {text-align: justify}
+
 
 .hidden { visibility: hidden !important }
 .hide { display: none !important }

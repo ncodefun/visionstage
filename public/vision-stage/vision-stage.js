@@ -1,3 +1,4 @@
+const CLEAR_STORE = false  //! Warning: erase all app data...
 const SCENE_HISTORY = true
 const UPDATE_CHECK_MIN = 30
 const LANDSCAPE_HEIGHT = 40 /// rem
@@ -5,7 +6,6 @@ const PORTRAIT_HEIGHT = 40
 const FONT_SIZE_DECIMALS = 1
 /// -> 10.2 px => makes total space vary a bit, but we get more even layout spacing (Browsers are BAD at this…)
 
-const CLEAR_STORE = false  //! Warning: erase all app data...
 
 import { html, svg, render as litRender } 
 	from './modules/lit-html.js'
@@ -35,7 +35,9 @@ export async function define( tag_name, clss, components){
 	
 	window.customElements.define( tag_name, clss)
 	return window.customElements.whenDefined( tag_name).then( () => {
-		if( tag_name.includes('app-main')){
+		if( tag_name.includes('vision-stage')){
+			log('info', 'stage defined', )
+
 			setTimeout( () => { 
 				q('#loading').classList.add('faded')
 				setTimeout( () => { q(':root > body > #loading').remove() }, 1000)
@@ -43,10 +45,11 @@ export async function define( tag_name, clss, components){
 
 			stage.resize()
 			stage.updateForURL()
-			setTimeout( e => 
+
+			setTimeout( e => {
 				window.addEventListener('resize', debounce( stage.resize.bind( stage), 300, 300)), 
 				2000
-			)
+			})
 			// ->  Arg 1: debounce dly (call once after events faster than this dly), 
 			// ->  Arg 2: throttle dly (call while events at this dly)
 		}
@@ -87,11 +90,19 @@ export function useSVG( id, clss='', ar, vb='0 0 32 32'){
 	</svg>`
 }
 const loaded_components = new Set()
+
 /// Component base class to be extended by custom elements 
 export class Component extends HTMLElement {
 
 	constructor(){
 		super()
+		if( this.localName === 'vision-stage'){
+			stage = this
+			this.langs = this.getAttribute('langs').split(/\s*,\s/)
+			this.ns = this.getAttribute('store')
+			initStore( this.ns )
+			this.buildCSSForLangs()
+		}
 		this._init()
 		
 		//if( this.localName==='menu-options') log('err', 'side menu strings?', this.strings)
@@ -105,23 +116,20 @@ export class Component extends HTMLElement {
 	}
 
 	_init(){
+		log('check', 'component init()', )
 		//console.groupCollapsed('comp: '+ this.id||this.localName)
-		//log('pink', 'INIT COMP:', this.id||this.localName)
 		this._state = {}
-		//this.initialized = true
+
 		/// now it's a normal static property (no need to cache), directly in class body!
 		/// use proto to "type cast" and avoid complaints of typeerror (ctor is a function; no .properties on it)
 		const _ctor = ctor( this)
 		let properties
-		if( _ctor.properties && _ctor._properties){
-			// log('err', 'HAS BOTH OWN AND INHERITED PROPS', 
+		if( _ctor.properties && _ctor._properties)
 			properties = Object.assign( {}, _ctor._properties, _ctor.properties)
-		}
 		else 
 			properties = _ctor.properties || _ctor._properties
 
-		/// to array of [key,val]
-		//log('err','properties:',properties)
+		// to array of [key,val]
 		let flat_properties = properties ? Object.entries( properties) : []
 		for( let [prop, desc] of flat_properties){
 			if( !isObject( desc)) /// wrap if primitive value
@@ -277,31 +285,12 @@ export class Component extends HTMLElement {
 			}
 		}
 
-		if( !stage){ ///! == this comp is stage itself: ain't finished being created...
-			stage = this //// when comp is vision-stage , use `this` 
-		}
-		// log('err', 'stage app:', stage.app)
-		// const app_langs = stage.app && stage.app === this && this.getAttribute('langs')
-		// app_langs && log('pink', 'app_langs:', app_langs)
-
-		if( stage === this){ /// we need langs now for stage strings, overwrite later if app_langs
-			stage.langs = (q('app-main')||q('my-app-main')).getAttribute('langs').split(/\s*,\s/)
-			stage.buildCSSForLangs()
+		if( this === stage){ // we need langs now for stage strings, overwrite later if app_langs
+			
+			// this.buildCSSForLangs()
 		}
 
-		// else if( app_langs || stage.app === this){
-		// 	
-		// 	/// overwrite
-		// 	if( app_langs){
-		// 		stage.langs = app_langs.split(/\s*,\s/)
-		// 	}
-		// 	if( !stage.langs.includes( stage.lang)){ 
-		// 		log('err','lang not in langs?', stage.lang, '->', stage.langs)
-		// 		stage.lang = stage.langs[0]
-		// 	}
-		// }
-
-		/// combine attribs and static strings
+		// combine attribs and static strings
 
 		const strings = (_ctor.strings ? clone( _ctor.strings) : {})
 		
@@ -314,8 +303,8 @@ export class Component extends HTMLElement {
 		
 		let no_strings = !_ctor.strings 
 
-		/// => {fr: {k:v,...}, en: {k:v,...}, ...}
-		//// get attribs string
+		// => {fr: {k:v,...}, en: {k:v,...}, ...}
+		// get attribs string
 		for( let name of this.getAttributeNames()){
 			if( name.startsWith('strings')){
 				no_strings = false
@@ -600,286 +589,24 @@ export class Component extends HTMLElement {
 	}
 }
 
-/// APPS BASE CLASS
-export class AppComponent extends Component {
+// let active_sw, redundant
+
+//  THIS IS THE STAGE / MASTER COMPONENT - contains apps, hosts global props and methods)
+export class VisionStage extends Component {
 
 	constructor(){
 		super()
-		//this.authentified = false // adds class .auth
-		// disable right-clicking
-		//!this.addEventListener( 'contextmenu', e => e.preventDefault())
+		this.app = stage
+		this.app_name = this.ns.replace('defimath-','').toLowerCase()
+		this.is_iOS = is_iOS
 		this.UI_button_size_class = 'medium UI'
-		this.stage = this.parentElement
-		this.lang = this.stage.lang
-		this.classList.add('app', 'waiting-scenes')
+
+		this.classList.add('stage', 'app', 'waiting-scenes')
+
 		if( !this.hasAttribute('no-scroll'))
 			this.classList.add('scroll')
 
-		if( !this.access_level)
-			this.access_level = 1 /// DEFAULT; NEEDS TO BE AUTHENTIFIED
-
-		//this.uses([['#app','portrait']]) /// renders if in portrait some parts are 'moved' in menu
-		
-		//// Selectors
-		/// We can open multiple selectors, but as soon as we click outside a selector they all close
-		this.open_selectors = new Set()
-		this.addEventListener('mousedown', e => {
-			const btn = e.target.closest('metacore-selector')
-			if( this.open_selectors.has( btn)) return /// clicked opened, will close itself
-			for( let sel of this.open_selectors)
-				sel.toggleOpen( false)
-		})
-		
 		this._closeOpenedMenu = this.closeOpenedMenu.bind( this)
-
-		let icons_path = this.getAttribute('icons')
-		if( icons_path){
-			this.icons_path = icons_path
-		}
-	}
-
-	/// -> use onConnected for extending apps, or put super.connectedCallback()
-	connectedCallback(){
-
-		//this.params = stage.url_segments.length>1 && stage.url_segments.slice(1) || []
-		//log('ok', 'App connected ')//-> params:', ...this.params)
-		this.onConnected && this.onConnected() /// -> before setting scene
-		document.title = this.$doc_title
-		//q("meta[name='description']").setAttribute('content', this.getAttribute('description'))
-		//log('prod', 'Vision Stage')
-		
-	}
-
-	//!! must be called from the app after user event, or onConnected but then the first time it won't play on iOS
-	setupSounds(){
-		const sounds_data = ctor( this).sounds
-		if( !sounds_data)
-			return
-
-		this.sounds = {}
-		window.AudioContext = window.AudioContext || window.webkitAudioContext
-		this.audio_context = new window.AudioContext() ///
-		this.gain_node = this.audio_context.createGain() /// global volume control
-		if( is_iOS || is_safari){
-			return Promise.all( 
-				sounds_data.map( ([name, url, options={}]) => fetch( url)
-					.then( response => response.arrayBuffer())
-					.then( array_buffer => {
-						this.audio_context.decodeAudioData( array_buffer, audio_buffer => {
-							this.sounds[ name] = { audio_buffer, options }
-						})
-						return 'success'
-					})
-				)
-			)
-		}
-		else
-			return Promise.all( 
-				sounds_data.map( ([name, url, options={}]) => fetch( url)
-					.then( response => response.arrayBuffer())
-					.then( array_buffer => this.audio_context.decodeAudioData( array_buffer))
-					.then( audio_buffer => this.sounds[ name] = { audio_buffer, options })
-					.catch( err => log('err',err))
-				)
-			)
-	}
-
-	playSound( name){
-		if( !this.sounds[ name]){
-			log('err', 'no sound with name:', name, 'check if sounds are set up')
-			return
-		}
-
-		const { audio_buffer, options } = this.sounds[ name]
-		//log('info', 'playSound:', name, options.volume)
-		const source = this.audio_context.createBufferSource()
-		source.buffer = audio_buffer
-		this.gain_node.gain.value = this.global_volume * (options.volume || 1)
-		source.connect( this.gain_node).connect( this.audio_context.destination)
-		this.playing_source = source
-
-		if( options.delay)
-			setTimeout( e => {
-				source.start()
-			}, options.delay)
-		else 
-			source.start()
-	}
-
-	stopSound( name){
-		//log('err', 'stop:', this.playing_source)
-		if( this.playing_source){
-			this.playing_source.stop()
-			this.playing_source = null
-		}
-	}
-
-	setLevel( e){
-		const lvl = e.currentTarget.level
-		log('prod', 'setLevel:', lvl||e.currentTarget)
-		if( lvl !== this.level || this.allow_level_reset)
-			this.level = lvl
-	}
-
-	_afterFirstRender(){
-		const bright_veil = el('div','',{ id:'bright-veil', class: 'veil menu-veil layer' })
-		const dark_veil = el('div','',{ id:'dark-veil', class: 'veil layer' })
-		bright_veil.addEventListener('mousedown', this._closeOpenedMenu)
-		this.append( bright_veil, dark_veil)
-
-		if( !this.menu_scenes)
-			this.classList.remove('waiting-scenes')
-	}
-
-	toggleMenuScenes(){
-		//log('err','--toggleMenu; prevent nav:', !!this.prevent_nav)
-		if( this.prevent_nav)
-			this.onNavPrevented && this.onNavPrevented()
-
-		if( !this.scene || !this.menu_scenes || this.menu_scenes.scenes.length<2 || this.prevent_nav) 
-			return
-			
-		this.menu_scenes.open = !this.menu_scenes.open
-	}
-
-	closeOpenedMenu(){
-		//log('pink', 'close?', )
-		if( this.scene && this.menu_scenes && this.menu_scenes.open)
-			this.menu_scenes.open = false
-		else if( this.menu_options && this.menu_options.open)
-			this.menu_options.open = false
-		else if( this.menu_auth && this.menu_auth.open && this.menu_auth.user)
-			this.menu_auth.open = false
-	}
-
-	toggleMenuOptionsOpen( e){
-		this.menu_options.open = !this.menu_options.open
-	}
-	toggleMenuAuthOpen( e){
-		if( this.authentified)
-			this.menu_auth.open = !this.menu_auth.open
-	}
-	/** TO OVERRIDE */
-	afterSceneChange(){
-
-	}
-}
-
-/** These will be extended, using underscore so these will mix with user's own */
-AppComponent._properties = { 
-	authentified: { // set by menu-auth
-		value: false,
-		class: 'auth',
-		// watcher(val){
-		// 	log('prod', 'auth:', val)
-		// }
-	},
-	faded: {
-		value: true,
-		class: 'faded'
-	},
-	opened_menu: {
-		value: '',
-		attribute: 'opened-menu',
-		watcher( val, prev){
-			//log('check', 'opened-menu:', val)
-			//if( !val) debugger
-			if( !this.scene && prev==='auth'&& !val && this.default_scene!==''){
-				this.menu_scenes && setTimeout( e => {
-					this.menu_scenes.open = true
-				}, 500)
-			}
-		}
-	},
-	menu_options: null,
-	menu_auth: null,
-	global_volume: { 
-		value:.6, 
-		stored:true 
-	}, //// this in menu == shown _page == this
-	// logo: {
-	// 	value: null,
-	// 	getter(){
-	// 		let path = '/vision-stage-resources/images/apps-posters/'+this._state.logo
-	// 		if( !path.endsWith('.png')) path += '.png'
-	// 		return path
-	// 	}
-	// },
-	scenes: null,
-	scene: {
-		value: null, /// {}
-		stored: false, //!! depends on url, should not override...
-		watcher( val, prev){
-			this.setAttribute('scene', val)
-			//console.clear()
-			this.afterSceneChange && this.afterSceneChange( val, prev)
-		},
-		transformer( val, prev){
-			//debugger
-			// val && log('info', 'scene:', val)
-			const restricted = chain( this.restrictions, val, 0)
-			//this.restrictions?.[ val]?.[ 0]
-			if( val && restricted === true){
-				log('warn', 'restricted scene:', val)
-				return prev
-			}
-			return val
-		}
-	},
-	has_scenes: {
-		value: false,
-		class: 'has-scenes' /** we want the title centered with side menu toggles when no scenes / no scene menu */
-	},
-	level: {
-		value: 1,
-		attribute: 'level',
-		watcher( val){
-			this.afterLevelChange && this.afterLevelChange( val)
-		}
-	},
-	admin: {
-		value: false
-	},
-	allowed: {
-		value: true, /// will be set later if we use menu-auth depending on if user_data permits it
-		// watcher( val){
-		// 	if( val) alert ('NOW ALLOWED')
-		// }
-	}
-}
-
-AppComponent._strings = {
-	fr: {
-		
-	},
-	en: {
-		
-	}
-}
-
-let active_sw, redundant
-
-///   THIS IS THE STAGE / MASTER COMPONENT - contains apps, hosts global props and methods)   ///
-class VisionStage extends Component {
-
-	constructor(){
-		const main = q('app-main') || q('my-app-main')
-		const ns = main.getAttribute('store')
-		initStore( ns )
-		super() /// needs store to be init
-
-		this.app_name = ns.replace('defimath-','').toLowerCase()
-		//log('warn', 'app name:', this.app_name)
-		this.is_iOS = is_iOS
-
-		//!!
-		// this.getActiveSW().then( SW => {
-		// 	active_sw = SW || null
-		// })
-
-		this._onInstallable = this.onInstallable.bind( this)
-		this._onClickInstall = this.onClickInstall.bind( this)
-		window.addEventListener('beforeinstallprompt', this._onInstallable)
 		window.addEventListener('popstate', () => this.updateForURL( true))
 
 		if( !CLEAR_STORE){
@@ -898,31 +625,60 @@ class VisionStage extends Component {
 		const PH = this.getAttribute('portrait-height')
 		this.landscape_height = LH && parseInt( LH) || LANDSCAPE_HEIGHT
 		this.portrait_height = PH && parseInt( PH) || PORTRAIT_HEIGHT
-		this.classList.add('stage')
-	}
 
-	buildCSSForLangs(){
-		//// build CSS to hide elements with a lang attribute not matching the app's lang ATTR
-		let str = ''
-		for( let lang of this.langs)
-			str += `html[lang='${lang}'] *[lang]:not([lang='${lang}']) { display: none !important }\n`
-		const stylesheet = document.createElement('style')
-		stylesheet.textContent = str
-	  document.head.appendChild( stylesheet)
+		// if( !this.access_level)
+		// 	this.access_level = 1 /// DEFAULT; NEEDS TO BE AUTHENTIFIED
+
+		// this.getActiveSW().then( SW => {
+		// 	active_sw = SW || null
+		// })
+
+		// -> disable right-clicking
+		// this.addEventListener( 'contextmenu', e => e.preventDefault())
+
+		// -> metacore-selector: auto close on mousedown
+		// We can open multiple selectors, but as soon as we click outside a selector they all close
+		// this.open_selectors = new Set()
+		// this.addEventListener('mousedown', e => {
+		// 	const btn = e.target.closest('metacore-selector')
+		// 	if( this.open_selectors.has( btn)) 
+		// 		return // clicked opened, will close itself
+		// 	for( let sel of this.open_selectors)
+		// 		sel.toggleOpen( false)
+		// })
+		
+		// let icons_path = this.getAttribute('icons')
+		// if( icons_path)
+		// 	this.icons_path = icons_path
+
+		
+		// this._onInstallable = this.onInstallable.bind( this)
+		// this._onClickInstall = this.onClickInstall.bind( this)
+		// window.addEventListener('beforeinstallprompt', this._onInstallable)
 	}
 
 	connectedCallback(){
-		this.app = this.q('app-main') || this.q('my-app-main')
+		document.title = this.$doc_title
 		this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
+		this.onConnected && this.onConnected() // -> before setting scene
+	}
+
+	_afterFirstRender(){
+		const veil = el('div','',{ id:'veil', class: 'layer' })
+		veil.addEventListener('mousedown', this._closeOpenedMenu)
+		this.append( veil)
+		if( !this.menu_scenes)
+			this.classList.remove('waiting-scenes')
 	}
 
 	resize(){
+		log('check', 'resize')
 		const root = document.documentElement
 		const FSD = this.font_size_decimals || FONT_SIZE_DECIMALS
 		//log('check', 'FSD:', FSD)
 		let ASPECT_RATIOS
-		const c = ctor( this.app)
-		//log('warn', 'c.aspect_ratios_v2:', c.aspect_ratios_v2)
+		const c = ctor( this)
+		log('warn', 'c.aspect_ratios_v2:', c.aspect_ratios_v2)
 		//log('err', 'aspect_ratios:', c.aspect_ratios)
 		if( c.aspect_ratios_v2){
 			const ratios = c.aspect_ratios_v2;
@@ -1048,12 +804,6 @@ class VisionStage extends Component {
 			document.body.classList.add('has-scrollbar')
 	}
 	
-	async testToast(){
-		//log('purple', 'testToast()')
-		let answer = await this.toast.setMessage('HELLO WORLD!', ['World!!','OK'])
-		//log('ok','answer', answer)
-	}
-
 	updateForURL( pop=false){
 		// this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
 		this.app.params = location.hash.slice(1).split('/')
@@ -1075,120 +825,114 @@ class VisionStage extends Component {
 		// 		this.app._state.level = l
 		// }
 	}
-	/*
-	//! erase SW
-	async getActiveSW(){
-		log('err', 'getActiceSW()', )
-		if( 'serviceWorker' in navigator){ /// remote debug is not https, would throw 
-			const registrations = await navigator.serviceWorker.getRegistrations()
-			for ( let registration of registrations){
-					registration.unregister()
-					// .then( () => {
-					// 	alert ('SW unregistered')
-					// })
-					//return null
-				// }
-				//return registration.active /// only first, should not be more
-			}
+
+	toggleMenuScenes(){
+		//log('err','--toggleMenu; prevent nav:', !!this.prevent_nav)
+		if( this.prevent_nav)
+			this.onNavPrevented && this.onNavPrevented()
+
+		if( !this.scene || !this.menu_scenes || this.menu_scenes.scenes.length<2 || this.prevent_nav) 
+			return
+			
+		this.menu_scenes.open = !this.menu_scenes.open
+	}
+	closeOpenedMenu(){
+		//log('pink', 'close?', )
+		if( this.scene && this.menu_scenes && this.menu_scenes.open)
+			this.menu_scenes.open = false
+		else if( this.menu_options && this.menu_options.open)
+			this.menu_options.open = false
+		else if( this.menu_auth && this.menu_auth.open && this.menu_auth.user)
+			this.menu_auth.open = false
+	}
+	toggleMenuOptionsOpen( e){
+		this.menu_options.open = !this.menu_options.open
+	}
+	toggleMenuAuthOpen( e){
+		if( this.authentified)
+			this.menu_auth.open = !this.menu_auth.open
+	}
+
+	setLevel( e){
+		const lvl = e.currentTarget.level
+		if( lvl !== this.level || this.allow_level_reset) // allow RE-SET even if same
+			this.level = lvl
+	}
+	// must be called from the app after user event, or onConnected but then the first time it won't play on iOS
+	setupSounds(){
+		const sounds_data = ctor( this).sounds
+		if( !sounds_data)
+			return
+
+		this.sounds = {}
+		window.AudioContext = window.AudioContext || window.webkitAudioContext
+		this.audio_context = new window.AudioContext() ///
+		this.gain_node = this.audio_context.createGain() /// global volume control
+		if( is_iOS || is_safari){
+			return Promise.all( 
+				sounds_data.map( ([name, url, options={}]) => fetch( url)
+					.then( response => response.arrayBuffer())
+					.then( array_buffer => {
+						this.audio_context.decodeAudioData( array_buffer, audio_buffer => {
+							this.sounds[ name] = { audio_buffer, options }
+						})
+						return 'success'
+					})
+				)
+			)
 		}
-	}*/
-
-	registerSW(){
-		//log('info', 'this.registerSW()')
-		if ('serviceWorker' in navigator)
-		navigator.serviceWorker.register('/sw.js')
-			.then( reg => {
-				log('info',"Service Worker Registered")
-				reg.onupdatefound = () => {
-					//log('ok', 'SW update found')
-					let installing_worker = reg.installing
-					installing_worker.onstatechange = async () => {
-						log('ok', 'SW State: ', installing_worker.state)
-						switch( installing_worker.state){
-							case 'installed':
-								// WAIT FOR A POSSIBLE "REDUNDANT" STATE
-								// CHROME MOBILE MAY BYPASS CACHE REFRESH ?
-								setTimeout( () => {
-									//! navigator.serviceWorker.controller is unreliable when calling update manually
-									if( !active_sw && !redundant){
-										// log('info', 'App is now available offline')
-										this.classList.add('cached')
-										this.toast.setMessage( this.$cached, ['OK', this.$install_standalone])
-											.then( answer => {
-												this.toast.show = false
-												if( answer === 1 && this.deferredPrompt)
-													this.onClickInstall()
-											})
-									}
-									else {
-										/// LONG RUNNING NETWORK CONNECTION (LIKE FIREBASE FIRESTORE) MAY PREVENT ACTIVATION FOR A WHILE; LOG TO KNOW
-										log('info', 'SW Update is available, waiting for activation…')
-									}
-								}, 200)
-								break
-
-							case 'activated':
-								/// IF NOT FIRST INSTALL, SHOW UPDATE READY: PLEASE REFRESH | LATER
-								if( active_sw || redundant) 
-									this.toast.setMessage( this.$update_ready, [this.$later, this.$refresh])
-										.then( answer => {
-											if( answer === 0)
-												this.toast.show = false
-											else
-												location.reload()
-										})
-								break
-
-							case 'redundant':
-								redundant = true
-								break
-						}
-					}
-				}
-				
-				/// CHECK FOR UPDATE ONCE IN A WHILE TO NOTIFY A USER USING THE APP FOR A LONG TIME 
-				/// (OR WHO KEEP THE TAB OPEN, NEVER REFRESHING)
-				setInterval( () => { 
-					log('ok', 'checking for service worker update...')
-					reg.update() 
-				}, 1000 * 60 * UPDATE_CHECK_MIN)
-			})
-		// else if( is_IOS)
-		// 	alert ('Offline service unsupported… 🥺  — Apple wants you to use Safari, for your own good! 😩')
+		else
+			return Promise.all( 
+				sounds_data.map( ([name, url, options={}]) => fetch( url)
+					.then( response => response.arrayBuffer())
+					.then( array_buffer => this.audio_context.decodeAudioData( array_buffer))
+					.then( audio_buffer => this.sounds[ name] = { audio_buffer, options })
+					.catch( err => log('err',err))
+				)
+			)
 	}
-
-	async onInstallable( e){
-		e.preventDefault()
-		this.deferredPrompt = e
-		log('info','Is installable')
-		this.classList.add('installable') /// use to show install shortcut/standalone button
-	}
-
-	/** user want a shortcut, trigger native prompt */
-	onClickInstall( e){
-		if( !this.deferredPrompt){
-			log('err','no deferredPrompt', this)
+	playSound( name){
+		if( !this.sounds[ name]){
+			log('err', 'no sound with name:', name, 'check if sounds are set up')
 			return
 		}
-		//this.menu.open = false
-		this.deferredPrompt.prompt() /// native prompt
-		this.deferredPrompt.userChoice
-			.then( choiceResult => {
-				if( choiceResult.outcome === 'accepted'){
-					this.classList.remove('installable') /// hides install section in menu
-				} 
-				/// else user dismissed prompt
-				this.deferredPrompt = null
-			})
+
+		const { audio_buffer, options } = this.sounds[ name]
+		//log('info', 'playSound:', name, options.volume)
+		const source = this.audio_context.createBufferSource()
+		source.buffer = audio_buffer
+		this.gain_node.gain.value = this.global_volume * (options.volume || 1)
+		source.connect( this.gain_node).connect( this.audio_context.destination)
+		this.playing_source = source
+
+		if( options.delay)
+			setTimeout( e => {
+				source.start()
+			}, options.delay)
+		else 
+			source.start()
+	}
+	stopSound( name){
+		//log('err', 'stop:', this.playing_source)
+		if( this.playing_source){
+			this.playing_source.stop()
+			this.playing_source = null
+		}
 	}
 
-	// confirmInstalled(){
-	// 	//// will resolve to the answer's index
-	// 	return this.toast.setMessage("<div><img class='logo' src='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'><h2 style='font-size:1.75rem'>🎉 Installé&thinsp;! 🎉</h2><sup>(&thinsp;disponible hors-ligne&thinsp;)</sup><p>Ajouter un raccourçis sur le bureau ouvrira l'application dans sa propre fenêtre.</p>",	['Créer un raccourçis','Non merci'])
-	// }
+	buildCSSForLangs(){
+		// build CSS to hide elements with a lang attribute not matching the app's lang ATTR
+		let str = ''
+		for( let lang of this.langs)
+			str += `.app[lang='${lang}'] [lang]:not([lang='${lang}']) { display: none !important }\n`
+		const stylesheet = document.createElement('style')
+		stylesheet.textContent = str
+	  document.head.appendChild( stylesheet)
+	}
 }
 
-VisionStage.properties = {
+// underscore prefix so these are merged and not overriden
+VisionStage._properties = {
 	title: '',
 	lang: {
 		value: navigator.language.slice(0,2),
@@ -1211,10 +955,89 @@ VisionStage.properties = {
 		value: false,
 		stored: true,
 		class: 'dark-mode'
+	},
+	authentified: { // set by menu-auth
+		value: false,
+		class: 'auth',
+		// watcher(val){
+		// 	log('prod', 'auth:', val)
+		// }
+	},
+	faded: {
+		value: true,
+		class: 'faded'
+	},
+	opened_menu: {
+		value: '',
+		attribute: 'opened-menu',
+		watcher( val, prev){
+			//log('check', 'opened-menu:', val)
+			//if( !val) debugger
+			if( !this.scene && prev==='auth'&& !val && this.default_scene!==''){
+				this.menu_scenes && setTimeout( e => {
+					this.menu_scenes.open = true
+				}, 500)
+			}
+		}
+	},
+	menu_options: null,
+	menu_auth: null,
+	global_volume: { 
+		value:.6, 
+		stored:true 
+	}, //// this in menu == shown _page == this
+	// logo: {
+	// 	value: null,
+	// 	getter(){
+	// 		let path = '/vision-stage-resources/images/apps-posters/'+this._state.logo
+	// 		if( !path.endsWith('.png')) path += '.png'
+	// 		return path
+	// 	}
+	// },
+	scenes: null,
+	scene: {
+		value: null, /// {}
+		stored: false, //!! depends on url, should not override...
+		watcher( val, prev){
+			this.setAttribute('scene', val)
+			//console.clear()
+			this.afterSceneChange && this.afterSceneChange( val, prev)
+		},
+		transformer( val, prev){
+			//debugger
+			// val && log('info', 'scene:', val)
+			const restricted = chain( this.restrictions, val, 0)
+			//this.restrictions?.[ val]?.[ 0]
+			if( val && restricted === true){
+				log('warn', 'restricted scene:', val)
+				return prev
+			}
+			return val
+		}
+	},
+	has_scenes: {
+		value: false,
+		class: 'has-scenes' /** we want the title centered with side menu toggles when no scenes / no scene menu */
+	},
+	level: {
+		value: 1,
+		attribute: 'level',
+		watcher( val){
+			this.afterLevelChange && this.afterLevelChange( val)
+		}
+	},
+	admin: {
+		value: false
+	},
+	allowed: {
+		value: true, /// will be set later if we use menu-auth depending on if user_data permits it
+		// watcher( val){
+		// 	if( val) alert ('NOW ALLOWED')
+		// }
 	}
 }
 
-VisionStage.strings = {
+VisionStage._strings = {
 	fr: {
 		cached: "🌟 Appli installée&thinsp;! 🌟<br><small>Vous pouvez maintenant l'utiliser hors-ligne<br><i>(&#8239;gardez le Wi-Fi ou l'Ethernet de cet appareil activé&#8239;)</i></small>",
 		update_ready: "🌟 Une mise à jour est prête 🌟<br><small>Veuillez rafraîchir la page.</small>",
@@ -1234,6 +1057,7 @@ VisionStage.strings = {
 
 /** Parse store from localStorge or init a new one */
 function initStore( ns){
+	log('check', 'init store:', ns)
 	store_namespace = ns
 	if( !ns){
 		log('err', 'no store namespace');
@@ -1261,11 +1085,11 @@ function initStore( ns){
 		if( debug.store) log('notok', 'NO STORE, CREATING ONE')
 		store = {}
 	}
-	else if( debug.store) {
+	//else if( debug.store) {
 		log('ok', 'GOT store:')
 		//log(JSON.stringify(store,null,2))
 		log( store)
-	}
+	//}
 }
 /** Get a possibly stored value || undefined */
 function storedValue( elem_id, prop){
@@ -1324,17 +1148,6 @@ export function clearStore( e){
 	location.reload()
 }
 
-
-
-///  Setting many props at once with stored:true, each will call saveStore (writes to LS), 
-///  so use a throttled "version" instead
+//  Setting many props at once with stored:true, each will call saveStore (writes to LS), 
+//  so use a throttled "version" instead
 const throttled_saveStore = debounce( saveStore, 200)
-
-
-///  ————————————————————————————————————————————————————————————————————————————————  ///
-
-
-define('vision-stage', VisionStage)
-
-
-///  ————————————————————————————————————————————————————————————————————————————————  ///
