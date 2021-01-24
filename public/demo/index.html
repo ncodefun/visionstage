@@ -6,13 +6,13 @@
 	<meta 	name=				'theme-color'
 					content=			'hsl(217, 100%, 52%)'>
 	<meta 	name=				'description' 	
-					content=			''>
+					content=			'Demo for the Vision Stage JS/HTML Framework'>
 	<meta 	name=				'keywords' 
-					content=			'web apps, PWA'>
+					content=			'vision-stage demo, lit-html'>
 	<meta 	name=				'web-author' 
-					content=			'José Roux (joserouxx@gmail.com)'>
-	<meta 	name=				'author' 
-					content=			''>
+					content=			'José Roux (ncode.fun@gmail.com)'>
+	<!-- <meta 	name=				'author' 
+					content=			''> -->
 
 	<meta 	name=				'viewport'
 					content=			'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no'>
@@ -25,38 +25,51 @@
 
 	<link 	rel='author' href='/humans.txt'>
 
+
 	<!--/  PRELOAD FONTS & CSS  /-->
+
+	<!-- 
 	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/rokkitt-v18-latin-700.woff2'>
 	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/jost-v2-latin-600.woff2'>
 	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/roboto-v20-latin-regular.woff2'>
-	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/roboto-condensed-v18-latin-regular.woff2'>
+	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/roboto-condensed-v18-latin-regular.woff2'> -->
 
 	<link rel='preload' as='style' href='/vision-stage/vision-stage.css'>
 	<link rel='preload' as='style' href='/vision-stage/components/menu-scenes.css'>
 	<link rel='preload' as='style' href='/vision-stage/components/menu-options.css'>
 	<link rel='preload' as='style' href='/vision-stage/components/inputs/range-slider.css'>
 	
+
 	<!--/  PRELOAD JS MODULES  /-->
+
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html.js'>
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/if-defined.js'>
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/unsafe-html.js'>
-
 	<link rel='modulepreload' href='/vision-stage/vision-stage.js'>
+	<link rel='modulepreload' href='/vision-stage/z-console.js'>
+
 	<link rel='modulepreload' href='/vision-stage/components/menu-scenes.js'>
 	<link rel='modulepreload' href='/vision-stage/components/menu-options.js'>
 	<link rel='modulepreload' href='/vision-stage/components/inputs/range-slider.js'>
-	<link rel='modulepreload' href='/vision-stage/z-console.js'>
 
-	<link rel='manifest' 	 		href='./manifest.json'>
+	<!--/ /--->
 
-	<link rel='icon' type='image/png' sizes='192x192' href='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'>
-	<link rel='icon' type='image/png' sizes='32x32'		href='/vision-stage-resources/images/app-icons/favicon-32x32.png'>
-	<link rel='icon' type='image/png' sizes='16x16'		href='/vision-stage-resources/images/app-icons/favicon-16x16.png'>
-	<link rel='apple-touch-icon' 			sizes='60x60' 	href='/vision-stage-resources/images/app-icons/apple-touch-icon.png'>
+	<link rel='manifest' 	 														
+		href='./manifest.json'>
+
+	<link rel='icon' type='image/png' sizes='192x192' 
+		href='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'>
+	<link rel='icon' type='image/png' sizes='32x32'		
+		href='/vision-stage-resources/images/app-icons/favicon-32x32.png'>
+	<link rel='icon' type='image/png' sizes='16x16'		
+		href='/vision-stage-resources/images/app-icons/favicon-16x16.png'>
+	<link rel='apple-touch-icon' 			sizes='60x60' 	
+		href='/vision-stage-resources/images/app-icons/apple-touch-icon.png'>
 
 	<link rel='stylesheet' href='/vision-stage/vision-stage.css'>
 	<link rel='stylesheet' href='./app.css'>
-	<script type='module'   src='./app.js'></script>
+
+	<script type='module'  src='./app.js'></script>
 </head>
 
 <body flow>
@@ -65,12 +78,12 @@
 		<div class='loader'><div></div><div></div><div></div><div></div></div>
 	</div>
 
-	<vision-stage>
-		<app-main class='grid'
-			langs='fr, en'
-			store='my-app'
-			strings:fr='title: My App, doc-title: My App – Me Co'>
-		</app-main>
+	<vision-stage no-scroll no-auth 
+		class='grid'
+		langs='fr, en'
+		store='my-app'
+		strings:fr='title: My App, doc-title: My App – Me Co'
+		>
 	</vision-stage>
 </body>
 </html>

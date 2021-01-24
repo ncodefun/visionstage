@@ -23,21 +23,31 @@
 					content=			'black-translucent'>
 
 	<!--//  PRELOAD  //-->
+
+	<!-- <link rel='preload' as='font' crossorigin 	
+		href='/vision-stage-resources/fonts/lato-v16-latin-700italic.woff2'> -->
+
 	<link rel='preload' as='style' href='/vision-stage/vision-stage.css'>
-	<link rel='preload' as='font' crossorigin href='/vision-stage-resources/fonts/lato-v16-latin-700italic.woff2'>
+		
+
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html.js'>
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/if-defined.js'>
 	<link rel='modulepreload' href='/vision-stage/modules/lit-html/directives/unsafe-html.js'>
 	<link rel='modulepreload' href='/vision-stage/vision-stage.js'>
 	<link rel='modulepreload' href='/vision-stage/z-console.js'>
 
-	<link rel='icon' type='image/png' sizes='192x192' href='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'>
-	<link rel='icon' type='image/png' sizes='32x32'		href='/vision-stage-resources/images/app-icons/favicon-32x32.png'>
-	<link rel='icon' type='image/png' sizes='16x16'		href='/vision-stage-resources/images/app-icons/favicon-16x16.png'>
-	<link rel='apple-touch-icon' 			sizes='60x60' 	href='/vision-stage-resources/images/app-icons/apple-touch-icon.png'>
+	<link rel='icon' type='image/png' sizes='192x192' 
+		href='/vision-stage-resources/images/app-icons/android-chrome-192x192.png'>
+	<link rel='icon' type='image/png' sizes='32x32'		
+		href='/vision-stage-resources/images/app-icons/favicon-32x32.png'>
+	<link rel='icon' type='image/png' sizes='16x16'		
+		href='/vision-stage-resources/images/app-icons/favicon-16x16.png'>
+	<link rel='apple-touch-icon' 			sizes='60x60' 	
+		href='/vision-stage-resources/images/app-icons/apple-touch-icon.png'>
 
 	<link rel='stylesheet' href='/vision-stage/vision-stage.css'>
 	<link rel='stylesheet' href='/home/app.css'>
+
 	<script type='module'  src='/home/app.js'></script>
 </head>
 
@@ -46,7 +56,17 @@
 		<h1>Vision Stage<div></div></h1>
 		<div class='loader'><div></div><div></div><div></div><div></div></div>
 	</div>
-	<vision-stage>
+
+	<vision-stage no-auth no-scroll
+		store='visionstage-home'
+		langs='fr, en'
+		strings:fr='title: Vision Stage, doc-title: Vision Stage – Accueil'
+		strings:en='title: Vision Stage, doc-title: Vision Stage – Home'
+		>
+	</vision-stage>
+
+
+	<!-- <vision-stage>
 		<app-main no-auth flow='col top stretch'
 			langs='fr, en'
 			store='visionstage-home'
@@ -55,6 +75,6 @@
 			strings:fr='title: Vision Stage, doc-title: Vision Stage – Accueil'
 			>
 		</app-main>
-	</vision-stage>
+	</vision-stage> -->
 </body>
 </html>
