@@ -76,7 +76,7 @@ menu-options #adjust-volume span {
 menu-options #volume-slider {
 	flex: 1 0 60%;
 }
-.stage.portrait menu-options #volume-slider {
+vision-stage.portrait menu-options #volume-slider {
 	max-width: none;
 }
 menu-options #volume-slider:focus {

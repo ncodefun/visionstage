@@ -26,7 +26,7 @@ class MenuScenes extends Component {
 	onConnected(){
 		app.nav = app.menu_scenes = this
 		this.onclick = this.onClick.bind( this)
-		this.scene_param_index = this.getAttribute('scene-param-index')
+		this.scene_param_index = this.getAttribute('scene-param-index')||0
 		this.classList.add('menu')
 
 		const scenes = []
@@ -76,12 +76,6 @@ class MenuScenes extends Component {
 			}
 		}
 
-		/// allow easy localized elements w/ [lang=''] -> hide those not matching .app lang
-		str.push(`.app[lang='en'] [lang]:not([lang='en'])`)
-		str.push(`.app[lang='fr'] [lang]:not([lang='fr'])`)
-		//!! todo: make dynamic for each lang
-
-
 		str = str.join(',\n') + '{ display: none !important }'
 		const stylesheet = document.createElement('style')
 		stylesheet.classList.add('show-for-styles')
@@ -126,8 +120,8 @@ class MenuScenes extends Component {
 		//log('check', 'scene:', scene, 'app scene:', app.scene)
 		if( scene && scene !== app.scene){ /// new scene
 			app.scene = scene
-			if( this.scene_param_index !== undefined)
-				app.params[ this.scene_param_index] = scene
+			app.params[ this.scene_param_index] = scene
+			
 		}
 		this.open = false
 	}

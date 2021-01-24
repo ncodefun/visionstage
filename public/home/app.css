@@ -22,27 +22,27 @@
 }
 
 html {
+	--scrollbar-color: #FFF3;
+	--scrollbar-thumb-color: #FFF7;
+
 	--color-base: hsl(160, 100%, 88%);
-	/* --color-base2: hsl(160, 93%, 79%); */
 	--color-base2: hsl(159, 100%, 83%);
 	--color-base2-faded: hsla(160, 93%, 79%, .8);
-
 	--color-highlight: hsl(160, 100%, 88%);
+
 
 	--soft: hsl(214, 22%, 41%);
 	--soft-dark: hsl(260, 6%, 25%);
 	--soft-darker: hsl(260, 11%, 22%);
 	--soft-darkest: hsl(260, 9%, 15%);
-	--blue: #0a68ff;
-	--dark-blue: var(--soft-dark,#3c4549);
 	--primary-dark: hsl(266, 88%, 40%);
 	--primary-darker: hsl(260, 66%, 41%);
 	--primary-darker-faded: hsla(260, 36%, 61%, 1);
-	--primary-darkest: hsl(245, 18%, 29%);
 }
 body {
-	background: var(--primary-darkest);
+	background: hsl(245, 18%, 29%);
 }
+
 img.layout {
 	height: 100%;
 	opacity: .25;
@@ -51,26 +51,13 @@ img.layout {
 	margin: auto;
 	left: auto;
 }
-.stage {
-	color: #f6efff;
-	color:hsl(276, 100%, 85%);
-	color: hsla(160, 93%, 79%, 0.76);
-	color: var(--color-base);
-	font-family: Asap Condensed, sans-serif;
 
-	--scrollbar-color: #FFF3;
-	--scrollbar-thumb-color: #FFF7;
-	/* --header-height: 0; */
-	/* background: url(/vision-stage-resources/images/textures/paper.png) hsl(265, 80%, 44%);
-	background-blend-mode: multiply; */
-}
 .app {
 	--floor: 56%;
-	/* background-blend-mode: overlay, normal, normal; */
+	color: var(--color-base);
+	font-family: Asap Condensed, sans-serif;
 	background-color:  hsl(266, 88%, 40%);
-	/* background-color:   hsl(266, 100%, 34%); */
 	background-image: 
-		/* url(/vision-stage-resources/images/textures/paper.png), */
 		linear-gradient( to bottom,
 			rgba(0,0,0,0), 
 			rgba(0,0,0,0) var(--floor), 
@@ -81,6 +68,7 @@ img.layout {
 			hsla(0, 0%, 82%, 0.11), 
 			hsla(0, 0%, 75%, 0.08) 60%, 
 			hsla(0, 0%, 69%, 0));
+	padding-top: 3.7rem;
 }
 
 a, button.bare {
@@ -101,7 +89,6 @@ button.bare.inline {
 a:hover, button.bare:hover {
 	color: var(--color-base2);
 }
-
 
 #main-footer {
 	height: 4rem;
@@ -129,6 +116,8 @@ img#logo {
 	}*/
 
 h1#title {
+	mix-blend-mode: luminosity;
+	opacity: .5;
 	/* background: #0f0; */
 	font: 2.7rem/1.33 Gro Bold, Autour One, sans-serif;
 	letter-spacing: .25rem;;
@@ -172,9 +161,20 @@ span.highlight {
 		0 0 .2rem #fff9;
 }
 
-button {
-	color: #000c;
-	margin: 1rem;
+.no-nothing {
+	/* font-size: 1.1rem; */
+	font-family: Simonetta;
+	margin: 3.6rem 0 .5rem;
+	/* font-style: italic; */
+	color: hsl(263deg, 100%, 77%);
+}
+.simple {
+	margin: 0;
+	font-family: Simonetta;
+	/* font-style: italic; */
+	font-size: 1.1rem;
+	color: hsl(263, 100%, 82%);
+	/* color: var(--color-base); */
 }
 
 @keyframes slow-blink {
@@ -195,53 +195,6 @@ button {
 
 }
 @media (max-aspect-ratio: 6/5){ /** matches the threshold in aspect-ratios */
-	.app > header > div {
-		flex-direction: column;
-		align-items: center !important;
-		left: auto;
-	}
-	.app > header img,
-	.app > header h1,
-	.app #tagline p:last-child
-		{ left: auto }
-	.app #tagline { 
-		left: auto;
-		top: 1.2rem;
-		align-items: center;
-	}
+
 }
 
-
-.app {
-	padding-top: 3.7rem;
-}
-h1#title {
-	/** white-pink */
-	mix-blend-mode: luminosity;
-	opacity: .5;
-
-	/** subtle pink/purple */
-	/* mix-blend-mode: overlay; */
-
-	/** subtle violet */
-	/* mix-blend-mode: soft-light; */
-
-	/** white-blue */
-	/* mix-blend-mode: hard-light; */
-}
-
-.no-nothing {
-	/* font-size: 1.1rem; */
-	font-family: Simonetta;
-	margin: 3.6rem 0 .5rem;
-	/* font-style: italic; */
-	color: hsl(263deg, 100%, 77%);
-}
-.simple {
-	margin: 0;
-	font-family: Simonetta;
-	/* font-style: italic; */
-	font-size: 1.1rem;
-	color: hsl(263, 100%, 82%);
-	/* color: var(--color-base); */
-}
