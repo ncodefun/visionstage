@@ -32,23 +32,23 @@ class App extends AppComponent {
 	template(){
 		return html`
 		<!-- <div class='layer no-events' flow>
-			<img src='./home/images/layout.png' class='layout' alt=''>
+			<img src='./home/images/layout5.png' class='layout' alt=''>
 		</div> -->
-		<header flow='col'>
-			<div flow='row top'>
-				<img src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
-				<h1>Vision <span>Stage</span></h1>
+		
+			<div id='title-row' flow='row top'>
+				<img id='logo' src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
+				<h1 id='title'>Vision <span>Stage</span></h1>
 			</div>
-			<div id='tagline' flow='col left'>
-				<p>Web apps in no time </p>
-				<p>Simple components in <span class='highlight'>pure JS/HTML</span> <span class='icon'>🙏</span></p>
+
+			<div id='tagline' flow='col'>
+				<p><span class='highlight'>Modern Web apps</span> in no time </p>
+				<p><span class='icon'>→</span> <span class='highlight'>Pure JS/HTML</span> components! <span class='icon'>🙏</span></p>
 			</div>
-		</header>
-
-		<main flow='col top stretch'><!-- stretch otherwise content overflows?? -->
-
-			<footer flow><a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a></footer>
-		</main>`
+			<section flow='col'>
+				<p class='no-nothing'>no custom syntax, no monster API, no preprocessing, no bundling, no shadow DOM…</p>
+				<p class='simple'>Just a minimal and <button class='bare inline'>intuitive API</button></p>
+			</section>
+			<footer id='main-footer' flow><a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a></footer>`
 	}
 
 	menuOptionsTemplate(){
@@ -68,7 +68,7 @@ class App extends AppComponent {
 	// 	this.show_more = !this.show_more
 	// }
 }
-
+//3C3F44
 App.aspect_ratios_v2 = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
