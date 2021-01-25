@@ -6,6 +6,7 @@ const FONT_SIZE_DECIMALS = 1
 // only one decimal => makes total rem space vary a bit, 
 // but we get more even layout spacing (Browsers are BAD at this…)
 
+
 import { html, svg, render as litRender } 
 	from './modules/lit-html.js'
 import { unsafeHTML } 
@@ -34,15 +35,13 @@ export async function define( tag_name, clss, components){
 	window.customElements.define( tag_name, clss)
 	return window.customElements.whenDefined( tag_name).then( () => {
 		if( tag_name.includes('vision-stage')){
-			//log('info', 'vision-stage defined')
+			app.resize()
+			app.classList.add('ready') //! after resize 
+			app.updateForURL()
 			setTimeout( () => { 
 				q('#loading').classList.add('faded')
 				setTimeout( () => { q(':root > body > #loading').remove() }, 1000)
 			}, 100)
-
-			app.resize()
-			app.updateForURL()
-
 			setTimeout( e => {
 				window.addEventListener('resize', debounce( app.resize.bind( app), 300, 300)), 
 				2000
@@ -50,9 +49,6 @@ export async function define( tag_name, clss, components){
 			// ->  Arg 1: debounce dly (call once after events faster than this dly), 
 			// ->  Arg 2: throttle dly (call while events at this dly)
 		}
-		// else {
-		// 	log('info', 'comp defined:', tag_name)
-		// }
 	})
 }
 
@@ -117,12 +113,7 @@ export class Component extends HTMLElement {
 	}
 
 	_init(){
-		log('check', 'component init()', )
-		//console.groupCollapsed('comp: '+ this.id||this.localName)
 		this._state = {}
-
-		/// now it's a normal static property (no need to cache), directly in class body!
-		/// use proto to "type cast" and avoid complaints of typeerror (ctor is a function; no .properties on it)
 		const _ctor = ctor( this)
 		let properties
 		if( _ctor.properties && _ctor._properties)
@@ -158,6 +149,7 @@ export class Component extends HTMLElement {
 			if( desc.class){
 				this.classList.toggle( desc.class, !!desc.value)
 			}
+
 			if( desc.attribute){ // ['open', 'bool']
 				//!! wait for ctor to finish, else attr will be set to prop initial value before we read initial attr value
 				requestAnimationFrame( t => {
@@ -185,12 +177,7 @@ export class Component extends HTMLElement {
 					return desc.getter ? desc.getter.call( this, this._state[ prop]) : this._state[ prop] 
 				},
 				set( val){ /// SET:
-					// if( prop==='scene')
-					// if( prop==='suit')
-					// 	log('pink', 'prop:', prop, 'val:', val)
-					//log(this.__name)
-					//if( prop === 'active_section') deb ugger
-					//--this.constructor.properties
+					//log('pink', 'SET prop:', prop, 'val:', val)
 					let store_id = this.id||this.localName
 					if( !store_id) debugger
 					if( prop in properties){ //// in? ==> is a reactive prop 
@@ -218,7 +205,7 @@ export class Component extends HTMLElement {
 								//log('pink', 'attribute:', desc.attribute, val)
 								this.setAttribute( desc.attribute, val)
 							}
-							else { /// Array
+							else { // Array
 								let attr = desc.attribute[0]
 								if( desc.attribute[1] === 'bool'){
 									if( val == true)
@@ -288,13 +275,7 @@ export class Component extends HTMLElement {
 			}
 		}
 
-		if( this === app){ // we need langs now for app strings, overwrite later if app_langs
-			
-			// this.buildCSSForLangs()
-		}
-
 		// combine attribs and static strings
-
 		const strings = (_ctor.strings ? clone( _ctor.strings) : {})
 		
 		if( _ctor._strings){
@@ -362,9 +343,6 @@ export class Component extends HTMLElement {
 			}
 		}
 
-		// if( _ctor.use s) // static
-		// 	this.use s( _ctor.use s)
-
 		if( this.afterResize && !resize_watchers.has( this)){
 			resize_watchers.add( this)
 			//log('check', 'resize_watchers	:', resize_watchers)
@@ -378,8 +356,6 @@ export class Component extends HTMLElement {
 
 		if( _ctor.sounds)
 			app.sounds_list = _ctor.sounds
-
-		//log('ok', 'comp props defined', this.localName)
 	}
 
 	///  ->  When these [[comp, ...props]] changes, also render me – 
@@ -592,8 +568,6 @@ export class Component extends HTMLElement {
 	}
 }
 
-
-
 export class VisionStage extends Component {
 
 	constructor(){
@@ -671,6 +645,7 @@ export class VisionStage extends Component {
 		this.append( veil)
 		if( !this.menu_scenes)
 			this.classList.remove('waiting-scenes')
+		this.lang = this.lang
 	}
 
 	resize(){
@@ -801,13 +776,13 @@ export class VisionStage extends Component {
 	updateForURL( pop=false){
 		// this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
 		this.params = location.hash.slice(1).split('/')
-		this.params.length && log('info', 'params:', ...this.params)
+		//this.params.length && log('info', 'params:', ...this.params)
 
 		// scene from first param
 		let scene = decodeURI( this.params[0])
 		if( !pop)
-			this._state.scene = scene || '' 
 			// we might not be ready to render; set on _state to bypass auto render
+			this._state.scene = scene || '' 
 		else
 			this.scene = scene
 
@@ -921,7 +896,7 @@ export class VisionStage extends Component {
 		// build CSS to hide elements with a lang attribute not matching the app's lang ATTR
 		let str = ''
 		for( let lang of this.langs)
-			str += `.app[lang='${lang}'] [lang]:not([lang='${lang}']) { display: none !important }\n`
+			str += `vision-stage[lang='${lang}'] [lang]:not([lang='${lang}']) { display: none !important }\n`
 		const stylesheet = document.createElement('style')
 		stylesheet.textContent = str
 	  document.head.appendChild( stylesheet)
@@ -929,7 +904,6 @@ export class VisionStage extends Component {
 }
 
 // underscore prefix so these are merged and not overriden
-
 VisionStage._properties = {
 	title: '',
 	lang: {
@@ -940,9 +914,12 @@ VisionStage._properties = {
 			let [lang, country] = navigator.language.split('-')
 			document.documentElement.setAttribute('lang', val + '-' + country) 
 			this.country = country
+			// set val (2 letter) on this element for CSS auto hide of els w/ [lang] not matching
+			this.setAttribute('lang', val)
 			//log('info', 'lang, country:', lang, country)
 		},
-		init_watcher: true
+		//init_watcher: true //! causes render (SET lang), maybe too soon, keep manual
+		//! -> instead just re-trigger after this is rendered (lang = lang)
 	},
 	portrait: {
 		value: false,
@@ -962,7 +939,7 @@ VisionStage._properties = {
 	},
 	faded: {
 		value: true,
-		class: 'faded'
+		class: 'faded',
 	},
 	opened_menu: {
 		value: '',
@@ -1082,11 +1059,11 @@ function initStore( ns){
 		if( debug.store) log('notok', 'NO STORE, CREATING ONE')
 		store = {}
 	}
-	//else if( debug.store) {
+	else if( debug.store) {
 		log('ok', 'GOT store:')
 		//log(JSON.stringify(store,null,2))
 		log( store)
-	//}
+	}
 }
 /** Get a possibly stored value || undefined */
 function storedValue( elem_id, prop){
