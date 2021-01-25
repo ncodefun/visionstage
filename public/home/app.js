@@ -21,18 +21,18 @@ class App extends VisionStage {
 
 			<div id='tagline' flow='col'>
 				<p><span class='highlight'>Modern Web apps</span> in no time </p>
-				<p><span class='icon'>→</span> <span class='highlight'>Pure JS/HTML</span> components! <span class='icon'>🙏</span></p>
+				<p>with <span class='highlight'>Pure JS/HTML</span> components <span class='icon'>🙏</span></p>
 			</div>
 
 			<section id='infos' flow='col'>
 				<p class='no-nothing nowrap text-center'>
-					no custom syntax, no monster API, <wbr>no preprocessing, no bundling, no shadow DOM…</p>
+					no custom syntax, no preprocessing, <wbr>no bundling, no shadow DOM…</p>
 				<p class='simple'>
 					Just a minimal and <button class='bare inline'>intuitive API</button></p>
 
 				<ul id='features'>
-					<li>Scale and frame content for universal aspect control</li>
-					<li>Intuitive flex layout&thinsp;: &lt;div flow="col top stretch"></li>
+					<!-- <li>Scale and frame content for universal aspect control</li> -->
+					<!-- <li>Intuitive flex layout&thinsp;: &lt;div flow="col top stretch"></li> -->
 				</ul>
 			</section>
 

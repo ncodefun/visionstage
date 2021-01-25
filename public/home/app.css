@@ -121,9 +121,9 @@ h1#title {
 	opacity: .5;
 	/* background: #0f0; */
 	font: 2.7rem/1.33 Gro Bold, Autour One, sans-serif;
-	letter-spacing: .25rem;;
+	letter-spacing: .25rem;
 	text-transform: uppercase;
-	margin: .5rem 0 7.6rem;
+	margin: .5rem 0 5rem;
 	position: relative;
 	text-shadow: -.1rem -.15rem .4rem #0004;
 	/* -webkit-text-stroke: 1.5px #a0822998; */
@@ -159,15 +159,23 @@ span.highlight {
 		0 0 .2rem #fff9;
 }
 
+#infos {
+	/* display: none; */
+	margin: 1.25rem 0 0;
+	padding: 0 2ch;
+}
 .no-nothing {
+	margin: 0;
 	/* font-size: 1.1rem; */
 	font-family: Simonetta;
-	margin: 3rem 0 0rem;
-	/* font-style: italic; */
+	line-height: 1.33;
+	font-style: italic;
 	color: hsl(263deg, 100%, 77%);
+	color: hsl(263, 100%, 82%);
 }
 .simple {
-	margin: 0;
+	display: none;
+	margin: .25rem 0 0;
 	font-family: Simonetta;
 	/* font-style: italic; */
 	font-size: 1.1rem;
