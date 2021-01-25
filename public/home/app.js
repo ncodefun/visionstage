@@ -1,17 +1,15 @@
 /* 
-!! Questions
+? Questions
 - possible problems with comps that renders or not (if added / removed)
 	can we use this.uses correctly (the stored ref may not be good anymore? or is it the selector that's stored??)...
 */
-import { q, range } from '/vision-stage/modules/utils-core.js'
-import { VisionStage, Component, html, define, log, useSVG } from '/vision-stage/vision-stage.js'
+// import { q, range } from '/vision-stage/modules/utils-core.js'
+import { VisionStage, html, define, log } from '/vision-stage/vision-stage.js'
 
 class App extends VisionStage {
 
 	onConnected(){
-		log('info', 'App connected:', )
 		this.render()
-		// this.faded = false
 	}
 
 	template(){
@@ -53,23 +51,20 @@ class App extends VisionStage {
 		// Component.load('menu-scenes')
 		// Component.load('menu-options')
 		// Component.load('menu-auth2')
-	}
-
-	afterSceneChange(){
-
-	}
-
-	onUserDataReady( data){
-		
-	}
-
-	onImageLoaded( e){
 		this.faded = false
 	}
 
-	// onClickMore( e){
-	// 	this.show_more = !this.show_more
-	// }
+	afterSceneChange(){
+		//
+	}
+
+	onUserDataReady( data){
+		//
+	}
+
+	onImageLoaded( e){
+		//this.faded = false
+	}
 }
 
 App.aspect_ratios = {
