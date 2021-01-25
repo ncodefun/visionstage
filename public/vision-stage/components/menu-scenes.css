@@ -53,7 +53,7 @@ button svg.fanion {
 	padding: .4em 2em .7em;
 	line-height: 1;
 }
-.app[opened-menu='scenes'] #selected-title {
+vision-stage[opened-menu='scenes'] #selected-title {
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity .42s ease;

@@ -1,11 +1,10 @@
 const CLEAR_STORE = false  //! Warning: erase all app data...
 const SCENE_HISTORY = true
-const UPDATE_CHECK_MIN = 30
 const LANDSCAPE_HEIGHT = 40 /// rem
 const PORTRAIT_HEIGHT = 40
 const FONT_SIZE_DECIMALS = 1
-/// -> 10.2 px => makes total space vary a bit, but we get more even layout spacing (Browsers are BAD at this…)
-
+// only one decimal => makes total rem space vary a bit, 
+// but we get more even layout spacing (Browsers are BAD at this…)
 
 import { html, svg, render as litRender } 
 	from './modules/lit-html.js'
@@ -14,20 +13,19 @@ import { unsafeHTML }
 import { ifDefined } 
 	from './modules/lit-html/directives/if-defined.js'
 
-import log from './z-console.js' /// blackbox this file in chrome to get real line numbers
+import log from './z-console.js' // blackbox this file in chrome to get real line numbers
 import { q, el, debounce, isObject, ctor, clone, loadStyleSheetAsync, objectFromString, containsHTML, nextFrame, cleanNum, chain  } from './modules/utils-core.js'
 
-/// Share with others for easy imports from a single source
+// Share with others for easy imports from a single source
 export { html, svg, unsafeHTML, ifDefined, log }
-/// To deprecate, using q('vision-stage') is as easy... 
-export const getStage = () => stage
 
-/// Defines a custom element and return whenDefined's promise in one short call:
-/// ``` define('my-comp').then( ...) ```
+/**
+ * Defines a custom element and return whenDefined's promise in one short call
+ * `define('my-comp').then( ...)`
+ */
 export async function define( tag_name, clss, components){
-	//log('info', 'define:', tag_name)
-	/// import js & css dependencies (requiered right from the start)
-	
+
+	// import comps (js & css) dependencies (when required right from the start)
 	if( components && components.length){
 		components = components.map( c => Component.load( c))
 		await Promise.all( components)
@@ -36,18 +34,17 @@ export async function define( tag_name, clss, components){
 	window.customElements.define( tag_name, clss)
 	return window.customElements.whenDefined( tag_name).then( () => {
 		if( tag_name.includes('vision-stage')){
-			log('info', 'stage defined', )
-
+			//log('info', 'vision-stage defined')
 			setTimeout( () => { 
 				q('#loading').classList.add('faded')
 				setTimeout( () => { q(':root > body > #loading').remove() }, 1000)
 			}, 100)
 
-			stage.resize()
-			stage.updateForURL()
+			app.resize()
+			app.updateForURL()
 
 			setTimeout( e => {
-				window.addEventListener('resize', debounce( stage.resize.bind( stage), 300, 300)), 
+				window.addEventListener('resize', debounce( app.resize.bind( app), 300, 300)), 
 				2000
 			})
 			// ->  Arg 1: debounce dly (call once after events faster than this dly), 
@@ -59,7 +56,7 @@ export async function define( tag_name, clss, components){
 	})
 }
 
-/// flags for logging different things (or not)
+// flags for logging different things (or not)
 export const debug = {
 	flow: false,
 	uses: false, /// logs: <comp-a> will render when any of [...] on <comp-b> is set
@@ -73,17 +70,21 @@ export const debug = {
 	scenes: false
 }
 
-let stage, store, store_namespace
+let app, store, store_namespace
+// let active_sw, redundant
+
 export const is_mac = navigator.platform === 'MacIntel'
 const is_iOS = /iPad|iPhone|iPod/.test( navigator.platform) || 
 							 (is_mac && navigator.maxTouchPoints > 1)
 const is_safari = /^((?!chrome|android).)*safari/i.test( navigator.userAgent)
-/// Will reference all components with an afterResize method to call them after window is resized
+
+// Will reference all components having an afterResize method 
+// to call them after window is resized
 const resize_watchers = new Set()
 const isScrollbarVisible = element => element.scrollHeight > element.clientHeight
 
 export function useSVG( id, clss='', ar, vb='0 0 32 32'){
-	let src = stage.app.icons_path || '/vision-stage-resources/images/icons.svg'
+	let src = app.icons_path || '/vision-stage-resources/images/icons.svg'
 	//log('check', 'svg path:', src)
 	return html`<svg class=${clss ? 'icon '+clss : 'icon'} viewBox=${vb} preserveAspectRatio=${ ifDefined( ar) }>
 		<use href='${src}#${id}'/>
@@ -97,7 +98,7 @@ export class Component extends HTMLElement {
 	constructor(){
 		super()
 		if( this.localName === 'vision-stage'){
-			stage = this
+			app = this
 			this.langs = this.getAttribute('langs').split(/\s*,\s/)
 			this.ns = this.getAttribute('store')
 			initStore( this.ns )
@@ -234,12 +235,14 @@ export class Component extends HTMLElement {
 							this.classList.toggle( desc.class, !!val)
 						}
 
-						// if( prop==='scene' && stage.app.scene)
-						// 	log('err', 'message:', stage.app.menu_scenes)
-						if( prop==='scene' && stage.app.scene && stage.app.scene !== stage.app.params[0] && stage.app.menu_scenes.scenes.length>1){
+						// if( prop==='scene' && app.scene)
+						// 	log('err', 'message:', app.menu_scenes)
+						if( prop==='scene' && app.scene && 
+								app.scene !== app.params[0] && 
+								app.menu_scenes.scenes.length>1){
 
-							const p = location.pathname + '#'+stage.app.scene
-							//stage.app.path === '/' ? '/' : '/'+stage.app.path+'/'+stage.app.scene
+							const p = location.pathname + '#'+app.scene
+							//app.path === '/' ? '/' : '/'+app.path+'/'+app.scene
 							/// replace if there were no scene to avoid comming back to no scene & no menu
 							/// then we'd have to detect and reopen menu => useless	
 							if( SCENE_HISTORY && prev_val){ 
@@ -285,7 +288,7 @@ export class Component extends HTMLElement {
 			}
 		}
 
-		if( this === stage){ // we need langs now for stage strings, overwrite later if app_langs
+		if( this === app){ // we need langs now for app strings, overwrite later if app_langs
 			
 			// this.buildCSSForLangs()
 		}
@@ -315,7 +318,7 @@ export class Component extends HTMLElement {
 
 				if( lang==='*' || !lang){ //// all : define first if others: need to be overriden with specific langs
 					/// assign same values to all languages
-					for( let l of stage.langs){
+					for( let l of app.langs){
 						strings[ l] = strings[ l] || {}
 						Object.assign( strings[ l], values)
 					}
@@ -340,13 +343,13 @@ export class Component extends HTMLElement {
 
 		if( !no_strings){
 
-			if( !stage.langs){
-				log('err', 'no stage langs yet', this)
+			if( !app.langs){
+				log('err', 'no app langs yet', this)
 			}
 			this.strings = strings
 			/// get / set string
 			//// the default lang obj should contains all strings keys; others might miss some
-			let default_lang_strings = strings[ stage.langs[0]]
+			let default_lang_strings = strings[ app.langs[0]]
 			if( default_lang_strings){ /// if we have strings KEYS, store each as this.$str 
 				for( let name of Object.keys( default_lang_strings)){
 					Object.defineProperty( this, '$'+name.replace(/-/g,'_'), {
@@ -374,7 +377,7 @@ export class Component extends HTMLElement {
 		}
 
 		if( _ctor.sounds)
-			stage.sounds_list = _ctor.sounds
+			app.sounds_list = _ctor.sounds
 
 		//log('ok', 'comp props defined', this.localName)
 	}
@@ -466,7 +469,7 @@ export class Component extends HTMLElement {
 
 				if( this.skipped_afterResize){
 					this.skipped_afterResize = false
-					this.afterResize( stage.REM)
+					this.afterResize( app.REM)
 				}
 				//-- delete this.afterFirstRender 
 				/// -> IT'S SUPPOSEDLY BETTER NOT TO DELETE ANYTHING AFTER AN OBJECT DEFINITION
@@ -496,7 +499,7 @@ export class Component extends HTMLElement {
 	getString( str_name, raw=false){
 		//log('err','string() name:', str_name)
 		if( !str_name) return
-		let lang = (stage || this).lang
+		let lang = (app || this).lang
 		let strings_for_lang = this.strings[ lang]
 		let str = strings_for_lang && strings_for_lang[ str_name]
 
@@ -506,7 +509,7 @@ export class Component extends HTMLElement {
 
 		//// try with default lang
 		if( !str){
-			strings_for_lang = this.strings[ stage.langs[0]] /// try to use the default lang (first)
+			strings_for_lang = this.strings[ app.langs[0]] /// try to use the default lang (first)
 			str = strings_for_lang && strings_for_lang[ str_name] 
 			//log('warn', 'no string for lang; got the default:', str_name, '→', str)
 		}
@@ -589,19 +592,18 @@ export class Component extends HTMLElement {
 	}
 }
 
-// let active_sw, redundant
 
-//  THIS IS THE STAGE / MASTER COMPONENT - contains apps, hosts global props and methods)
+
 export class VisionStage extends Component {
 
 	constructor(){
 		super()
-		this.app = stage
+
 		this.app_name = this.ns.replace('defimath-','').toLowerCase()
 		this.is_iOS = is_iOS
 		this.UI_button_size_class = 'medium UI'
 
-		this.classList.add('stage', 'app', 'waiting-scenes')
+		this.classList.add('app', 'waiting-scenes')
 
 		if( !this.hasAttribute('no-scroll'))
 			this.classList.add('scroll')
@@ -624,7 +626,7 @@ export class VisionStage extends Component {
 		const LH = this.getAttribute('landscape-height')
 		const PH = this.getAttribute('portrait-height')
 		this.landscape_height = LH && parseInt( LH) || LANDSCAPE_HEIGHT
-		this.portrait_height = PH && parseInt( PH) || PORTRAIT_HEIGHT
+		this.is_portrait_height = PH && parseInt( PH) || PORTRAIT_HEIGHT
 
 		// if( !this.access_level)
 		// 	this.access_level = 1 /// DEFAULT; NEEDS TO BE AUTHENTIFIED
@@ -672,75 +674,66 @@ export class VisionStage extends Component {
 	}
 
 	resize(){
-		log('check', 'resize')
+		//log('check', 'resize')
 		const root = document.documentElement
 		const FSD = this.font_size_decimals || FONT_SIZE_DECIMALS
 		//log('check', 'FSD:', FSD)
 		let ASPECT_RATIOS
 		const c = ctor( this)
-		log('warn', 'c.aspect_ratios_v2:', c.aspect_ratios_v2)
-		//log('err', 'aspect_ratios:', c.aspect_ratios)
-		if( c.aspect_ratios_v2){
-			const ratios = c.aspect_ratios_v2;
-			//log('info', 'ratios:', ratios)
-			ASPECT_RATIOS = {
-				threshold: ratios.threshold,
-				portrait: ratios.portrait && {
-					ultra_tall: ratios.portrait['min'],
-					tall: ratios.portrait['min-content'],
-					base: ratios.portrait['base-content'] || ratios.portrait['max'],
-					wide: ratios.portrait['max'] || ratios.portrait['base-content'],
-				},
-				landscape: {
-					base: ratios.landscape['min'],
-					wide: ratios.landscape['max-content'],
-					ultra_wide: ratios.landscape['max'],
-				},
-				cross_margin: ratios.cross_margin||0,
-				landscape_cross_margin: ratios.landscape_cross_margin||0,
-				ultra_wide_cross_margin: ratios.ultrawide_cross_margin||0,
-			}
+		const ratios = c.aspect_ratios;
+		//log('info', 'ratios:', ratios)
+		ASPECT_RATIOS = {
+			threshold: ratios.threshold,
+			portrait: ratios.portrait && {
+				ultra_tall: ratios.portrait['min'],
+				tall: ratios.portrait['min-content'],
+				base: ratios.portrait['base-content'] || ratios.portrait['max'],
+				wide: ratios.portrait['max'] || ratios.portrait['base-content'],
+			},
+			landscape: {
+				base: ratios.landscape['min'],
+				wide: ratios.landscape['max-content'],
+				ultra_wide: ratios.landscape['max'],
+			},
+			cross_margin: ratios.cross_margin||0,
+			landscape_cross_margin: ratios.landscape_cross_margin||0,
+			ultra_wide_cross_margin: ratios.ultrawide_cross_margin||0,
 		}
-		else {
-			ASPECT_RATIOS = c.aspect_ratios
-		}
-
 		const threshold = ASPECT_RATIOS.threshold
-
 		let w = window.innerWidth,
 				h = window.innerHeight
 		const AR = { now: parseFloat( cleanNum( w / h)), min: 0 }
-		
 		const is_portrait = AR.now < threshold
-		if( this.portrait !== is_portrait) /// ? only set if different; causes render EACH TIME (A LOT)
-			this.portrait = is_portrait
+		if( this.is_portrait !== is_portrait) // only set if different; causes render EACH TIME (A LOT)
+			this.is_portrait = is_portrait
 
-		/// defines what relative height we want (in rem)
-		let height_rem = this.portrait ? 
-			this.portrait_height : 
+		// defines what relative height we want (in rem)
+		let height_rem = this.is_portrait ? 
+			this.is_portrait_height : 
 			this.landscape_height
 
-		/// We need three values SUB, MIN & MAX
-		
-		if( this.portrait && ASPECT_RATIOS.portrait){
-			AR.sub = ASPECT_RATIOS.portrait.ultra_tall /// STAGE TALLEST
-			AR.min = ASPECT_RATIOS.portrait.base /// CONTENT NARROWEST
-			AR.max = ASPECT_RATIOS.portrait.wide /// STAGE WIDEST
+		// We need three values SUB, MIN & MAX
+		if( this.is_portrait && ASPECT_RATIOS.portrait){
+			AR.sub = ASPECT_RATIOS.portrait.ultra_tall 	// STAGE TALLEST
+			AR.min = ASPECT_RATIOS.portrait.base 				// CONTENT NARROWEST
+			AR.max = ASPECT_RATIOS.portrait.wide 				// STAGE WIDEST
 		}
 		else {
 			AR.sub = 
-			AR.min = ASPECT_RATIOS.landscape.base	/// STAGE NARROWEST
-			AR.max = ASPECT_RATIOS.landscape.ultra_wide /// STAGE WIDEST
+			AR.min = ASPECT_RATIOS.landscape.base				// STAGE NARROWEST
+			AR.max = ASPECT_RATIOS.landscape.ultra_wide // STAGE WIDEST
 		}
 		//log('info', 'AR sub, min, max:', AR.sub, AR.min, AR.max)
-		this.style.setProperty('--stage-ar-for-widest-content', ASPECT_RATIOS.landscape.wide) /// CONTENT WIDEST 
+		// CONTENT WIDEST
+		this.style.setProperty('--stage-ar-for-widest-content', ASPECT_RATIOS.landscape.wide) 
+		// CONTENT TALLEST
 		ASPECT_RATIOS.portrait &&
-		this.style.setProperty('--stage-ar-for-tallest-content', ASPECT_RATIOS.portrait.tall) /// CONTENT TALLEST
+		this.style.setProperty('--stage-ar-for-tallest-content', ASPECT_RATIOS.portrait.tall) 
 
 		let margin = 0, above_ultra_wide = AR.now > AR.max, below_land_base = AR.now < AR.min
 
-		if( this.portrait){
-			if( ASPECT_RATIOS.cross_margin && AR.now > AR.max) // just below threshold, side black bars
+		if( this.is_portrait){
+			if( ASPECT_RATIOS.cross_margin && AR.now > AR.max) // just below threshold, side "black bars"
 				margin = ASPECT_RATIOS.cross_margin
 		}
 		else { // landscape
@@ -752,22 +745,23 @@ export class VisionStage extends Component {
 					0
 		}
 
-		if( typeof margin === 'string')
+		if( typeof margin === 'string') // assumes %, implicit or explicit
 			margin = parseFloat(margin) * h / 100
 	
-		/// Adjust size for margin
+		// Adjust size for margin
 		if( AR.now > AR.max){
 			if( margin) 
-				h -= (margin * 2) /// scale stage to adjust for margin
-			w = Math.floor( h * AR.max) /// smallest of: window width or max AR
+				h -= (margin * 2) 
+			w = Math.floor( h * AR.max) // smallest of: window width or max AR
 		}
-		else if( AR.min && AR.now < (AR.min||AR.sub)){
+		else if( AR.min && AR.now < AR.min){ // was (AR.min||AR.sub) ?
 			if( margin)
 				w -= margin * 2
 			if( this.margin)
 				h -= margin * 2
-			const MIN_AR = 1 / (!this.portrait && AR.min || AR.sub)
-			h = Math.floor( Math.min( w * MIN_AR, h)) /// smallest of: window height (h) or base AR
+			// cap height (h) to base AR 
+			const MIN_AR = 1 / (!this.is_portrait && AR.min || AR.sub)
+			h = Math.floor( Math.min( w * MIN_AR, h)) // smallest of: window height (h) or base AR
 		}
 		else if( this.margin){
 			w -= margin * 2
@@ -779,18 +773,18 @@ export class VisionStage extends Component {
 		this.stw = w
 
 		this.AR = w/h
-		/// limit stage's height based on portrait's min AR
-		const base_h = !this.portrait ? h : Math.min( h, w * (1/AR.min))
+		// limit stage's height based on portrait's min AR
+		const base_h = !this.is_portrait ? h : Math.min( h, w * (1/AR.min))
 		root.style.setProperty('--stw',w+'px')
 		root.style.setProperty('--sth',h+'px')
 		root.style.fontSize = 
 			(Math.floor( base_h / height_rem * 10**FSD) / 10**FSD) + 'px'
-			/// -> floor else we might overflow and get scrollbar
+			// -> floor else we might overflow and get scrollbar
 		//log('info', 'fontSize :', root.style.fontSize)
-		/// VALUE OF ONE REM IN PX (0.00)
+		// VALUE OF ONE REM IN PX (0.00)
 		this.REM = Math.round((base_h / height_rem) * 100) / 100
 		//log('check', 'resize_watchers:', ...resize_watchers)
-		for( let comp of resize_watchers){ /// components with afterResize method
+		for( let comp of resize_watchers){ // components with afterResize method
 			//log('check', 'call resize for comp? :', comp)
 			if( comp.rendered){ comp.afterResize( this.REM, AR.now) } 
 			else { 
@@ -798,31 +792,31 @@ export class VisionStage extends Component {
 				comp.skipped_afterResize = true
 			}
 		}
-		/// WE MIGHT WANT TO STYLE THE STAGE DIFFERENTLY WHEN THERE'S A SCROLLBAR 
-		/// e.g. BY DEFAULT WE USE ROUNDED CORNERS WHEN WE SET A MARGIN / CROSS-MARGIN ATTR ON <vision-stage>, BUT IT BECOME "UGLY" WITH A SCROLLBAR, SO WE REMOVE ROUNDED CORNERS THEN…
-		if( isScrollbarVisible( stage.app))
+		// WE MIGHT WANT TO STYLE THE STAGE DIFFERENTLY WHEN THERE'S A SCROLLBAR 
+		// e.g. BY DEFAULT WE USE ROUNDED CORNERS WHEN WE SET A MARGIN / CROSS-MARGIN ATTR ON <vision-stage>, BUT IT BECOME "UGLY" WITH A SCROLLBAR, SO WE REMOVE ROUNDED CORNERS THEN…
+		if( isScrollbarVisible( app))
 			document.body.classList.add('has-scrollbar')
 	}
 	
 	updateForURL( pop=false){
 		// this.url_segments = location.pathname.split('/').filter( item => item!=='').map( item => decodeURI( item))
-		this.app.params = location.hash.slice(1).split('/')
-		this.app.params.length && log('info', 'params:', ...this.app.params)
+		this.params = location.hash.slice(1).split('/')
+		this.params.length && log('info', 'params:', ...this.params)
 
 		// scene from first param
-		let scene = decodeURI( this.app.params[0])
+		let scene = decodeURI( this.params[0])
 		if( !pop)
-			this.app._state.scene = scene || '' 
+			this._state.scene = scene || '' 
 			// we might not be ready to render; set on _state to bypass auto render
 		else
-			this.app.scene = scene
+			this.scene = scene
 
 		// level from second param
-		// let l = this.app.params[1]
+		// let l = this.params[1]
 		// if( l){
 		// 	l = parseInt( l)
 		// 	if( !isNaN( (l)))
-		// 		this.app._state.level = l
+		// 		this._state.level = l
 		// }
 	}
 
@@ -858,6 +852,9 @@ export class VisionStage extends Component {
 		if( lvl !== this.level || this.allow_level_reset) // allow RE-SET even if same
 			this.level = lvl
 	}
+
+	/** Basic audio playback, no lib :)  */
+
 	// must be called from the app after user event, or onConnected but then the first time it won't play on iOS
 	setupSounds(){
 		const sounds_data = ctor( this).sounds
@@ -866,8 +863,9 @@ export class VisionStage extends Component {
 
 		this.sounds = {}
 		window.AudioContext = window.AudioContext || window.webkitAudioContext
-		this.audio_context = new window.AudioContext() ///
-		this.gain_node = this.audio_context.createGain() /// global volume control
+		this.audio_context = new window.AudioContext()
+		this.gain_node = this.audio_context.createGain() // global volume control
+		// more verbose, eventually delete...
 		if( is_iOS || is_safari){
 			return Promise.all( 
 				sounds_data.map( ([name, url, options={}]) => fetch( url)
@@ -896,7 +894,6 @@ export class VisionStage extends Component {
 			log('err', 'no sound with name:', name, 'check if sounds are set up')
 			return
 		}
-
 		const { audio_buffer, options } = this.sounds[ name]
 		//log('info', 'playSound:', name, options.volume)
 		const source = this.audio_context.createBufferSource()
@@ -932,18 +929,18 @@ export class VisionStage extends Component {
 }
 
 // underscore prefix so these are merged and not overriden
+
 VisionStage._properties = {
 	title: '',
 	lang: {
 		value: navigator.language.slice(0,2),
 		stored: true,
 		watcher( val, prev){
+			// set complete lang code on <html> for speak function
 			let [lang, country] = navigator.language.split('-')
+			document.documentElement.setAttribute('lang', val + '-' + country) 
 			this.country = country
-			document.documentElement.setAttribute('lang', val + '-' + country) /// set complete code for speak
 			//log('info', 'lang, country:', lang, country)
-			if( this.app) this.app.lang = val // more intuitive to use app.lang
-			//log('pink', 'app:', this.app)
 		},
 		init_watcher: true
 	},
@@ -1100,7 +1097,7 @@ function storedValue( elem_id, prop){
 /** either save after setting a prop on elem, or just save */
 export function saveStore( elem_id, prop, val, remove=false){
 
-	if( stage && stage.do_not_store) return
+	if( app && app.do_not_store) return
 
 	//! was async: problem if used on unload event... cannot block 
 	//!  => should make async + another sync version for unload
@@ -1142,7 +1139,7 @@ export function saveStore( elem_id, prop, val, remove=false){
 
 export function clearStore( e){
 	log('err', 'clear store')
-	stage.do_not_store = true // prevent storing on before reload
+	app.do_not_store = true // prevent storing on before reload
 	localStorage.removeItem( store_namespace)
 	log('err', 'Store cleared')
 	location.reload()

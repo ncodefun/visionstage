@@ -1,12 +1,12 @@
-import { log, Component, html, define, getStage } from '../vision-stage.js'
-log('ok', '-> popup-toast')
-const stage = getStage()
+import { log, Component, html, define } from '../vision-stage.js'
+
+const app = q('vision-stage')
 
 class Toast extends Component {
 
 	onConnected(){
 		//log('check', 'toast connected' )
-		stage.toast = this
+		app.toast = this
 	}
 
 	template(){

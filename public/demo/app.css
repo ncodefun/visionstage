@@ -14,7 +14,7 @@ main > footer {
 	font-weight: bold;
 }
 /** to target by [show-for:scene] you need to escape the colon (:) */
-.app[scene='A'] [show-for\:scene='A C']{ margin-bottom: auto; }
-.app[scene='A'] div:nth-child(2) { margin-top: auto; }
+vision-stage[scene='A'] [show-for\:scene='A C']{ margin-bottom: auto; }
+vision-stage[scene='A'] div:nth-child(2) { margin-top: auto; }
 /** target a value in a list of values w/ ~= (~ =)*/
 [show-for\:scene~='C'] { color: purple; }

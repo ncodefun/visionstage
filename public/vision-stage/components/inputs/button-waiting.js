@@ -1,16 +1,11 @@
-import { log, Component, html, define, getStage, useSVG, unsafeHTML } from '../../vision-stage.js'
+import { log, Component, html, define, useSVG, unsafeHTML } from '../../vision-stage.js'
 
-// import './value-selector.js'
-// Component.load('comp-file-name') /// dynamic import to also load css file
+// use the user HTML as initial_content, or use a label string or prop
+// loader 
 
-//// use the user HTML as initial_content, or use a label string or prop
-//// loader 
+// .waiting = false 
+// .done = true => checkmark and a $label-done string
 
-//// .waiting = false 
-//// .done = true => checkmark and a $label-done string
-
-
-const stage = getStage()
 
 /**
  * Button which shows a waiting state when clicked, 

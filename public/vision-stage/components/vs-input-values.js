@@ -1,8 +1,5 @@
-import { q, tempClass } from '/vision-stage/modules/utils-core.js'
-import { Component, html, define, log, getStage } from '/vision-stage/vision-stage.js'
-
-const stage = getStage()
-const app = stage.app
+// import { q, tempClass } from '/vision-stage/modules/utils-core.js'
+import { Component, html, define, log } from '/vision-stage/vision-stage.js'
 
 class VSInputValues extends Component {
 

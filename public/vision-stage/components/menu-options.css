@@ -45,7 +45,7 @@ menu-options #install-app ul {
 	padding-left: 1em;
 	margin: 0;
 }
-.app.installable menu-options #install-app {
+vision-stage.installable menu-options #install-app {
 	display: flex;
 }
 menu-options #install-btn {

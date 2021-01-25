@@ -1,8 +1,7 @@
-import { Component, html, define, log, getStage, ifDefined } from '../../vision-stage.js'
-//import {q} from '../../modules/utils-core.js'
+import { Component, html, define, log, ifDefined } from '../../vision-stage.js'
+//import { q } from '../../modules/utils-core.js'
 
-const stage = getStage()
-const app = stage.app
+//const app = q('vision-stage')
 
 class RangeSlider extends Component {
 	

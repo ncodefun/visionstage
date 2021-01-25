@@ -1,12 +1,13 @@
-import { Component, html, define, log, getStage, unsafeHTML, useSVG } from '../vision-stage.js'
-//import { q } from '../modules/utils-core.js'
-const stage = getStage()
-const app = stage.app
+import { Component, html, define, log, unsafeHTML, useSVG } from '../vision-stage.js'
+import { q } from '../modules/utils-core.js'
+
+const app = q('vision-stage')
 
 class MenuScenes extends Component {
 
 	constructor(){
 		super()
+
 		this.initial_content = this.innerHTML
 		let disabled_scenes = this.getAttribute('disabled-scenes')
 		if( !disabled_scenes)
@@ -30,7 +31,7 @@ class MenuScenes extends Component {
 		this.classList.add('menu')
 
 		const scenes = []
-		const strings_for_lang = this.strings[ stage.lang] //!! or use default ?
+		const strings_for_lang = this.strings[ app.lang] //!! or use default ?
 		for( let str_key in strings_for_lang){
 			//// we must know which strings are scenes; for now they're one char long, or have $ special prefix
 			if( str_key.length === 1 || str_key.startsWith('$'))

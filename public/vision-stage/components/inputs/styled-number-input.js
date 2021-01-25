@@ -1,10 +1,8 @@
 import { q, tempClass, chunksOfLength } from '../../modules/utils-core.js'
-import { Component, html, define, log, getStage } from '../../vision-stage.js'
+import { Component, html, define, log } from '../../vision-stage.js'
 
-const stage = getStage()
-const app = stage.app
+const app = q('vision-stage')
 const allowed_keys = ['Backspace', 'ArrowLeft', 'ArrowRight']
-
 
 class StyledNumberInput extends Component {
 

@@ -1,6 +1,6 @@
-import { log, Component, html, define, getStage, unsafeHTML } from '../vision-stage.js'
+import { log, Component, html, define, unsafeHTML } from '../vision-stage.js'
 // log('ok', '-> popup-full')
-const stage = getStage()
+const app = q('vision-stage')
 
 class Popup extends Component {
 
@@ -14,7 +14,7 @@ class Popup extends Component {
 
 	onConnected(){
 		//log('check', 'Popup connected' )
-		stage.app.popup = this
+		app.popup = this
 	}
 
 	template(){

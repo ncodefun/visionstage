@@ -1,7 +1,5 @@
 import { Component, html, define, useSVG, unsafeHTML, log } from '../../vision-stage.js'
 
-// const stage = getStage()
-// const app = stage.app
 
 /**
  * @property target {HTMLElement}

@@ -40,6 +40,7 @@ html {
 	--primary-darker-faded: hsla(260, 36%, 61%, 1);
 }
 body {
+	text-align: center;
 	background: hsl(245, 18%, 29%);
 }
 
@@ -52,7 +53,7 @@ img.layout {
 	left: auto;
 }
 
-.app {
+vision-stage {
 	--floor: 56%;
 	color: var(--color-base);
 	font-family: Asap Condensed, sans-serif;
@@ -94,7 +95,7 @@ a:hover, button.bare:hover {
 	height: 4rem;
 	width: 100%;
 	flex-shrink: 0;
-	text-align: center;
+	
 	margin-top: auto;
 }
 
@@ -107,7 +108,7 @@ img#logo {
 	mix-blend-mode: lighten; 
 	transition: opacity 1s .5s ease; /** prevent flash of unstyled content...*/
 	}
-	.app.faded > header img {
+	vision-stage.faded > header img {
 		opacity: 0;
 	}
 	/*
@@ -133,9 +134,6 @@ h1#title span {
 
 #tagline {
 	font: 900 italic 2rem/1.5 Simonetta, sans-serif;
-	text-align: center;
-	/* background: #000; */
-	
 }
 #tagline p {
 	margin: 0;
@@ -164,7 +162,7 @@ span.highlight {
 .no-nothing {
 	/* font-size: 1.1rem; */
 	font-family: Simonetta;
-	margin: 3.6rem 0 .5rem;
+	margin: 3rem 0 0rem;
 	/* font-style: italic; */
 	color: hsl(263deg, 100%, 77%);
 }
@@ -175,6 +173,15 @@ span.highlight {
 	font-size: 1.1rem;
 	color: hsl(263, 100%, 82%);
 	/* color: var(--color-base); */
+}
+#features {
+	margin-top: 3rem;
+	padding: 0;
+	list-style-type: none;
+	font: 1rem/1.5 Roboto Condensed, sans-serif
+}
+#features p {
+	margin: 0;
 }
 
 @keyframes slow-blink {

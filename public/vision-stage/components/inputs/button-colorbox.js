@@ -1,8 +1,5 @@
 import { Component, html, define, log } from '../../vision-stage.js'
 
-// const stage = getStage()
-// const app = stage.app
-
 class ColorBox extends Component {
 
 	template(){			

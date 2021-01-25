@@ -3,7 +3,7 @@
 }
 
 /**!! BLOCK MAIN IF NOT AUTHENTICATED */
-.app:not(.auth):not([no-auth]) > main { 
+vision-stage:not(.auth):not([no-auth]) > main { 
 	pointer-events: none !important;
 }
 
@@ -92,7 +92,7 @@ button.signout .exit {
 	font-weight: bold;
 }
 
-.app[opened-menu='auth'] #access-level-label {
+vision-stage[opened-menu='auth'] #access-level-label {
 	display: block;
 }
 #access-level-label {

@@ -1,6 +1,4 @@
-html {
-	/* --title-banner-color:  */
-}
+
 vision-stage.dark-mode {
 	background-color: #16171a;
 	background-blend-mode: soft-light;
@@ -175,7 +173,7 @@ vision-stage.dark-mode {
 		background: var(--soft-dark);
 		color: hsl(267, 100%, 96%);
 	}
-	vision-stage, #loading { 
+	vision-stage { 
 		/*background-color: #C6C6C6; /** opaque version is mixed with #d7d7d7 */
 		background: url(/vision-stage-resources/images/textures/paper-opaque-8bit.png);
 		color: var(--soft-darker, #272727);
@@ -709,7 +707,7 @@ vision-stage.dark-mode {
 
 vision-stage {
 	display: block;
-	transition: opacity .23s .23s ease-out;
+	transition: opacity .5s .3s ease-out;
 }
 
 vision-stage.grid > main { /** OPT IN MAX-WIDTH/HEIGHT  */

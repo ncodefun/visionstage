@@ -11,7 +11,7 @@ const DEBUG = false
 // 	measurementId: ""
 // }
 
-import { Component, html, define, log, useSVG, getStage, unsafeHTML } from '../vision-stage.js'
+import { Component, html, define, log, useSVG, unsafeHTML } from '../vision-stage.js'
 import { q, ctor, chain } from '../modules/utils-core.js'
 import * as _firebase from '../modules/firebase/app.js';
 import "/vision-stage/modules/firebase/auth.js"
@@ -19,15 +19,12 @@ import "/vision-stage/modules/firebase/firestore.js"
 import "/vision-stage/modules/firebase/analytics.js"
 
 Component.load('inputs/button-waiting')
-//!! popups
+//! popups
 
+const app = q('vision-stage')
 
 const ALLOW_AUTO_SIGNIN = true
 const firebase = _firebase.default
-
-const TRIAL_DUR_SEC = 60 * 15 //// 15 minutes
-const stage = getStage()
-const app = stage.app
 app.authentified = false
 const app_name = stage.app_name //.localName.replace(/^app-/, '')
 //log('err', 'app name:', app_name)

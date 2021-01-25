@@ -1,16 +1,14 @@
-import { Component, html, define, log, useSVG, getStage } from '../vision-stage.js'
-//import { q } from '../modules/utils-core.js'
+import { Component, html, define, log, useSVG } from '../vision-stage.js'
+import { q } from '../modules/utils-core.js'
 import screenfull from '../modules/screenfull.js'
 
-// log('ok', '-> menu-options')
-
-const stage = getStage()
-const app = stage.app
+const app = q('vision-stage')
 
 class MenuOptions extends Component {
 	
 	constructor(){
 		super()
+		//app = q('vision-stage')
 		app.menu_options = this
 		// this._onClick = this.onClick.bind( this)
 		// this.addEventListener('click', this._onClick)
@@ -18,7 +16,7 @@ class MenuOptions extends Component {
 
 	template(){
 		//log('check', 'render menu options')
-		const langs = stage.langs
+		const langs = app.langs
 		return html`
 		<div class="menu-body" flow='col stretch'>
 			<header>
@@ -26,10 +24,8 @@ class MenuOptions extends Component {
 					<ul class='lang-options' flow='row space-evenly' @click=${ this.setLang }>
 					${
 						langs.map( lang => html`
-							<li><button class='bare medium square pseudo-link ${ stage.lang === lang ? 'active':'' }'><div class='text'>${lang.toUpperCase()}</div></button></li>`)
+							<li><button class='bare medium square pseudo-link ${ app.lang === lang ? 'active':'' }'><div class='text'>${lang.toUpperCase()}</div></button></li>`)
 					}
-						<!-- <li><button class='bare medium square pseudo-link ${ stage.lang === 'fr' ? 'active':'' }'><div class='text'>FR</div></button></li>
-						<li><button class='bare medium square pseudo-link ${ stage.lang === 'en' ? 'active':'' }'><div class='text'>EN</div></button></li> -->
 					</ul>`
 				}
 				<button id='fullscreen-toggle' class='icon round ${app.UI_button_size_class}' aria-label=${ this.$fullscreen }
@@ -49,7 +45,7 @@ class MenuOptions extends Component {
 				<span aria-hidden>🔊</span>
 			</section>
 
-			<!--///  APP's options  ///-->
+			<!--//  APP's options  //-->
 			${ app.menuOptionsTemplate && app.menuOptionsTemplate() }
 			<hr class='split'>
 			${ app.menuOptionsBottomTemplate && app.menuOptionsBottomTemplate() }
@@ -87,27 +83,30 @@ class MenuOptions extends Component {
 		</div>`
 	}
 
-	/// resize happen before this is registered (this load is defered), so also listen for afterFirstRender
-	afterFirstRender(){ this.setTopCornerWidth() }
-	afterResize(){ this.setTopCornerWidth() }
-	/// we want the right side button of the header (fullscreen toggle) 
-	/// to match the (flexible) width of the top corner buttons of the app's header
+	// we want the right side button of the header (fullscreen toggle) 
+	// to match the (flexible) width of the top corner buttons of the app's header
+	// for a balanced visual...
 	setTopCornerWidth(){
 		let w = app.q('.top-corner-wrapper')
 		w && app.style.setProperty('--top-corner-width', w.clientWidth+'px')
 	}
 
+	afterResize(){ this.setTopCornerWidth() }
+	afterFirstRender(){ this.setTopCornerWidth() } // init, resize is already done
+
 	setLang( e){
 		if( e.target.localName === 'button'){
-			stage.lang = e.target.textContent.toLowerCase()
+			app.lang = e.target.textContent.toLowerCase()
 		}
 	}
 
 	onConnected(){
-		//log('ok', 'menu options connected')
 		this.classList.add('menu')
-		//app.menu_options = this
-		this.app = app /// to use in app's menuOptionsTemplate events callbacks since `this` will be this menu
+		app.menu_options = this
+
+		// to use in app's menuOptionsTemplate events callbacks 
+		// b/c `this` will be this component, **NOT THE APP**
+		this.app = app
 		this.render()
 	}
 
@@ -122,12 +121,6 @@ class MenuOptions extends Component {
 			log('err','screenfull not enabled')
 		this.open = false
 	}
-
-/* 	onClick( e){
-		if( e.target.localName==='menu-options'){ /// clicked beside => close
-			this.open = false
-		}
-	} */
 }
 
 MenuOptions.properties = {

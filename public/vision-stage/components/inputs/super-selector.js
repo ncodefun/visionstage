@@ -15,13 +15,10 @@
 		</super-selector>
  */
 
+import { Component, html, define, log, useSVG } from '../../vision-stage.js'
+import { q } from '../../modules/utils-core.js'
 
-// log('ok', '-> super-selector', )
-import { Component, html, define, log, getStage, useSVG } from '../../vision-stage.js'
-import {q} from '../../modules/utils-core.js'
-
-const stage = getStage()
-const app = stage.app
+const app = q('vision-stage')
 
  //// cote de performance globale -> donne une mauvaise réponse ... 0
 
