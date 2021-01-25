@@ -18,10 +18,6 @@ class MenuScenes extends Component {
 			this.disabled_scenes = disabled_scenes.split(/\s+/)
 
 		this.admin_scenes = app.admin_scenes ?  app.admin_scenes : []
-		this.non_admin_scenes = app.admin_scenes 
-			? app.admin_scenes.filter( s => !this.admin_scenes.includes( s)) 
-			: null
-		//log('check', 'this.non_admin_scenes:', this.non_admin_scenes)
 	}
 
 	onConnected(){
@@ -53,6 +49,12 @@ class MenuScenes extends Component {
 			app.scenes = 
 			this.scenes = 
 				scenes.map( s => s.replace(/^\$/g,''))
+
+			if( this.admin_scenes){
+				this.non_admin_scenes = 
+					this.scenes.filter( s => !this.admin_scenes.includes( s)) 
+			}
+
 			app.onScenes && app.onScenes( this.scenes)
 			if( app.scene && !this.scenes.includes( app.scene) ){
 				log('err', 'unknown scene:', app.scene, this.scenes)
