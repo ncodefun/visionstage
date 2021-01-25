@@ -31,10 +31,11 @@ class App extends VisionStage {
 					no custom syntax, no monster API, <wbr>no preprocessing, no bundling, no shadow DOM…</p>
 				<p class='simple'>
 					Just a minimal and <button class='bare inline'>intuitive API</button></p>
-				<p class='features'>
-					Staged content&thinsp;: scaled rem / framed within flexible limits</p>
-				<p>
-					Intuitive flex layout&thinsp;: &lt;div flow="col top stretch"></p>
+
+				<ul id='features'>
+					<li>Scale and frame content for universal aspect control</li>
+					<li>Intuitive flex layout&thinsp;: &lt;div flow="col top stretch"></li>
+				</ul>
 			</section>
 
 			<footer id='main-footer' flow>
@@ -71,7 +72,7 @@ class App extends VisionStage {
 	// }
 }
 
-App.aspect_ratios_v2 = {
+App.aspect_ratios = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
 		'min-content': .66, 				// extend content height up to this

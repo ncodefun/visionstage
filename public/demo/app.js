@@ -92,7 +92,7 @@ class App extends VisionStage {
 	
 }
 
-App.aspect_ratios_v2 = {
+App.aspect_ratios = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
 		'min-content': .66, 				// extend content height up to this
