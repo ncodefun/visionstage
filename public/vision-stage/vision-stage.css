@@ -294,7 +294,7 @@ vision-stage.dark-mode {
 		box-sizing: border-box;
 	}
 	body *:not(:defined){
-		display: none;
+		visibility: hidden !important;
 	}
 	.transparent {
 		opacity: 0;
@@ -474,7 +474,10 @@ vision-stage.dark-mode {
 /** INITIAL / TEMP **/
 
 	vision-stage.faded 
-		{ opacity: 0 }
+		{ opacity: 0  }
+	vision-stage:not(.ready),
+	vision-stage:not(.ready) *
+		{ transition: none !important }
 	.menu-auth 
 		{ pointer-events: none } /** might block scenes before its css is fully loaded */
 	#toggle-menu-auth
@@ -707,7 +710,17 @@ vision-stage.dark-mode {
 
 vision-stage {
 	display: block;
-	transition: opacity .5s .3s ease-out;
+	transition: opacity .5s .25s ease-out; /** delay, let #loading fade out first */
+}
+
+/**! TO TEST !**/
+vision-stage > main.constrain {
+	width: 100%;
+	max-width: calc(var(--sth) * var(--stage-ar-for-widest-content));
+	justify-self: center;
+	height: 100%;
+	max-height: calc(100vw * 1 / var(--stage-ar-for-tallest-content));
+	align-self: end; /** stick to bottom after max-height is reached */
 }
 
 vision-stage.grid > main { /** OPT IN MAX-WIDTH/HEIGHT  */
