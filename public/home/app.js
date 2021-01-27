@@ -35,8 +35,8 @@ class App extends VisionStage {
 					</div>
 					
 					<div id='details' class='stay-big'>
-						<strong>• • • ZERO TOOLS • • •</strong><br>
-						<span class='nowrap'>keep it simple – stop waisting time</span> <span class='nowrap'>with overkill frameworks and monster tools…</span>
+						<div>• • • KEEP IT SIMPLE • • •</div>
+						<span class='nowrap'>No more waisting time</span> <span class='nowrap'>with overkill frameworks and monster tools…</span>
 						<br>
 						Focus on what counts – <strong>start to create&hairsp;!!</strong>
 					</div>
