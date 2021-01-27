@@ -14,36 +14,39 @@ class App extends VisionStage {
 
 	template(){
 		return html`
-			<div id='title-row' flow='row top'>
-				<img id='logo' src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
-				<h1 id='title'>Vision <span>Stage</span></h1>
-			</div>
+			<!-- <main> -->
 
-			<div id='tagline' flow='col'>
-				<p><span class='highlight'>Modern Web apps</span> in no time </p>
-				<p><span class='highlight'>Pure JS/HTML</span> components <span class='icon highlight'>🙏</span></p>
-			</div>
+				<header>
+					<div id='title-row' flow='row top'>
+						<img id='logo' src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
+						<h1 id='title'>Vision <span>Stage</span></h1>
+					</div>
+				</header>
 
-			<div id='feat' flow='col'>
-				<div>App/stage component – frame & resize (rem) content for universal aspect control</div>
-				<div>Menu components for scenes, options and auth</div>
-				<div>Easy localization, SVG icons, sounds, intuitive flex layout and more&hairsp;!</div>
-			</div>
-			
-			<div id='details'>
-				<strong>••• ZERO TOOLS •••</strong><br>
-				keep it simple – stop waisting your time with overkill frameworks and monster tools…
-				<br>
-				Focus on what counts – <strong>start to create&hairsp;!!</strong>
-			</div>
+				<div id='tagline' flow='col'>
+					<p><span class='highlight'>Modern Web apps</span> in no time </p>
+					<p><span class='highlight'>Pure JS/HTML</span> components <span class='icon highlight'>🙏</span></p>
+				</div>
 
-			<div id='included'>
+					<div id='feat' flow='col' class='stay-big'>
+						<div>App/stage component&hairsp;: <span class='nowrap'>frame & resize (rem) content <wbr>for universal aspect control</span></div>
+						<div>Menu components for scenes, <span class='nowrap'>options (+fullscreen +language) and auth</span></div>
+						<div>Easy localization, SVG icons, sounds, <span class='nowrap'>intuitive flex layout and more&hairsp;!</span></div>
+					</div>
+					
+					<div id='details' class='stay-big'>
+						<strong>• • • ZERO TOOLS • • •</strong><br>
+						<span class='nowrap'>keep it simple – stop waisting time</span> <span class='nowrap'>with overkill frameworks and monster tools…</span>
+						<br>
+						Focus on what counts – <strong>start to create&hairsp;!!</strong>
+					</div>
 
-			</div>
 
-			<footer id='main-footer' flow>
-				<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
-			</footer>`
+				<footer id='main-footer' flow class='stay-big'>
+					<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
+				</footer>
+			<!-- </main> -->
+			`
 	}
 
 	menuOptionsTemplate(){
@@ -75,13 +78,13 @@ class App extends VisionStage {
 App.aspect_ratios = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
-		'min-content': .66, 				// extend content height up to this
-		'base-content': .75, 				// base – min width for content
-		'max': .75, 								// extend stage and content width up to this wide
+		'min-content': .6, 					// extend content height up to this
+		'base-content': .9, 				// base – min width for content
+		'max': .9, 									// extend stage and content width up to this wide
 	},
-	threshold: 1.2,								// switch between portrait and landscape
+	threshold: .85,								// switch between portrait and landscape
 	landscape: {
-		'min': 1.333, 							// base – min width for content
+		'min': 1, 									// base – min width for content
 		'max-content': 1.6, 				// extend content width up to this
 		'max': 2.1									// extend stage width up to this
 	},

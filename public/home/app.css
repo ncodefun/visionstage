@@ -42,6 +42,8 @@ html {
 body {
 	text-align: center;
 	background: hsl(245, 18%, 29%);
+	background: hsl(252, 18%, 45%);
+	background: hsl(260, 47%, 25%);
 }
 
 img.layout {
@@ -72,6 +74,10 @@ vision-stage {
 	padding-top: 3.7rem;
 }
 
+vision-stage > main {
+	display: contents; /** bypass ios bug */
+}
+
 a, button.bare {
 	color: var(--color-base);
 }
@@ -92,16 +98,16 @@ a:hover, button.bare:hover {
 }
 
 #main-footer {
-	height: 4rem;
+	height: 4em;
 	width: 100%;
-	/* margin-top: auto; */
+	margin-top: .5rem;
 }
 
 img#logo {
 	display: block;
-	height: 11rem;
+	height: 11em;
 	position: absolute;
-	transform: translateX(-3.8rem);
+	transform: translateX(-3.8em);
 	/* mix-blend-mode: screen; /** more details */
 	mix-blend-mode: lighten; 
 	transition: opacity 1s .5s ease; /** prevent flash of unstyled content...*/
@@ -118,7 +124,7 @@ h1#title {
 	mix-blend-mode: luminosity;
 	opacity: .5;
 	/* background: #0f0; */
-	font: 2.7rem/1.33 Gro Bold, Autour One, sans-serif;
+	font: 2.7em/1.33 Gro Bold, Autour One, sans-serif;
 	letter-spacing: .25rem;
 	text-transform: uppercase;
 	margin: .5rem 0 5rem;
@@ -131,41 +137,41 @@ h1#title span {
 }
 
 #tagline {
-	font: 900 italic 2rem/1.5 Simonetta, sans-serif;
+	font: 900 italic 2em/1.5 Simonetta, sans-serif;
 }
 #feat {
-	margin: 3rem 0 0;
-	font: 900 1rem/1.5 Simonetta, sans-serif;
+	margin: 3rem 0 1rem;
+	font: 900 1em/1.5 Simonetta, sans-serif;
 	color: hsl(263, 100%, 82%);
 }
 #feat > div {
-	background: #fff1;
 	background: #adffd6;
-	/* background: var(--color-base); */
 	color: #000b;
 	padding: 0 1ch;
-	margin-bottom: 2px;
+	margin-bottom: .2rem;
 }
 #details {
-	margin: auto 0 2rem;
+	margin: auto 0;
+	padding: .7em 2ch;
 	font-family: Encode Sans, Germes;
 	font-style: normal;
-	font-size: .9rem;
+	font-size: .9em;
 	font-weight: 400;
 	color: hsl(266, 100%, 92%);
 	background: #ffffff17;
 	border-radius: .25rem;
-	padding: .7rem 2ch;
+	
 }
-
-
-
+#details strong {
+	color: hsl(266, 100%, 95%);
+	font-weight: 600;
+}
 
 #tagline p {
 	margin: 0;
 }
 #tagline p:not(:first-child) {
-	font-size: 1.25rem;
+	font-size: .7em;
 	/* opacity: .76; */
 	/* animation: slow-blink 1.6s infinite alternate; */
 }
@@ -181,63 +187,6 @@ span.highlight {
 }
 
 
-#details strong {
-	color: hsl(266, 100%, 95%);
-	font-weight: 600;
-}
-
-
-#infos {
-	/* display: none; */
-	margin: .75rem 0 0;
-	padding: 1rem 2ch;
-	color: hsl(264, 100%, 95%);
-	font-family: Encode Sans, Germes;
-	font-size: .9rem;
-	background: #fff1;
-	border-radius: .25rem;
-	align-self: center;
-}
-#infos h2 {
-	margin: 0 0 .75rem;
-	font-family: Gro Bold;
-	letter-spacing: .1rem;
-}
-#infos p {
-	margin: 0;
-}
-
-
-
-
-
-.no-nothing {
-	margin: 0;
-	/* font-size: 1.1rem; */
-	font-family: Simonetta;
-	line-height: 1.33;
-	font-style: italic;
-	color: hsl(263deg, 100%, 77%);
-	color: hsl(263, 100%, 82%);
-}
-.simple {
-	display: none;
-	margin: .25rem 0 0;
-	font-family: Simonetta;
-	/* font-style: italic; */
-	font-size: 1.1rem;
-	color: hsl(263, 100%, 82%);
-	/* color: var(--color-base); */
-}
-#features {
-	margin-top: 3rem;
-	padding: 0;
-	list-style-type: none;
-	font: 1rem/1.5 Roboto Condensed, sans-serif
-}
-#features p {
-	margin: 0;
-}
 
 @keyframes slow-blink {
 	0% {
@@ -252,11 +201,32 @@ span.highlight {
 		animation-timing-function: ease;
 	}
 }
-
-@media (min-aspect-ratio: 6/5) { /** landscape */
-
+.dash::before {
+	content: '– '
 }
-@media (max-aspect-ratio: 6/5){ /** matches the threshold in aspect-ratios */
-
+/* vision-stage[orientation='landscape'] .dash::before {
+	content: '– '
 }
-
+vision-stage[orientation='portrait'] .dash::before {
+	content: ': '
+} */
+vision-stage[orientation='portrait'] img#logo {
+	transform: translate(-3.65em, -.1em);
+}
+vision-stage[orientation='portrait'] header {
+	font-size: 1.42em;
+	margin-bottom: 2em;
+}
+vision-stage[orientation='portrait'] #tagline {
+	font-size: 2.5em;
+}
+vision-stage[orientation='portrait'] #feat > div {
+	width: 100%;
+	max-width: calc(100% - 1rem);
+	margin-bottom: .25rem;
+	padding: .5rem 0;
+	line-height: 1.33;
+}
+vision-stage[orientation='portrait'] #details {
+	max-width: calc(100% - 1rem);
+}
