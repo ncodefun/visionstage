@@ -94,9 +94,7 @@ a:hover, button.bare:hover {
 #main-footer {
 	height: 4rem;
 	width: 100%;
-	flex-shrink: 0;
-	
-	margin-top: auto;
+	/* margin-top: auto; */
 }
 
 img#logo {
@@ -135,35 +133,84 @@ h1#title span {
 #tagline {
 	font: 900 italic 2rem/1.5 Simonetta, sans-serif;
 }
+#feat {
+	margin: 3rem 0 0;
+	font: 900 1rem/1.5 Simonetta, sans-serif;
+	color: hsl(263, 100%, 82%);
+}
+#feat > div {
+	background: #fff1;
+	background: #adffd6;
+	/* background: var(--color-base); */
+	color: #000b;
+	padding: 0 1ch;
+	margin-bottom: 2px;
+}
+#details {
+	margin: auto 0 2rem;
+	font-family: Encode Sans, Germes;
+	font-style: normal;
+	font-size: .9rem;
+	font-weight: 400;
+	color: hsl(266, 100%, 92%);
+	background: #ffffff17;
+	border-radius: .25rem;
+	padding: .7rem 2ch;
+}
+
+
+
+
 #tagline p {
 	margin: 0;
 }
-#tagline p:last-child {
-	font-size: 1.5rem;
+#tagline p:not(:first-child) {
+	font-size: 1.25rem;
 	/* opacity: .76; */
 	/* animation: slow-blink 1.6s infinite alternate; */
-	position: relative;
-	/* color: var(--color-base2-faded); */
 }
 #tagline .icon {
 	font-style: normal;
 }
 
 span.highlight {
-	/* color: hsl(303, 100%, 79%); */
-	/* color: var(--color-highlight); */
 	color: var(--color-base2);
 	text-shadow: 
-		0 0 .75rem #fff8,
-		/* 0 0 .25rem #fff3, */
-		0 0 .2rem #fff9;
+		0 0 .75rem #fff6,
+		0 0 .2rem #fff7;
 }
+
+
+#details strong {
+	color: hsl(266, 100%, 95%);
+	font-weight: 600;
+}
+
 
 #infos {
 	/* display: none; */
-	margin: 1.25rem 0 0;
-	padding: 0 2ch;
+	margin: .75rem 0 0;
+	padding: 1rem 2ch;
+	color: hsl(264, 100%, 95%);
+	font-family: Encode Sans, Germes;
+	font-size: .9rem;
+	background: #fff1;
+	border-radius: .25rem;
+	align-self: center;
 }
+#infos h2 {
+	margin: 0 0 .75rem;
+	font-family: Gro Bold;
+	letter-spacing: .1rem;
+}
+#infos p {
+	margin: 0;
+}
+
+
+
+
+
 .no-nothing {
 	margin: 0;
 	/* font-size: 1.1rem; */

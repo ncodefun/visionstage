@@ -21,20 +21,25 @@ class App extends VisionStage {
 
 			<div id='tagline' flow='col'>
 				<p><span class='highlight'>Modern Web apps</span> in no time </p>
-				<p>with <span class='highlight'>Pure JS/HTML</span> components <span class='icon'>🙏</span></p>
+				<p><span class='highlight'>Pure JS/HTML</span> components <span class='icon highlight'>🙏</span></p>
 			</div>
 
-			<section id='infos' flow='col'>
-				<p class='no-nothing nowrap text-center'>
-					no custom syntax, no preprocessing, <wbr>no bundling, no shadow DOM…</p>
-				<p class='simple'>
-					Just a minimal and <button class='bare inline'>intuitive API</button></p>
+			<div id='feat' flow='col'>
+				<div>App/stage component – frame & resize (rem) content for universal aspect control</div>
+				<div>Menu components for scenes, options and auth</div>
+				<div>Easy localization, SVG icons, sounds, intuitive flex layout and more&hairsp;!</div>
+			</div>
+			
+			<div id='details'>
+				<strong>••• ZERO TOOLS •••</strong><br>
+				keep it simple – stop waisting your time with overkill frameworks and monster tools…
+				<br>
+				Focus on what counts – <strong>start to create&hairsp;!!</strong>
+			</div>
 
-				<ul id='features'>
-					<!-- <li>Scale and frame content for universal aspect control</li> -->
-					<!-- <li>Intuitive flex layout&thinsp;: &lt;div flow="col top stretch"></li> -->
-				</ul>
-			</section>
+			<div id='included'>
+
+			</div>
 
 			<footer id='main-footer' flow>
 				<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
