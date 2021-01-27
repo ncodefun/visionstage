@@ -720,6 +720,8 @@ export class VisionStage extends Component {
 					0
 		}
 
+		this.setAttribute('orientation', this.is_portrait ? 'portrait' : 'landscape')
+
 		if( typeof margin === 'string') // assumes %, implicit or explicit
 			margin = parseFloat(margin) * h / 100
 	
@@ -767,6 +769,9 @@ export class VisionStage extends Component {
 				comp.skipped_afterResize = true
 			}
 		}
+
+
+
 		// WE MIGHT WANT TO STYLE THE STAGE DIFFERENTLY WHEN THERE'S A SCROLLBAR 
 		// e.g. BY DEFAULT WE USE ROUNDED CORNERS WHEN WE SET A MARGIN / CROSS-MARGIN ATTR ON <vision-stage>, BUT IT BECOME "UGLY" WITH A SCROLLBAR, SO WE REMOVE ROUNDED CORNERS THEN…
 		if( isScrollbarVisible( app))
