@@ -299,7 +299,7 @@ vision-stage.dark-mode {
 		box-sizing: border-box;
 	}
 	body *:not(:defined){
-		visibility: hidden !important;
+		display: none !important;
 	}
 	.transparent {
 		opacity: 0;
@@ -755,7 +755,7 @@ vision-stage.grid > main { /** OPT IN MAX-WIDTH/HEIGHT  */
 }
 
 .stay-big {
-	font-size: var(--header-font-size); /* !! rename ? */
+	font-size: var(--header-font-size) !important; /* !! rename ? */
 }
 
 .admin {
