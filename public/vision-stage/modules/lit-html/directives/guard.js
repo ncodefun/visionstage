@@ -12,4 +12,4 @@ import{directive as r}from"../../lit-html.js";
  * subject to an additional IP rights grant found at
  * http://polymer.github.io/PATENTS.txt
  */const e=new WeakMap,t=r((r,t)=>a=>{const s=e.get(a);if(Array.isArray(r)){if(Array.isArray(s)&&s.length===r.length&&r.every((r,e)=>r===s[e]))return}else if(s===r&&(void 0!==r||e.has(a)))return;a.setValue(t()),e.set(a,Array.isArray(r)?Array.from(r):r)});export{t as guard};
-
+//# sourceMappingURL=guard.js.map

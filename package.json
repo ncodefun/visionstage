@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "browser-sync start --server 'public/' --port 5000 --files '**/index.html,**/*.js,**/*.css'",
+    "start": "browser-sync start --server 'public/' --port 5000 --files '**/index.html,**/*.js,**/*.css' --no-notify --no-open --no-ghost-mode",
+    "start-ghost": "browser-sync start --server 'public/' --port 5000 --files '**/index.html,**/*.js,**/*.css' --no-notify --no-open",
     "pack": "snowpack --optimize",
     "deploy:test": "firebase hosting:channel:deploy test1"
   },
@@ -8,9 +9,8 @@
     "snowpack": "^1.4.0"
   },
   "dependencies": {
-    "firebase": "^8.0.1",
-    "lit-html": "^1.3.0",
-    "zfont": "^1.2.7"
+    "firebase": "^8.2.4",
+    "lit-html": "^1.3.0"
   },
   "snowpack": {
     "webDependencies": [
@@ -24,8 +24,7 @@
       "firebase/auth",
       "firebase/firestore",
       "firebase/storage",
-      "firebase/analytics",
-      "zfont"
+      "firebase/analytics"
     ]
   },
   "name": "vision-stage",

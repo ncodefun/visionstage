@@ -13,4 +13,4 @@ import{directive as e,NodePart as t,isPrimitive as n}from"../../lit-html.js";
  * http://polymer.github.io/PATENTS.txt
  */
 const o=new WeakMap,r=e(e=>r=>{if(!(r instanceof t))throw new Error("unsafeHTML can only be used in text bindings");const a=o.get(r);if(void 0!==a&&n(e)&&e===a.value&&r.value===a.fragment)return;const i=document.createElement("template");i.innerHTML=e;const s=document.importNode(i.content,!0);r.setValue(s),o.set(r,{value:e,fragment:s})});export{r as unsafeHTML};
-
+//# sourceMappingURL=unsafe-html.js.map

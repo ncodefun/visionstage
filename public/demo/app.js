@@ -22,8 +22,7 @@ class App extends VisionStage {
 		<popup-full></popup-full>
 
 		<header>
-
-			<div flow class='top-corner-wrapper'> <!-- to get the size of the grid area, to apply in menu options' header -->
+			<div flow class='top-corner-wrapper'>
 				<button ?disabled=${!this.menu_options} id='toggle-menu-options' class='round ${this.UI_button_size_class}'
 					aria-label='menu des options'
 					@click=${ this.toggleMenuOptionsOpen }>
@@ -77,13 +76,8 @@ class App extends VisionStage {
 		<section></section>`
 	}
 
-
 	afterSceneChange(){
 
-	}
-
-	afterLevelChange(){
-		
 	}
 }
 

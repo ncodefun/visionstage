@@ -12,4 +12,4 @@ import{directive as e,AttributePart as t}from"../../lit-html.js";
  * subject to an additional IP rights grant found at
  * http://polymer.github.io/PATENTS.txt
  */const o=new WeakMap,i=e(e=>i=>{const m=o.get(i);if(void 0===e&&i instanceof t){if(void 0!==m||!o.has(i)){const e=i.committer.name;i.committer.element.removeAttribute(e)}}else e!==m&&i.setValue(e);o.set(i,e)});export{i as ifDefined};
-
+//# sourceMappingURL=if-defined.js.map

@@ -15,5 +15,5 @@ import{f as e}from"../common/index.esm-671f1674.js";export{f as default}from"../
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-e.registerVersion("firebase","8.0.1","app");
-
+e.registerVersion("firebase","8.2.4","app");
+//# sourceMappingURL=app.js.map
