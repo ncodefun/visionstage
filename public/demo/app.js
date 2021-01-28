@@ -7,21 +7,17 @@ class App extends VisionStage {
 		this.render()
 	}
 
-	onUserDataReady( data){
-		
-	}
-
 	afterFirstRender(){
-		/// wait till now to not block app load/render
+		// this way we're not blocking app load/render
 		Component.load('menu-scenes')
 		Component.load('menu-options')
-		// Component.load('menu-auth2')
+		Component.load('menu-auth')
 		this.faded = false
 	}
 
 	template(){
 		return html`
-		<!-- <menu-auth2 class='side-menu right layer'></menu-auth2> -->
+		<menu-auth class='side-menu right layer'></menu-auth>
 		<menu-options class='side-menu left layer'></menu-options>
 		<popup-full></popup-full>
 
@@ -89,20 +85,23 @@ class App extends VisionStage {
 	afterLevelChange(){
 		
 	}
-	
+}
+
+App.firebase_config = {
+
 }
 
 App.aspect_ratios = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
-		'min-content': .66, 				// extend content height up to this
-		'base-content': .75, 				// base – min width for content
-		'max': .85, 								// extend stage and content width up to this wide
+		'min-content': .66, 				// extend <main> height up to this
+		'base-content': .75, 				// base – min width for <main>
+		'max': .85, 								// extend stage/<main> width up to this wide
 	},
 	threshold: 1.1,								// switch between portrait and landscape
 	landscape: {
-		'min': 1.333, 							// base – min width for content
-		'max-content': 1.6, 				// extend content width up to this
+		'min': 1.333, 							// base – min width
+		'max-content': 1.6, 				// extend <main> width up to this
 		'max': 1.777								// extend stage width up to this
 	},
 	cross_margin: '1.2%',					// if dead space on one axis, add margins on the other (looks better…)
@@ -126,4 +125,8 @@ App.sounds = [
 	// ['wrong', '/vision-stage-resources/sounds/wrong.mp3', { volume:.6 }],
 ]
 
-define( 'vision-stage', App)
+
+define( 'vision-stage', App, []) 
+// -> we can declare required comps (JS & CSS) to be loaded 
+// -> app definition (customElements.define) will wait once all are loaded
+// -> For non critical components, use Component.load()
