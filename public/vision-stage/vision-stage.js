@@ -124,7 +124,7 @@ export class Component extends HTMLElement {
 		// to array of [key,val]
 		let flat_properties = properties ? Object.entries( properties) : []
 		for( let [prop, desc] of flat_properties){
-			if( !isObject( desc)) /// wrap if primitive value
+			if( !isObject( desc)) // wrap if primitive value
 				desc = { value: desc }
 
 			else if( desc.stored && !this.id && debug.store){
@@ -140,7 +140,7 @@ export class Component extends HTMLElement {
 				else //! DELETE / CLEAN UP
 					saveStore( store_id, prop, null, true)
 			}
-			else if( desc.stored){ //// store initial value
+			else if( desc.stored){ // store initial value
 				//if( debug.store) 
 				//log('info','--storing initial value:', store_id, prop, desc.value)
 				saveStore( store_id, prop, desc.value)
@@ -265,14 +265,12 @@ export class Component extends HTMLElement {
 				}
 			})
 
-			const v = 
-				stored_val || desc.value
+			const v = stored_val || desc.value
+
 			if( desc.init_watcher)
 				this[ prop] = v
-			else {/// init "silently": no watcher/transformer etc...
+			else  // init "silently": no watcher/transformer etc...
 				this._state[ prop] = v
-				//prop==='scene' && log('err', 'scene; stored_val , desc.value:', stored_val , desc.value)
-			}
 		}
 
 		// combine attribs and static strings
@@ -287,18 +285,16 @@ export class Component extends HTMLElement {
 		
 		let no_strings = !_ctor.strings 
 
-		// => {fr: {k:v,...}, en: {k:v,...}, ...}
-		// get attribs string
 		for( let name of this.getAttributeNames()){
 			if( name.startsWith('strings')){
 				no_strings = false
 				let lang = name.includes(':') ? name.split(':')[1] : undefined //app.langs[0]
 				let values = objectFromString( this.getAttribute( name))
 				//log('purple', 'got strings from attr:', values)
-				//! this.removeAttribute( name) 
 
-				if( lang==='*' || !lang){ //// all : define first if others: need to be overriden with specific langs
-					/// assign same values to all languages
+				if( lang==='*' || !lang){ 
+					// * all : define first if others; need to be overriden with specific langs
+					// assign same values to all languages
 					for( let l of app.langs){
 						strings[ l] = strings[ l] || {}
 						Object.assign( strings[ l], values)
@@ -311,9 +307,10 @@ export class Component extends HTMLElement {
 				}
 				this.removeAttribute( name)
 			}
+			// single string definition -> // string:hello="fr: Allô le monde, en: Hello world"
 			else if( name.startsWith('string:')){
 				let str_name = name.split(':')[1]
-				let val = objectFromString( this.getAttribute( name)) /// { fr: ..., en: ... }
+				let val = objectFromString( this.getAttribute( name)) 
 				for( let k in val){
 					strings[ k] = strings[ k] || {}
 					strings[ k][ str_name] = val[ k]
@@ -328,10 +325,11 @@ export class Component extends HTMLElement {
 				log('err', 'no app langs yet', this)
 			}
 			this.strings = strings
-			/// get / set string
-			//// the default lang obj should contains all strings keys; others might miss some
+			// get / set string
+			// the default lang obj should contains all strings keys; others might miss some
 			let default_lang_strings = strings[ app.langs[0]]
-			if( default_lang_strings){ /// if we have strings KEYS, store each as this.$str 
+			// if we have strings KEYS, store each as this.$str 
+			if( default_lang_strings){ 
 				for( let name of Object.keys( default_lang_strings)){
 					Object.defineProperty( this, '$'+name.replace(/-/g,'_'), {
 						get(){
