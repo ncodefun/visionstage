@@ -14,38 +14,32 @@ class App extends VisionStage {
 
 	template(){
 		return html`
-			<!-- <main> -->
-
-				<header>
-					<div id='title-row' flow='row top'>
-						<img id='logo' src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
-						<h1 id='title'>Vision <span>Stage</span></h1>
-					</div>
-				</header>
-
-				<div id='tagline' flow='col'>
-					<p><span class='highlight'>Modern Web apps</span> in no time </p>
-					<p><span class='highlight'>Pure JS/HTML</span> components <span class='icon highlight'>🙏</span></p>
+			<header>
+				<div id='title-row' flow='row top'>
+					<img id='logo' src="/home/images/love-in-the-dark.png" class='' alt="" @load=${this.onImageLoaded}>
+					<h1 id='title'>Vision <span>Stage</span></h1>
 				</div>
+			</header>
 
-					<div id='feat' flow='col' class='stay-big'>
-						<div>App/stage component&hairsp;: <span class='nowrap'>frame & resize (rem) content <wbr>for universal aspect control</span></div>
-						<div>Menu components for scenes, <span class='nowrap'>options (+fullscreen +language) and auth</span></div>
-						<div>Easy localization, SVG icons, sounds, <span class='nowrap'>intuitive flex layout and more&hairsp;!</span></div>
-					</div>
-					
-					<div id='details' class='stay-big'>
-						<div>• • • KEEP IT SIMPLE • • •</div>
-						<span class='nowrap'>No more waisting time</span> <span class='nowrap'>with overkill frameworks and monster tools…</span>
-						<br>
-						Focus on what counts – <strong>start to create&hairsp;!!</strong>
-					</div>
+			<div id='tagline' flow='col'>
+				<p><span class='highlight'>Modern Web apps</span> in no time </p>
+				<p><span class='highlight'>Pure JS/HTML</span> components <span class='icon highlight'>🙏</span></p>
+			</div>
 
+			<div id='feat' flow='col'>
+				<div>App/stage component&hairsp;: <span class='nowrap'>frame & resize (rem) content <wbr>for universal aspect control</span></div>
+				<div>Menu components for scenes, <span class='nowrap'>options (+fullscreen +language) and auth</span></div>
+				<div>Easy localization, SVG icons, sounds, <span class='nowrap'>intuitive flex layout and more&hairsp;!</span></div>
+			</div>
+			
+			<div id='details'>
+				<div>• • • KEEP IT SIMPLE • • •</div>
+				Focus on what counts – <strong>start to create&hairsp;!!</strong>
+			</div>
 
-				<footer id='main-footer' flow class='stay-big'>
-					<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
-				</footer>
-			<!-- </main> -->
+			<footer id='main-footer' flow>
+				<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
+			</footer>
 			`
 	}
 
@@ -58,7 +52,7 @@ class App extends VisionStage {
 		/// wait till now to not block app load/render
 		// Component.load('menu-scenes')
 		// Component.load('menu-options')
-		// Component.load('menu-auth2')
+		// Component.load('menu-auth')
 		this.faded = false
 	}
 
@@ -78,15 +72,15 @@ class App extends VisionStage {
 App.aspect_ratios = {
 	portrait: {	
 		'min': .5, 									// extend stage height up to this, (content sticks at bottom)
-		'min-content': .6, 					// extend content height up to this
+		// 'min-content': .6, 					// extend content height up to this
 		'base-content': .9, 				// base – min width for content
 		'max': .9, 									// extend stage and content width up to this wide
 	},
-	threshold: .85,								// switch between portrait and landscape
+	threshold: .9,								// switch between portrait and landscape
 	landscape: {
 		'min': 1, 									// base – min width for content
-		'max-content': 1.6, 				// extend content width up to this
-		'max': 2.1									// extend stage width up to this
+		// 'max-content': 1.6, 				// extend content width up to this
+		'max': 1.777								// extend stage width up to this
 	},
 	cross_margin: '1.2%',
 	// ultrawide_cross_margin: '1.2%'
