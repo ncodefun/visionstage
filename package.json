@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "browser-sync start --server 'public/' --port 5001 --files '**/index.html,**/*.js,**/*.css' --no-open",
+    "start": "browser-sync start --server 'public/' --port 5000 --files '**/index.html,**/*.js,**/*.css'",
     "pack": "snowpack --optimize",
     "deploy:test": "firebase hosting:channel:deploy test1"
   },
@@ -8,13 +8,8 @@
     "snowpack": "^1.4.0"
   },
   "dependencies": {
-    "d3-ease": "^2.0.0",
-    "file-saver": "^2.0.2",
     "firebase": "^8.0.1",
     "lit-html": "^1.3.0",
-    "screenfull": "^5.0.2",
-    "split-ease": "^1.0.2",
-    "zdog": "^1.1.2",
     "zfont": "^1.2.7"
   },
   "snowpack": {
@@ -30,12 +25,7 @@
       "firebase/firestore",
       "firebase/storage",
       "firebase/analytics",
-      "screenfull",
-      "file-saver",
-      "zdog",
-      "zfont",
-      "split-ease",
-      "d3-ease"
+      "zfont"
     ]
   },
   "name": "vision-stage",
@@ -43,5 +33,5 @@
   "main": "main.js",
   "author": "José Roux",
   "license": "",
-  "description": ""
+  "description": "After running 'npm run pack', just move the content of the web_modules folder which will be created to the modules folder."
 }
