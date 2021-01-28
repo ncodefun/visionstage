@@ -38,6 +38,8 @@ class App extends VisionStage {
 			</div>
 
 			<footer id='main-footer' flow>
+				<a href='/demo/'>Demo with menus</a>
+				<span class='pre'> | </span>
 				<a href='https://github.com/ncodefun/visionstage' target='_blank'>GitHub</a>
 			</footer>
 			`
