@@ -1,4 +1,6 @@
 import { log, Component, html, define, unsafeHTML } from '../vision-stage.js'
+import { q } from '../modules/utils-core.js'
+
 // log('ok', '-> popup-full')
 const app = q('vision-stage')
 
