@@ -1,34 +1,30 @@
-import { q, range } from '/vision-stage/modules/utils-core.js'
 import { VisionStage, Component, html, define, log, useSVG } 
 	from '/vision-stage/vision-stage.js'
+import { q, range } 
+	from '/vision-stage/modules/utils-core.js'
 
 class App extends VisionStage {
 
 	onConnected(){
-		this.render()
-	}
-
-	onUserDataReady( data){
-		
+		this.render() // or later if we need to load data and then setup before render
 	}
 
 	afterFirstRender(){
-		/// wait till now to not block app load/render
 		Component.load('menu-scenes')
 		Component.load('menu-options')
 		Component.load('menu-auth')
-		this.faded = false
+		this.faded = false 
+		// -> or later (if drawing takes time and it causes visual disturbances...)
 	}
 
 	template(){
 		return html`
-		<menu-options class='side-menu left layer'></menu-options>
 		<!-- <menu-auth class='side-menu right layer'></menu-auth> -->
+		<menu-options class='side-menu left layer'></menu-options>
 		<popup-full></popup-full>
 
 		<header>
-
-			<div flow class='top-corner-wrapper'> <!-- to get the size of the grid area, to apply in menu options' header -->
+			<div flow class='top-corner-wrapper'> 
 				<button ?disabled=${!this.menu_options} id='toggle-menu-options' class='round ${this.UI_button_size_class}'
 					aria-label='menu des options'
 					@click=${ this.toggleMenuOptionsOpen }>
@@ -81,11 +77,6 @@ class App extends VisionStage {
 	afterSceneChange(){
 
 	}
-
-	afterLevelChange(){ //!! -> onLevelChanged
-		
-	}
-	
 }
 
 App.aspect_ratios_v2 = {
@@ -101,8 +92,11 @@ App.aspect_ratios_v2 = {
 		'max-content': 1.6, 				// extend content width up to this
 		'max': 1.777								// extend stage width up to this
 	},
-	cross_margin: '1.2%',					// if dead space on one axis, add margins on the other (looks better…)
-	//ultrawide_cross_margin: '1.2%' // only use cross_margin when we're over landscape.max AR (not below land.min & over thresh.)
+	// if dead space on one axis, add margins on the other
+	cross_margin: '1.2%',	
+
+	// same but only when we're over landscape.max AR (not below land.min & over thresh.)
+	// ultrawide_cross_margin: '1.2%' 
 }
 
 App.properties = {
@@ -123,4 +117,4 @@ App.sounds = [
 	// ['wrong', '/vision-stage-resources/sounds/wrong.mp3', { volume:.6 }],
 ]
 
-define( 'vision-stage', App)
+define( 'vision-stage', App, [])
