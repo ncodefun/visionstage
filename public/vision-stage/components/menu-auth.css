@@ -2,7 +2,7 @@
 	text-align: center;
 }
 
-/**!! BLOCK MAIN IF NOT AUTHENTICATED */
+/** BLOCK MAIN IF NOT AUTHENTICATED */
 vision-stage:not(.auth):not([no-auth]) > main { 
 	pointer-events: none !important;
 }
@@ -292,13 +292,6 @@ header > h2 + button.small.signup:hover {
 	margin: .5em;
 }
 
-form.student label {
-	margin: 1rem;
-}
 .icon svg.person {
 	height: 1.33rem;
-}
-.tab-group button.tab {
-	padding-top: .12em;
-	font-weight: bold;
 }

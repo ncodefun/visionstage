@@ -1,6 +1,6 @@
 const PROD = true /// enables firebase analitycs
 const DEBUG = false
-// const FIREBASE_CONFIG = {
+const FIREBASE_CONFIG = {
 // 	apiKey: '',
 // 	authDomain: '',
 // 	databaseURL: '',
@@ -9,10 +9,10 @@ const DEBUG = false
 // 	messagingSenderId: '',
 // 	appId: '',
 // 	measurementId: ""
-// }
+}
 
 import { Component, html, define, log, useSVG, unsafeHTML } from '../vision-stage.js'
-import { q, ctor, chain } from '../modules/utils-core.js'
+import { q, ctor } from '../modules/utils-core.js'
 import * as _firebase from '../modules/firebase/app.js';
 import "/vision-stage/modules/firebase/auth.js"
 import "/vision-stage/modules/firebase/firestore.js"
@@ -22,11 +22,11 @@ Component.load('inputs/button-waiting')
 //! popups
 
 const app = q('vision-stage')
+const app_name = app.app_name // -> from 'store' attr on <vision-stage>
 
 const ALLOW_AUTO_SIGNIN = true
 const firebase = _firebase.default
 app.authentified = false
-const app_name = stage.app_name //.localName.replace(/^app-/, '')
 //log('err', 'app name:', app_name)
 function generatePassword() {
 		//! test
@@ -98,9 +98,9 @@ class AuthMenu extends Component {
 	initFirebase(){
 		this.firebase_initialized = true
 		const firebase_config = ctor( app).firebase_config || FIREBASE_CONFIG
-		if( !firebase_config){
-			log('err', 'No default firebase_config nor App.firebase_config')
-			throw Error('No default firebase_config nor App.firebase_config')
+		if( !firebase_config || !firebase_config.apiKey){
+			log('err', 'No default FIREBASE_CONFIG nor App.firebase_config')
+			throw Error('No default FIREBASE_CONFIG nor App.firebase_config')
 		}
 		this.firebase = firebase.initializeApp( firebase_config, 'apps');
 		this.auth = this.firebase.auth()
@@ -137,98 +137,25 @@ class AuthMenu extends Component {
 	}
 
 	onAuthStateChanged( user){
-		
-		//console.clear()
-		if( q('#btn-ok')) q('#btn-ok').waiting = false
+		if( q('#btn-ok')) 
+			q('#btn-ok').waiting = false
 
-		DEBUG&&log( 'purple','user:', user&&user.email||'none', 'verified:', !!(user&&user.emailVerified))
-		//q('.app[user-access-level]').classList.add('show')
-		//log('err', 'auth hide splash')
-		//q('#splashscreen').classList.add('hide')
-		//! TEST
-		//stage.app.setAttribute('user-access-level', 1)
+		DEBUG && log( 'purple','user:', 
+			user && user.email||'none', 'verified:', !!(user && user.emailVerified))
 
 		this.user_uid = null
 		this.user_signed_in = false
-		/// MAYBE STUDENT
+
 		if( !user){
-			
-			if( this.firestore) return //!! why would this callback fire multiple times?
-
-			// First time only
-			if( !this.firestore){
-				this.firestore = this.firebase.firestore()
-				//!! this.firestore.enablePersistence()
-			}
-			
-			/// try to auto "signin" student
-			// has registered with a teacher for this app
-			const teacher_email = chain( this.student_apps.apps[ app_name], 'teacher')
-			if( ALLOW_AUTO_SIGNIN && this.student_username && teacher_email && !this.prevent_auto_signin){ 
-				const path = 'teachers/'+teacher_email+'/students/'+this.student_username
-				this.student_doc = this.firestore.doc( path)
-				this.student_doc.get().then( doc => {
-					if( doc && doc.exists){						
-						let data = doc.data()
-						DEBUG && log('info', 'student data:', data)
-						this.student_name = data.name
-						/// student doc exists, but check apps
-						if( data.apps[ app_name]){
-
-							DEBUG && log('purple', 'Auto-signin student')
-							this.student_data = data
-							this.selected_tab = 1
-							this.stats = data.apps[ app_name].stats
-							this.restrictions = data.apps[ app_name].restrictions
-
-							app.authentified = true
-							
-							if( app.onStudentDataReady) /// set student mode
-								app.onStudentDataReady( this.student_data, this.stats, this.restrictions) 
-							else if( app.onUserDataReady) /// if we differenciate students in another way?
-								app.onUserDataReady( data) /// we normally use this to set allowed = true
-
-							this.watchStudentDoc()
-
-							if( PROD)
-							this.firebase.analytics().logEvent('app_loaded', {
-								title: app.$title,
-								scene: app.scene||'none',
-								role: "student"
-							})
-							DEBUG && log('info', '-> Analytics; app title:', app.$title, 'scene:', app.scene||'none')
-						}
-						else {
-							DEBUG && log('pink', 'Could not auto-signin student, not registered')
-							this.open = true
-						}
-					}
-					else { //!! we could have registered but w/ another app, or been removed from teacher's list
-						DEBUG && log('pink', 'Could not auto-signin student, no student doc @ path:', path)
-						this.open = true
-					}
-				})
-				.catch( err => {
-					DEBUG && log('err', 'err:', err)
-				})
-			}
-			else {
-				//log('warn', 'Cannot auto signin; prevented by signout or no teacher in student_apps')
-				if( app.menu_scenes && app.menu_scenes.open)
-					app.menu_scenes.open = false
-				setTimeout( e => {
-					this.open = true
-				}, 500)
-			}
+			// close scenes menu; we're gonna open this menu
+			if( app.menu_scenes && app.menu_scenes.open)
+				app.menu_scenes.open = false
+			setTimeout( e => this.open = true, 500)
 		}
-		/// USER => TEACHER
-		else {
+		else { // user exists
 			this.user = user
-
-			//if( !this.user_email) /// erased data
 			this.user_email = user.email
 
-			/// @TO CHECK
 			if( this.send_email_verification){
 				this.send_email_verification = false
 				user.sendEmailVerification()
@@ -238,147 +165,91 @@ class AuthMenu extends Component {
 					.then( () => log('err','sent email verif email...'))
 			}
 
-			//// First time only
+			// First time only
 			if( !this.firestore){
 				this.firestore = this.firebase.firestore()
-				//!! this.firestore.enablePersistence()
+				// this.firestore.enablePersistence()
+				/*
 				if( PROD){
 					this.firebase.analytics().logEvent('app_loaded', {
 						title: app.$title,
 						scene: app.scene||'none',
-						role: "teacher"
 					})
 					DEBUG && log('info', '-> Analytics; app title:', app.$title, 'scene:', app.scene||'none')
-				}
+				}*/
 			}
 
-			/// get user data and call if app.onUserDataReady 
-			/// => set as this.user_data
-			if( !this.user_data) //// first time only
+			// get user data and call if app.onUserDataReady 
+			// => set as this.user_data
+			if( !this.user_data) // first time only
 			this.firestore.doc(`users_public/${user.uid}/`).get()
 				.then( doc => {
 					if( doc && doc.exists)
 						this.user_data = doc.data()
 					else {
-						DEBUG && log('purple', 'no user data')
 						this.user_data = {
-							role: 'teacher',
+							role: '',
 							subs: {
 
 							}
 						}
-						/// must continue below... do not return
 					}
-					////  MANAGE USER ACCESS LEVEL  ////
 
-					const app_lvl = app.access_level||1 /// 1: ifConnected, 2: ifSubscribed
-					DEBUG && log('purple', 'required access level:', app_lvl)
+					//  MANAGE USER ACCESS LEVEL  //
+
+					const app_lvl = app.access_level||1 // 1: ifConnected, 2: ifSubscribed
 					this.subs = this.user_data.subs || {}
-					this.user_role = this.user_data.role || 'teacher'
+					this.user_role = this.user_data.role || ''
 					q('.app').setAttribute('user-role', this.user_role)
 					
-					/// get OBJECT WITH KEY=(APP ID), VAL=(SUBS ACTIVE? 0:FALSE, 1:TRUE)
+					// get OBJECT WITH KEY=(APP NAME), VAL=(SUBS ACTIVE? 0:FALSE, 1:TRUE)
 					this.subscriptions = Object
-						.entries( this.subs)
-						.filter( ([k,v]) => v!=0)
-						.map( ([k,v]) => k)
+						.entries( this.subs) // ex: subs = { visionneuse: 1 }
+						.filter( ([k,v]) => v!=0) // keep only active subs 
+						.map( ([k,v]) => k) // keep only app names
 
-					const app_name = stage.app_name /// => store attribute value minus "defimath-"
-					const safe_email = this.user_email //.replace(/\./g,'_dot_')
-					DEBUG && this.subscriptions.length && log('purple', 'subscriptions:', this.subscriptions)
-					this.user_subscribed = //false
+					const app_name = app.app_name // => store attr on <vision-stage>
+
+					this.user_subscribed =
 						this.subscriptions.some( sub => app_name.includes( sub))
 						||
 						this.subscriptions.includes('all')
 
 					if( this.user_subscribed){
-						DEBUG && log('purple', 'subscribed; app_name:', app_name)
-						this.watchUserConnection( user)
-						//log('err', 'safe_email:', safe_email, app_name)
-						this.teacher_doc = this.firestore.doc(`teachers/${safe_email}`)
-						const getAppDoc = () => {
-							const app_doc = this.teacher_doc.collection('apps').doc( app_name)
-							app_doc.get().then( doc => {
-								if( doc.exists){
-									let data = doc.data()
-									DEBUG && log('purple', 'app data:', JSON.stringify( data)) /// num / max students , restricted
-									this.max_students = data.max_students
-									this.num_students = data.num_students
-									this.live_students_updates_ready = true
-									//// students app restrictions editor 
-									/// data.restrictions
-								}
-								else { //
-									DEBUG && log('warn', 'subs, but no app doc (will create); safe_email:', safe_email,'app_name:',app_name)
-									// this.firestore.doc( path)
-									app_doc.set({
-										num_students: 0, max_students: 20 //!! default if we are subscribed
-									})
-									.catch( err => log('err', 'cannot set app_doc default:', err))
-								}
-							})
-							.catch( err => log('err', 'err get app_doc:', err))
-						}
+						//this.watchUserConnection( user)
 
-						/// First check if teacher_doc exists; if not we need to create it
-						this.teacher_doc.get().then( doc => {
-							if( !doc.exists){
-								
-								this.teacher_doc.set({})
-									.then( () => getAppDoc())
-									.catch( err => log('err', 'could not create empty doc for teacher:', err))
-							}
-							else {
-								getAppDoc()
-							}
-						})
-						.catch( err => log('err', 'could not get doc for teacher:', err))
-					}
-					else {
-						DEBUG && log('purple', 'not subscribed to this app:', app_name)
 					}
 					
-					DEBUG && log('purple', 'user_role:', this.user_role)
-					DEBUG && log('purple', 'user_subscribed:', this.user_subscribed)
-					//log('purple', 'subs in data:', this.subs, 'check against stage.app.localName:',stage.app.localName)
-
+					//! App require subscription, popup w/ link to subscribe
 					if( app_lvl === 2 && !this.user_subscribed){ 
-						//// SHOW SUBSCRIBE PAGE/SECTION
-						//console.clear()
-						DEBUG && log('err', 'not subscribed')
 						setTimeout( e => {
-							app.popup.setMessage(["Cette application requiert un abonnement.","<a href='/abonnement'>Abonnez-vous ici</a>"])
+							app.popup.setMessage([ //@TODO localize
+								`Cette application requiert un abonnement.`,
+								`<a href='/abonnement'>Abonnez-vous ici</a>`])
 						}, 0)
 						return
 					}
 
+					//! App is for admins only, nuke all content
 					if( app_lvl === 3 && this.user_role !== 'admin'){
-						stage.innerHTML = '<p class="warning">Cette page est réservée aux administrateurs du site.</p>'
+						app.innerHTML = //@TODO localize
+							'<p class="warning">Cette page est réservée aux administrateurs du site.</p>'
 						return
 					}
 
-					//// OK, hide menu-auth	
 					if( this.open){
 						if( this.just_signed_up){
-							this.just_signed_up = false
 							// keep menu open so we can read the "validate your email address" msg...
+							this.just_signed_up = false
 						}
+						// OK, hide menu-auth	
 						else {
 							this.open = false
 						}
 					}
-					else { /// we now allow closing auth menu even if not connected
-						// app.authentified = true
-						// app.onAllowed && app.onAllowed()
-						// app.onAll owed = null
-					}
-					//stage.onUserDataReady( this.user_data)
 
 					app.authentified = true
-					if( app.onUserDataReady)
-						app.onUserDataReady( this.user_data)
-					//else alert ('no callback')
-					// 	log('info', 'no onUserDataReady callback:', app)
+					app.onUserDataReady && app.onUserDataReady( this.user_data)
 				})
 				/*.catch( err => {
 					//alert ("ERR: "+err)
