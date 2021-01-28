@@ -573,7 +573,7 @@ export class VisionStage extends Component {
 	constructor(){
 		super()
 
-		this.app_name = this.ns.replace('defimath-','').toLowerCase()
+		this.app_name = this.ns.toLowerCase()
 		this.is_iOS = is_iOS
 		this.UI_button_size_class = 'medium UI'
 
