@@ -16,14 +16,14 @@ class App extends VisionStage {
 		/// wait till now to not block app load/render
 		Component.load('menu-scenes')
 		Component.load('menu-options')
-		Component.load('menu-auth2')
+		Component.load('menu-auth')
 		this.faded = false
 	}
 
 	template(){
 		return html`
 		<menu-options class='side-menu left layer'></menu-options>
-		<!-- <menu-auth2 class='side-menu right layer'></menu-auth2> -->
+		<!-- <menu-auth class='side-menu right layer'></menu-auth> -->
 		<popup-full></popup-full>
 
 		<header>
